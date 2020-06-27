@@ -4,6 +4,8 @@ title: About Me
 permalink: /about/
 ---
 
-Coding for fun!
+* Coding for fun!
 
-Broadly interested in *<u>computer systems</u>* and *<u>programming languages</u>*.
+* Broadly interested in *<u>computer systems</u>* and *<u>programming languages</u>*.
+
+* Love anime! My [douban](https://www.douban.com/people/190489967/), [bangumi](https://bangumi.tv/user/446865).
