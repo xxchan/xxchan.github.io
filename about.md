@@ -12,3 +12,8 @@ permalink: /about/
 
 * Programming Languages:
   - 1k+ LoC: Rust, Coq, C, Java
+
+* Toy Projects:
+  - [nb](https://github.com/xxchan/nb): a naïve blockchain(Rust)
+  - [kvs](https://github.com/xxchan/kvs): a simple key-value database(Rust)
+  - [leptjson](https://github.com/xxchan/leptjson): a tiny JSON parser(C)
