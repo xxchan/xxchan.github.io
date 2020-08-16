@@ -2,7 +2,7 @@
 layout: post
 title: ".bash_profile 和 .bashrc"
 categories:
-  - Random
+  - CS
 tags:
   - Random
 ---
