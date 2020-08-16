@@ -52,3 +52,11 @@ plugins:
 #   - vendor/gems/
 #   - vendor/ruby/
 markdown: kramdown
+
+gitalk:
+  enabled: true
+  client_id: fdebeea90302233dad58
+  client_secret: 577499d4ee054d3c792bb98dd95c11043a7d53ba
+  repository: xxchan.github.io
+  owner: xxchan
+  admin: xxchan
