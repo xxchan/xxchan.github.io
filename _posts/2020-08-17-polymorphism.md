@@ -56,7 +56,7 @@ instance Functor [] where
   fmap f (x:xs) = f x : fmap f xs
 ```
 
-## Rust: Trait
+### Rust: Trait
 
 From [https://doc.rust-lang.org/rust-by-example/trait.html](https://doc.rust-lang.org/rust-by-example/trait.html)
 
