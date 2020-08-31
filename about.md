@@ -17,3 +17,7 @@ permalink: /about/
   - [nb](https://github.com/xxchan/nb): a naïve blockchain(Rust)
   - [kvs](https://github.com/xxchan/kvs): a simple key-value database(Rust)
   - [leptjson](https://github.com/xxchan/leptjson): a tiny JSON parser(C)
+  
+* Open Source Contribution:
+  - [zCore](https://github.com/rcore-os/zCore): Reimplement Zircon microkernel in Rust. I helped improve its tests and documentations.
+  - Issues/trivial PRs to [tikv](https://github.com/tikv/tikv), [intellij-rust](https://github.com/intellij-rust/intellij-rust), [grcov](https://github.com/mozilla/grcov).
