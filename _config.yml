@@ -60,3 +60,5 @@ gitalk:
   repository: xxchan.github.io
   owner: xxchan
   admin: xxchan
+
+google_analytics: UA-170116964-1
