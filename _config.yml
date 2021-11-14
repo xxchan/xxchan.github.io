@@ -63,7 +63,8 @@ gitalk:
 
 google_analytics: UA-170116964-1
 
-theme: minimal-mistakes-jekyll
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+# theme: minimal-mistakes-jekyll
 defaults:
   # _posts
   - scope:
