@@ -52,7 +52,10 @@ plugins:
 #   - vendor/gems/
 #   - vendor/ruby/
 markdown: kramdown
+kramdown:
+   math_engine: mathjax
 
+   
 gitalk:
   enabled: true
   client_id: fdebeea90302233dad58
@@ -62,6 +65,14 @@ gitalk:
   admin: xxchan
 
 google_analytics: UA-170116964-1
+
+# Analytics
+analytics:
+  provider               : "google" # false (default), "google", "google-universal", "google-gtag", "custom"
+  google:
+    tracking_id          : UA-170116964-1
+    anonymize_ip         : # true, false (default)
+
 
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 # theme: minimal-mistakes-jekyll

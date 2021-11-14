@@ -93,9 +93,9 @@ TLS 也有这个密钥交换的环节，但它其实并不直接用协商的 sha
 
 ### Homomorphic Secret Sharing
 
-同态（Homomorphism）是从 A 空间到 B 空间的映射 f，使得在 A 空间的操作 $*_A$ 可以对应到 B 空间的操作 $*_B$，即 $f(x *_A y) = f(x)*_B f(y)$。加密可以看作明文和密文之间的映射，同态加密就是指在密文上操作使得在原文上生效。
+同态（Homomorphism）是从 A 空间到 B 空间的映射 f，使得在 A 空间的操作 $$*_A$$ 可以对应到 B 空间的操作 $$*_B$$，即 $$f(x *_A y) = f(x)*_B f(y)$$。加密可以看作明文和密文之间的映射，同态加密就是指在密文上操作使得在原文上生效。
 
-Shamir‘s secret sharing 就有 homomorphic 的性质：对 share 做加法相当于对原文做加法。根据多项式的性质不难想象。
+Shamir's secret sharing 就有 homomorphic 的性质：对 share 做加法相当于对原文做加法。根据多项式的性质不难想象。
 
 ```
                    ┌────────┐
@@ -130,7 +130,7 @@ Shamir‘s secret sharing 就有 homomorphic 的性质：对 share 做加法相�
 
 说到用每个人自定的秘密生成一个公共秘密，不禁想到上面的 DH key exchange。假设每个人有自己的 $a_i$，每个人可算出 $A_i=g^{a_i}$ 进行共享，得出集体的 public key 就是 $A=\prod_{i=1}^nA_i$，集体的 private key 是 $a=\sum_{i=1}^na_i$ 仍然未知，需要集体合作才能获得。
 
-当某人需要发送消息给集体时，随机生成一个 private key b，用 A^b 对消息进行加密，同时发送密文和 A^b 即可。
+当某人需要发送消息给集体时，随机生成一个 private key b，用 $A^b$ 对消息进行加密，同时发送密文和 $A^b$ 即可。
 
 现在我们可以再结合一下 threshold secret sharing 了，每个人把 $a_i$ 再进行 (t,n)-secret sharing，这样任意 t 个人合力就可以恢复出 group 的 private key。这就叫 threshold encryption。
 
