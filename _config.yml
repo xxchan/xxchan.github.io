@@ -28,9 +28,9 @@ twitter_username: yayale_umi
 github_username: xxchan
 
 # Build settings
-theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -62,3 +62,17 @@ gitalk:
   admin: xxchan
 
 google_analytics: UA-170116964-1
+
+theme: minimal-mistakes-jekyll
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: false
+      comments: true
+      share: true
+      related: true
