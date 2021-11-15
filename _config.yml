@@ -19,7 +19,7 @@
 # in the templates via {{ site.myvariable }}.
 
 title: XX's Blog
-email: xxchan@sjtu.edu.cn
+# email: xxchan@sjtu.edu.cn
 description: >- # this means to ignore newlines until "baseurl:"
   Just some random thoughts of mine.
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -88,3 +88,31 @@ defaults:
       comments: true
       share: true
       related: true
+
+
+author:
+  name             : "xxchan"
+  avatar           : "https://avatars.githubusercontent.com/u/37948597?v=4"
+  bio              : "Just for fun."
+  location         :
+  email            :
+  linkedin         : "xxchan"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/yayale_umi"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/xxchan"
+
+
+# Site Settings
+locale                   : "zh-CN"
+# words_per_minute         : 50
+
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
