@@ -5,10 +5,10 @@ categories:
   - Life
 tags:
   - Device
+toc: true
+toc_sticky: true
+toc_label: 目录
 ---
-
-* TOC
-{:toc}
 
 *Disclaimer: 本文并非客观评测，纯属主观感受。*
 

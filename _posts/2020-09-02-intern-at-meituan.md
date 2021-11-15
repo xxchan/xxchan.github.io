@@ -5,12 +5,12 @@ categories:
   - CS
 tags:
   - Random
+toc: true
+toc_sticky: true
+toc_label: 目录
 ---
 
 *Disclaimer：本文提及的内容有效范围仅限于后端业务开发岗位，甚至仅限于我所在部门，仅为个人体验与看法，请酌情参考。*
-
-* TOC
-{:toc}
 
 上回说到经过了惨烈的春招实习求职之后，我终于获得了美团的实习 offer。现在，这份实习刚刚结束，趁热做个总结吧。
 

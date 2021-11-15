@@ -5,12 +5,12 @@ categories:
   - CS
 tags:
   - PL
+toc: true
+toc_sticky: true
+toc_label: 目录
 ---
 
 *Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。*
-
-* TOC
-{:toc}
 
 我的 PL 学习路径是 Python → C++（C with class）→ Coq → Haskell  → Rust → Java。学 Haskell 的时候学到了 Typeclass，觉得太妙了，第一次看见有这么好的东西可以用来减少重复代码。不过随即觉得其实和 C++ 的抽象类挺像。Coq 里也有 Typeclass，但我没怎么用过。学 Rust 发现了 Trait，当时就隐隐觉得和 Typeclass 很像，不过表达力貌似要比 Typeclass 弱一些。稍微研究了一下也没完全搞清楚区别，甚至还发现了 Java 里的 Interface。
 
