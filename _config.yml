@@ -59,7 +59,7 @@ kramdown:
 gitalk:
   enabled: true
   client_id: fdebeea90302233dad58
-  client_secret: 577499d4ee054d3c792bb98dd95c11043a7d53ba
+  client_secret: 10303000b0d82bfe90358e789187121d8abafb35
   repository: xxchan.github.io
   owner: xxchan
   admin: xxchan
