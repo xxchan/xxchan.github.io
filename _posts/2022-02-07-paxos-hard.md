@@ -49,7 +49,7 @@ initial value: ⊥ (uninitialized)
 propose(v):
     if prop == ⊥:
         prop = v
-    return v
+    return prop
 ```
 
 Fairly simple, right? Some notes here:

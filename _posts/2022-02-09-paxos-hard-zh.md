@@ -48,7 +48,7 @@ Replicated state machine 可以说是最强的抽象了，算是所有 shared da
 propose(v):
     if prop == ⊥:
         prop = v
-    return v
+    return prop
 ```
 
 是不是很简单？有几个注意点：
