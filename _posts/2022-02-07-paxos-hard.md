@@ -11,6 +11,9 @@ toc_sticky: true
 toc_label: Contents
 ---
 
+[Chinese Version](https://xxchan.github.io/cs/2022/02/09/paxos-hard-zh.html)
+
+
 In this blog, I will **omit practical aspects like performance issues**. I will focus on general ideas like basic notions, expressiveness, or "**how to make it possible**" instead of "how to make it super-fast". Also, I will try to convey my ideas to readers without any knowledge of distributed systems or consensus. Still, it may be better if you already know one or more consensus algorithms, like Raft or Paxos.
 
 ## My Way of Learning Consensus
@@ -21,7 +24,7 @@ Exactly one year ago, I was learning MIT 6.824 and implementing Raft. I thought 
 
 Last semester, I needed to implement Paxos in one of my homework. I happened to have bookmarked [this blog](https://blog.openacid.com/algo/paxos/) earlier. I found it explains Paxos in a simple way and I implemented (basic) Paxos correspondingly, without reading papers or other explanation articles. The homework also required us to implement multiple decisions using a given technique, so I didn't read things like multi-Paxos.
 
-I also had Concurrent Algorithms and Distributed Algorithms courses. They are theoretical, and both talked about consensus, and I thought it was not very hard to understand. The consensus algorithm given in the DA course is very like Paxos, and it's simple enough to fit in one slide. Besides, the universal construction in the CA course and the total order broadcast algorithm, which prove you can use consensus to do almost anything, are also not hard to understand. And then, I began to wonder why people think Paxos is hard to understand, and that's why I wanted to write this blog.
+I also had Concurrent Algorithms and Distributed Algorithms courses. They are theoretical, and both talked about consensus, and I thought it was not very hard to understand. The consensus algorithm given in the DA course is very like Paxos, and it's simple enough to fit in one slide. Besides, the Universal Construction in the CA course and the Total Order Broadcast algorithm in the DA course, which prove you can use consensus to do almost anything, are also not hard to understand. And then, I began to wonder why people think Paxos is hard to understand, and that's why I wanted to write this blog.
 
 Finally, I read the two Paxos papers and confirmed that they are both understandable. But Lamport's language is so interesting. *The Part-Time Parliament* is very detailed and straightforward. It kind of looks like it uses a mapping to transform the terms. *Paxos Made Simple* instead talks about intuitions in plain words. It is kind of like a blog.
 
@@ -88,7 +91,7 @@ First, Single decision consensus interface is introduced (slide 1-5). And then m
 
 Yes, I think Paxos's idea can be summarized into one sentence: **request promise before write**! It is indeed so simple and can be implemented with fewer than 200 LoC.
 
-xp tells you how Paxos works in a simple way, but you may still wonder why we go this way and whether this really works. Now I should say in his paper, Lamport **derives** this idea (from *properties* he wants to achieve). So if you re-read the paper after you already know Paxos, you may find it rather understandable and has brilliant reasoning and intuitions. But I'm afraid that maybe this is also why many people failed to understand it at the beginning, because they are not accustomed to this way of thinking and want to know how exactly it works before knowing where the idea can be derived.
+xp tells you *how* Paxos works in a simple way, but you may still wonder *why* we go this way and whether this really works. Now I should say in his paper, Lamport **derives** this idea (from *properties* he wants to achieve). So if you re-read the paper after you already know Paxos, you may find it rather understandable and has brilliant reasoning and intuitions. But I'm afraid that maybe this is also why many people failed to understand it at the beginning, because they are not accustomed to this way of thinking and want to know how exactly it works before knowing where the idea can be derived.
 
 Btw, xp's follow-up blog: [Implement paxos-based kv storage with 200 line of code](https://drmingdrmer.github.io/algo/2020/10/28/paxoskv.html) implements (single-decision) Paxos, and manages consensus instances by hand. (There's a more complicated follow-up blog [here](https://blog.openacid.com/algo/mmp3/)) So you can also learn (single-decision) Paxos by reading the implementation.
 
@@ -102,7 +105,7 @@ I should now say this evaluation is a little bit **unfair**. Single-decision con
 
 ---
 
-Another evaluation that Paxos does not provide a good foundation for building *practical* implementations in *real-world* systems may be true. However, I think this is just a **non-goal** for Paxos. It talks about an elegant way to solve a theoretical problem. It just **doesn't care** much about how you implement it in the read-world... I think Lamport is also a more theoretical researcher. (He established the foundation of the distributed computing theory.) Real-world stuff may not be that attractive to theory researchers, if the problem is not theoretically interesting.
+Another evaluation that Paxos does not provide a good foundation for building *practical* implementations in *real-world* systems may be true. However, I think this is just a **non-goal** for Paxos. It talks about an elegant way to solve a theoretical problem. It just **doesn't care** much about how you implement it in the real-world... I think Lamport is also a more theoretical researcher. (He established the foundation of the distributed computing theory.) Real-world stuff may not be that attractive to theory researchers, if the problem is not theoretically interesting.
 
 ---
 
@@ -110,7 +113,7 @@ Now let's look at Raft itself. I will also try to describe it in a few words.
 
 First, it talks about the replicated state machine and **tells you explicitly we are building the replicated log**. Engineers may be unfamiliar with consensus, but must know logs very well.
 
-Second, Raft chooses the **leader-based** approach: only the leader can interact with the outside world and append entries to the log. Paxos is instead completely **peer-to-peer**. Having a leader will usually make the main process or the "happy path" easier to understand. Raft chooses majority-write naturally. Then the only problem is how to handle the leader's crash, and Raft's approach is to restrict nodes from voting for *outdated* nodes. The trick is simple, but it also takes some effort to understand why it works because many edge cases are covered. The property to maintain is that the new leader must *at least* contain all majority-written entries, but whether it contains more is insignificant. 
+Second, Raft chooses the **leader-based** approach: only the leader can interact with the outside world and append entries to the log. Paxos is instead completely **peer-to-peer**. Having a leader will usually make the main process or the "happy path" easier to understand. Raft chooses majority-write naturally. Then the only problem is how to handle the leader's crash, and Raft's approach is to restrict nodes from voting for *outdated* nodes. The trick is simple, but it also takes some effort to understand why it works because many edge cases are covered. The property to maintain is that the new leader must *at least* contain all majority-written entries, but whether it contains more pending entries is insignificant. 
 
 Finally, inconsistent states exist in the replicate log, and the leader will fix it by overwriting.
 
