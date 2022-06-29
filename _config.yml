@@ -57,14 +57,9 @@ kramdown:
    toc_levels: 1..6
    
 
-google_analytics: UA-170116964-1
-
 # Analytics
 analytics:
-  provider               : "google" # false (default), "google", "google-universal", "google-gtag", "custom"
-  google:
-    tracking_id          : UA-170116964-1
-    anonymize_ip         : # true, false (default)
+  provider               : "custom" # false (default), "google", "google-universal", "google-gtag", "custom"
 
 
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
