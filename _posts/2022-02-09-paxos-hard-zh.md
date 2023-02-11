@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "为啥 Paxos 这么难？"
+excerpt: "因为它需要一种不同的思维方式"
 categories:
   - CS
 tags:

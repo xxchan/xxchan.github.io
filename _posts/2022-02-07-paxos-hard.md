@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Why is Paxos Hard?"
+excerpt: "Because it requires a different mindset"
 categories:
   - CS
 tags:
