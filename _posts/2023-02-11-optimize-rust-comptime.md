@@ -10,6 +10,8 @@ toc_sticky: true
 toc_label: 目录
 ---
 
+[English version of this post]({% post_url 2023-02-17-optimize-rust-comptime-en %})
+
 虽然经常有逸闻抱怨 Rust 编译速度臭名昭著地慢，但我们的项目 [RisingWave](https://github.com/risingwavelabs/risingwave) 在经过前人比如（[skyzh](https://github.com/skyzh)，[BugenZhao](https://github.com/bugenzhao)）的一些努力后，编译速度并不算慢，特别是我自从用上 M1 的 Macbook Pro 后，编译速度根本不是问题，全量 debug 编译也就两三分钟。
 
 然而随着时间推移，CI 里加了越来越多的东西，越来越臃肿了。现在 main workflow 需要大概 40min，PR workflow 需要大概 25min30s。虽然并不算特别慢，但是可以体感到比以前变慢了不少。
@@ -26,7 +28,7 @@ P.S. 很推荐 [matklad](https://github.com/matklad)（IntelliJ Rust 和 rust-an
 
 我用到的大部分方法这里面都有讲到，而且他讲的清晰明了。如果没有另外说明，那么文中的 quote 都来自这里。
 
-本文算是我的实践记录，或者大概可以也当成一个 tl; dr 版。每一个优化点都带上了相应的 PR，可以结合 [commit history](https://github.com/risingwavelabs/risingwave/commits/main) 点开每个优化点（目前应该还都在首页）前后的页面对比效果。
+本文算是我的实践记录，或者大概可以也当成一个 tl; dr 版。每一个优化点都带上了相应的 PR，可以结合 [commit history](https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&branch=main&qualified_name=refs%2Fheads%2Fmain) 点开每个优化点前后的页面对比效果。
 
 ---
 
