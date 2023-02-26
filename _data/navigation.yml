@@ -1,5 +1,7 @@
 # main links
 main:
+  - title: "Blog Analytics"
+    url: https://plausible.io/xxchan.github.io
   - title: "About"
     url: /about/
   # - title: "Sample Posts"
