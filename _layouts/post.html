@@ -61,7 +61,14 @@ layout: default
     
     <div class="page__comments">
     {% include giscus-comment.html %} 
-    {% webmentions page.url %}
+    <!-- <div class="webmentions">
+      likes
+      {% webmention_likes page.url %}
+      replies
+      {% webmention_replies page.url %}
+      reposts
+      {% webmention_reposts page.url %}
+    </div> -->
     </div>
     {% comment %} {% if jekyll.environment == 'production' and site.comments.provider and page.comments %}
       {% include comments.html %}
