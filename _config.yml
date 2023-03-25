@@ -26,11 +26,13 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: https://xxchan.github.io
 twitter_username: yayale_umi
 github_username: xxchan
+repository: xxchan/xxchan.github.io
 
 # Build settings
 plugins:
   - jekyll-feed
   - jekyll-include-cache
+  - jekyll-webmention_io
 
 # Exclude from processing.
 # The following items will not be processed, by default.

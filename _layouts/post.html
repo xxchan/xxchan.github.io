@@ -61,6 +61,7 @@ layout: default
     
     <div class="page__comments">
     {% include giscus-comment.html %} 
+    {% webmentions page.url %}
     </div>
     {% comment %} {% if jekyll.environment == 'production' and site.comments.provider and page.comments %}
       {% include comments.html %}
