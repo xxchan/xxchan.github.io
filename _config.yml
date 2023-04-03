@@ -23,7 +23,7 @@ title: XX's Blog
 description: >- # this means to ignore newlines until "baseurl:"
   Just some random thoughts of mine.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: https://xxchan.github.io
+url: https://xxchan.me
 twitter_username: yayale_umi
 github_username: xxchan
 repository: xxchan/xxchan.github.io
