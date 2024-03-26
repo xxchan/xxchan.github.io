@@ -1,0 +1,971 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>This Week in RisingWave #2 (20230225) - XX’s Blog</title>
+<meta name="description" content="The exciting things happening in RisingWave">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="This Week in RisingWave #2 (20230225)">
+<meta property="og:url" content="https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2.html">
+
+
+  <meta property="og:description" content="The exciting things happening in RisingWave">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-02-25T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- webmention -->
+<link rel="webmention" href="https://webmention.io/xxchan.github.io/webmention" />
+<link rel="pingback" href="https://webmention.io/xxchan.github.io/xmlrpc" />
+
+<!-- webmentions_head -->
+<link rel="dns-prefetch" href="https://webmention.io"><link rel="preconnect" href="https://webmention.io"><link rel="preconnect" href="ws://webmention.io:8080">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <script src="/js/JekyllWebmentionIO.js" async></script>
+<template style="display:none" id="webmention-bookmarks"><div class="webmentions webmentions--bookmarks">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No bookmarks were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-likes"><div class="webmentions webmentions--likes">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No likes were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-links"><div class="webmentions webmentions--links">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No links were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-posts"><div class="webmentions webmentions--posts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <a class="webmention__title webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">{{ webmention.title }}</a>
+          <div class="webmention__meta">
+            {% if webmention.pubdate %}
+              <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No posts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-replies"><div class="webmentions webmentions--replies">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                {% if webmention.author.photo %}
+                  <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                {% endif %}
+                <b class="p-name">{{ webmention.author.name }}</b>
+              </a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.author %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No replies were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-reposts"><div class="webmentions webmentions--reposts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No reposts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-rsvps"><div class="webmentions webmentions--rsvps">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="Avatar for {{ webmention.author.name }}" title="{{ webmention.author.name }}">
+              <b class="p-name">{{ webmention.author.name }}</b>
+              {{ webmention.content }}
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No RSVPs were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-count">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<span class="webmention-count"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>{{ count }}</span></template><template style="display:none" id="webmention-webmentions">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<div class="webmentions"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item">
+          <article class="h-cite webmention webmention--{{ webmention.type }}
+            {% unless webmention.author %}webmention--no-author{% endunless %}
+            {% unless webmention.author.photo %}webmention--no-photo{% endunless %}
+            {% if webmention.source=='twitter' %}{% if webmention.type=='like' or webmention.type=='repost' %}webmention--author-starts{% endif %}{% endif %}
+            ">
+            {% if webmention.author %}
+              <div class="webmention__author p-author h-card">
+                <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                  {% if webmention.author.photo %}
+                    <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                  {% endif %}
+                  <b class="p-name">{{ webmention.author.name }}</b>
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="webmention__content p-content">
+              {% if webmention.content %}
+                {{ webmention.content }}
+              {% else %}
+                {{ webmention.title }}
+              {% endif %}
+            </div>
+            
+            <div class="webmention__meta">
+              {% if webmention.pubdate %}
+                <time class="webmention__pubdate dt-published"
+                      datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              {% endif %}
+              {% if webmention.pubdate and webmention.url %}|{% endif %}
+              {% if webmention.url %}
+                <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">Permalink</a>
+              {% endif %}
+            </div>
+          </article>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No webmentions were found.</p>
+  {% endif %}
+</div></template>
+  
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://plausible.io/xxchan.github.io">Blog Analytics</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Just for fun.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="This Week in RisingWave #2 (20230225)">
+    <meta itemprop="description" content="The exciting things happening in RisingWave">
+    <meta itemprop="datePublished" content="2023-02-25T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2.html" class="u-url" itemprop="url">This Week in RisingWave #2 (20230225)
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#most-exciting-things-">Most exciting things 🤩</a><ul><li><a href="#common-sub-plan-sharing">Common sub-plan sharing</a></li><li><a href="#python-udf">Python UDF</a></li></ul></li><li><a href="#other-notable-things">Other notable things</a><ul><li><a href="#telemetry">Telemetry</a></li><li><a href="#replace-bloom-filter-with-xor-filter">Replace Bloom filter with XOR filter</a></li><li><a href="#stream-error-reporting">Stream error reporting</a></li><li><a href="#table-schema-change">Table schema change</a></li></ul></li><li><a href="#new-major-sql-features">New major SQL features</a><ul><li><a href="#jsonb-data-type">jsonb data type</a></li><li><a href="#new-array-function-array_to_string">New array function: array_to_string</a></li><li><a href="#new-aggregate-function-stddev--stdvar">New aggregate function: stddev / stdvar</a></li></ul></li><li><a href="#mind-blowing-sql-surprise-">Mind-blowing SQL surprise 🤯</a><ul><li><a href="#operator-">Operator |/</a></li><li><a href="#null-s-hurt-our-head--full-outer-join-in-steraming">NULL s hurt our head – FULL OUTER JOIN in steraming</a></li></ul></li><li><a href="#rusty-stuff-️">Rusty stuff 🦀️</a><ul><li><a href="#error-handling">Error handling</a></li><li><a href="#chacharng">ChaChaRng</a></li><li><a href="#private-marker-trait">Private marker trait</a></li></ul></li><li><a href="#new-contributors">New Contributors</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>See <a href="/this-week-in-risingwave/2023/02/17/twirw-1.html">#1</a> for an introduction of this series.</p>
+</blockquote>
+
+<blockquote>
+  <p>This blog series is <em>my personal comments</em> about (part of) the development of <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a>.</p>
+
+  <p>Please take it as an unofficial and no-promise supplement.</p>
+</blockquote>
+
+<h2 id="most-exciting-things-">Most exciting things 🤩</h2>
+
+<h3 id="common-sub-plan-sharing">Common sub-plan sharing</h3>
+
+<p>We decided to refactor tree-structured plan node into a DAG some time ago (See <a href="https://github.com/risingwavelabs/rfcs/pull/28">RFC #28</a>). The largest benefit is to enable common sub-plan sharing.</p>
+
+<p>Previously we already implemented <code class="language-plaintext highlighter-rouge">LogicalShare</code> , which represents the plan node that will be shared, and used it to share source/subquery/CTE/view. Now comes the last piece of the puzzle: common sub-plan sharing.</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7865">feat(optimizer): Common sub-plan detection. by wsx-ucb #7865</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8159">chore(streaming): rewrite nexmark q5 to benefit from common sub-plan sharing by chenzl25 #8159</a></li>
+</ul>
+
+<h3 id="python-udf">Python UDF</h3>
+
+<p>Unlike Flink, RisingWave’s uses SQL as the main interface, to make it easier for users to use. But sometimes users do want some custom logic… We are doing some interesting experiments on this topic, and this is a little milestone. Basically you can already play with Python UDF now!</p>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7943">feat(udf): minimal Python UDF SDK by wangrunji0408 #7943</a></p>
+
+<h2 id="other-notable-things">Other notable things</h2>
+
+<h3 id="telemetry">Telemetry</h3>
+
+<p>Telemetry can greatly help us understand and improve how the system behaves in real-world scenarios!</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7384">feat: telemetry by odysa #7384</a></li>
+  <li><a href="https://github.com/risingwavelabs/rfcs/pull/53">RisingWave Telemetry Design by odysa #53</a></li>
+</ul>
+
+<h3 id="replace-bloom-filter-with-xor-filter">Replace Bloom filter with XOR filter</h3>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8081">perf(bloom filter): replace bloom filter with xor filter by soundOfDestiny #8081</a></li>
+  <li>We are also <a href="https://github.com/risingwavelabs/risingwave/issues/7406">investigating Ribbon filter · Issue #7406</a></li>
+</ul>
+
+<h3 id="stream-error-reporting">Stream error reporting</h3>
+
+<p>RisingWave tolerates compute errors by default (see <a href="https://github.com/risingwavelabs/risingwave/issues/4625">#4625</a>), but previously errors are only shown in the log. Now we are trying to report the errors to users (<a href="https://github.com/risingwavelabs/risingwave/issues/7824">See #7824</a>).</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7832">feat(stream): Report <code class="language-plaintext highlighter-rouge">compute_error_count</code> to prometheus by jon-chuang #7832</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7877">feat(stream): <code class="language-plaintext highlighter-rouge">source_error_count</code> reporting to prometheus by jon-chuang #7877</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8132">feat(stream): <code class="language-plaintext highlighter-rouge">ErrorSuppressor</code> for user compute errors by jon-chuang #8132</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/issues/8037">test(stream): Test reporting of stream errors in e2e setting · Issue #8037</a></li>
+</ul>
+
+<h3 id="table-schema-change">Table schema change</h3>
+
+<p><code class="language-plaintext highlighter-rouge">ALTER TABLE</code> is quite tricky for streaming… <code class="language-plaintext highlighter-rouge">ADD COLOMN</code> is somewhat reasonable, and we are working on it as the first step.</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8094">feat(streaming): support output indices in dispatchers by BugenZhao #8094</a>: This ensures existing downstream MV to receive old output columns and new downstream MV receive all columns. It also enables a perf optimization for MV on MV.</li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8063">feat: adding column of table schema change by BugenZhao #8063</a></li>
+</ul>
+
+<h2 id="new-major-sql-features">New major SQL features</h2>
+
+<h3 id="jsonb-data-type"><code class="language-plaintext highlighter-rouge">jsonb</code> data type</h3>
+
+<blockquote>
+  <p>The <code class="language-plaintext highlighter-rouge">json</code> data type stores an exact copy of the input text, which processing functions must reparse on each execution; while <code class="language-plaintext highlighter-rouge">jsonb</code> data is stored in a decomposed binary format that makes it slightly slower to input due to added conversion overhead, but significantly faster to process, since no reparsing is needed. <code class="language-plaintext highlighter-rouge">jsonb</code> also supports indexing, which can be a significant advantage.</p>
+
+  <p><a href="https://www.postgresql.org/docs/current/datatype-json.html">https://www.postgresql.org/docs/current/datatype-json.html</a></p>
+</blockquote>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8144">feat(sqlparser): support jsonb operator <code class="language-plaintext highlighter-rouge">-&gt;</code> and <code class="language-plaintext highlighter-rouge">-&gt;&gt;</code> by xiangjinwu #8144</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/issues/7714">Tracking: jsonb operations · Issue #7714</a></li>
+</ul>
+
+<h3 id="new-array-function-array_to_string">New array function: <code class="language-plaintext highlighter-rouge">array_to_string</code></h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/8027">feat(expr): support <code class="language-plaintext highlighter-rouge">array_to_string</code> by fuyufjh #8027</a></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=&gt;</span> <span class="k">select</span> <span class="n">array_to_string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s1">','</span><span class="p">);</span>
+ <span class="n">array_to_string</span> 
+<span class="c1">-----------------</span>
+ <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=&gt;</span> <span class="k">select</span> <span class="n">array_to_string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s1">','</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">);</span>
+ <span class="n">array_to_string</span> 
+<span class="c1">-----------------</span>
+ <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="mi">5</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>It’s also called <code class="language-plaintext highlighter-rouge">array_join</code> in some other systems, and we added that alias as well.</p>
+
+<h3 id="new-aggregate-function-stddev--stdvar">New aggregate function: <code class="language-plaintext highlighter-rouge">stddev</code> / <code class="language-plaintext highlighter-rouge">stdvar</code></h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7952">feat: implement stddev/var function by shanicky #7952</a></p>
+
+<h2 id="mind-blowing-sql-surprise-">Mind-blowing SQL surprise 🤯</h2>
+
+<p>I don’t know that much about SQL before I becoming a database developer. Every now and then I got some new surprise from SQL…</p>
+
+<h3 id="operator-">Operator <code class="language-plaintext highlighter-rouge">|/</code></h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/8174/files">fix(sqlparser): align operator precedence with PostgreSQL by xiangjinwu #8174</a></p>
+
+<p>Do you know Postgres has a square root operator <code class="language-plaintext highlighter-rouge">|/</code> …? The operator precedence might also surprise you.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=&gt;</span> <span class="k">select</span> <span class="o">|/</span><span class="mi">4</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span> 
+<span class="c1">----------</span>
+        <span class="mi">2</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=&gt;</span> <span class="k">select</span> <span class="o">|/</span><span class="mi">4</span><span class="o">+</span><span class="mi">12</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span> 
+<span class="c1">----------</span>
+        <span class="mi">4</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="null-s-hurt-our-head--full-outer-join-in-steraming"><code class="language-plaintext highlighter-rouge">NULL</code> s hurt our head – FULL OUTER JOIN in steraming</h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/issues/8084">Should we ban full outer join for streaming query? · Issue #8084</a></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">create</span> <span class="k">table</span> <span class="n">t</span> <span class="p">(</span><span class="n">a</span> <span class="nb">int</span> <span class="k">primary</span> <span class="k">key</span><span class="p">);</span>
+<span class="k">insert</span> <span class="k">into</span> <span class="n">t</span> <span class="k">values</span><span class="p">(</span><span class="k">null</span><span class="p">);</span>
+<span class="k">create</span> <span class="n">materialized</span> <span class="k">view</span> <span class="n">v</span> <span class="k">as</span> <span class="k">select</span> <span class="n">t1</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">t</span> <span class="k">as</span> <span class="n">t1</span> <span class="k">full</span> <span class="k">join</span> <span class="n">t</span> <span class="k">as</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Then <code class="language-plaintext highlighter-rouge">v</code> will have primary key <code class="language-plaintext highlighter-rouge">(t1.a, t2.a)</code> , but …</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>left  side: +[null] --&gt; Full Join -&gt; +[null, null]
+right side: +[null] --&gt; Full Join -&gt; +[null, null]
+</code></pre></div></div>
+
+<h2 id="rusty-stuff-️">Rusty stuff 🦀️</h2>
+
+<blockquote>
+  <p><a href="https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/">We ❤️ Rust!</a> This section is about some general Rust related issues.</p>
+</blockquote>
+
+<h3 id="error-handling">Error handling</h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/issues/8074">Is appropriate return a Enum Type Error? · Issue #8074</a></p>
+
+<p>Error handling is quite a topic in Rust (or any language). We ran into this discussion again.</p>
+
+<h3 id="chacharng"><code class="language-plaintext highlighter-rouge">ChaChaRng</code></h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/8068">feat(sqlsmith): use <code class="language-plaintext highlighter-rouge">ChaChaRng</code> for determinism by kwannoel #8068</a>: Use a reproducible rng so that deterministic fuzz test results can be (more) reproduceable.</p>
+
+<h3 id="private-marker-trait">Private marker trait</h3>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/8122">refactor(meta): list all implementors of MetadataModel by zwang28 #8122</a></p>
+
+<p>Just show you the code! 😲</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">mod</span> <span class="n">private</span> <span class="p">{</span>
+    <span class="c">/// A marker trait helps to collect all implementors of `MetadataModel` in</span>
+    <span class="c">/// `for_all_metadata_models`. The trait should only be implemented by adding item in</span>
+    <span class="c">/// `for_all_metadata_models`.</span>
+    <span class="k">pub</span> <span class="k">trait</span> <span class="n">MetadataModelMarker</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">pub</span> <span class="k">trait</span> <span class="n">MetadataModel</span><span class="p">:</span> <span class="nn">std</span><span class="p">::</span><span class="nn">fmt</span><span class="p">::</span><span class="n">Debug</span> <span class="o">+</span> <span class="n">Sized</span> <span class="o">+</span> <span class="nn">private</span><span class="p">::</span><span class="n">MetadataModelMarker</span> <span class="p">{</span>
+    <span class="c">// ...</span>
+<span class="p">}</span>
+
+<span class="nd">macro_rules!</span> <span class="n">for_all_metadata_models</span> <span class="p">{</span>
+    <span class="p">(</span><span class="nv">$macro:ident</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+        <span class="nv">$macro</span><span class="o">!</span> <span class="p">{</span>
+            <span class="c">// These items should be included in a meta snapshot.</span>
+            <span class="c">// So be sure to update meta backup/restore when adding new items.</span>
+            <span class="p">{</span> <span class="nn">risingwave_pb</span><span class="p">::</span><span class="nn">hummock</span><span class="p">::</span><span class="n">HummockVersion</span> <span class="p">},</span>
+            <span class="c">// ...</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nd">macro_rules!</span> <span class="n">impl_metadata_model_marker</span> <span class="p">{</span>
+    <span class="p">(</span><span class="nv">$</span><span class="p">({</span> <span class="nv">$target_type:ty</span> <span class="p">},)</span><span class="o">*</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+        <span class="nv">$</span><span class="p">(</span>
+            <span class="k">impl</span> <span class="nn">private</span><span class="p">::</span><span class="n">MetadataModelMarker</span> <span class="k">for</span> <span class="nv">$target_type</span> <span class="p">{}</span>
+        <span class="p">)</span><span class="o">*</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">for_all_metadata_models!</span><span class="p">(</span><span class="n">impl_metadata_model_marker</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="new-contributors">New Contributors</h2>
+
+<p>As I mentioned last time, RisingWave is an open source project, and new contributors are always welcome. So happy to see we do have some new contributors this week:</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8013">fix(executor): exit early when limit = 0 by Dousir9 #8013</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8171">fix(parser): disallow empty object names by broccoliSpicy #8171</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7693">fix(sqlparser): disallow JOIN without CROSS/ON/USING by sun-jacobi #7693</a></li>
+</ul>
+
+<p>Check out the <a href="https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc">good first issue</a> and <a href="https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22">help wanted</a> issues if you also want to join force! (They are usually carefully chosen. Not just random chore work. It’s a good way to get started!)</p>
+
+<hr />
+
+<p>P.S. Welcome to join the RisingWave <a href="https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw">Slack community</a>.</p>
+
+<p>So much for this week. (I also havn’t fully learned the details of many of them yet…) See you next week (hopefully)! 🤗</p>
+
+<p>P.P.S I’m also considering deep diving into one or few interesting things every week, instead of writing a weekly summary like this. What do you think? 🤔</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#this-week-in-risingwave" class="page__taxonomy-item p-category" rel="tag">This-Week-in-RisingWave</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2023-02-25T00:00:00+00:00">February 25, 2023</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=This+Week+in+RisingWave+%232+%2820230225%29%20https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F25%2Ftwirw-2.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F25%2Ftwirw-2.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F25%2Ftwirw-2.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/this-week-in-risingwave/2023/02/17/twirw-1.html" class="pagination--pager" title="This Week in RisingWave #1 (20230217)
+">Previous</a>
+    
+    
+      <a href="/this-week-in-risingwave/2023/03/04/twirw-3.html" class="pagination--pager" title="This Week in RisingWave #3 (20230304)
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    <!-- <div class="webmentions">
+      likes
+      <div class="webmentions webmentions--likes">
+  <p class="webmentions__not-found">No likes were found.</p>
+</div>
+      replies
+      <div class="webmentions webmentions--replies">
+  <p class="webmentions__not-found">No replies were found.</p>
+</div>
+      reposts
+      <div class="webmentions webmentions--reposts">
+  <p class="webmentions__not-found">No reposts were found.</p>
+</div>
+    </div> -->
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/25/twirw-6.html" rel="permalink">This Week in RisingWave #6 (20230325)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week, I talked about NULLS {FIRST | LAST}, renaming relations, bushy tree, zld, open source and more.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/18/twirw-5.html" rel="permalink">This Week in RisingWave #5 (20230318)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/10/twirw-4.html" rel="permalink">This Week in RisingWave #4 (20230310)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script>
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

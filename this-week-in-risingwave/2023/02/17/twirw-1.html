@@ -1,0 +1,900 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>This Week in RisingWave #1 (20230217) - XX’s Blog</title>
+<meta name="description" content="RisingWave is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="This Week in RisingWave #1 (20230217)">
+<meta property="og:url" content="https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1.html">
+
+
+  <meta property="og:description" content="RisingWave is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-02-17T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- webmention -->
+<link rel="webmention" href="https://webmention.io/xxchan.github.io/webmention" />
+<link rel="pingback" href="https://webmention.io/xxchan.github.io/xmlrpc" />
+
+<!-- webmentions_head -->
+<link rel="dns-prefetch" href="https://webmention.io"><link rel="preconnect" href="https://webmention.io"><link rel="preconnect" href="ws://webmention.io:8080">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <script src="/js/JekyllWebmentionIO.js" async></script>
+<template style="display:none" id="webmention-bookmarks"><div class="webmentions webmentions--bookmarks">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No bookmarks were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-likes"><div class="webmentions webmentions--likes">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No likes were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-links"><div class="webmentions webmentions--links">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No links were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-posts"><div class="webmentions webmentions--posts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <a class="webmention__title webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">{{ webmention.title }}</a>
+          <div class="webmention__meta">
+            {% if webmention.pubdate %}
+              <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No posts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-replies"><div class="webmentions webmentions--replies">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                {% if webmention.author.photo %}
+                  <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                {% endif %}
+                <b class="p-name">{{ webmention.author.name }}</b>
+              </a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.author %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No replies were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-reposts"><div class="webmentions webmentions--reposts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No reposts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-rsvps"><div class="webmentions webmentions--rsvps">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="Avatar for {{ webmention.author.name }}" title="{{ webmention.author.name }}">
+              <b class="p-name">{{ webmention.author.name }}</b>
+              {{ webmention.content }}
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No RSVPs were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-count">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<span class="webmention-count"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>{{ count }}</span></template><template style="display:none" id="webmention-webmentions">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<div class="webmentions"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item">
+          <article class="h-cite webmention webmention--{{ webmention.type }}
+            {% unless webmention.author %}webmention--no-author{% endunless %}
+            {% unless webmention.author.photo %}webmention--no-photo{% endunless %}
+            {% if webmention.source=='twitter' %}{% if webmention.type=='like' or webmention.type=='repost' %}webmention--author-starts{% endif %}{% endif %}
+            ">
+            {% if webmention.author %}
+              <div class="webmention__author p-author h-card">
+                <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                  {% if webmention.author.photo %}
+                    <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                  {% endif %}
+                  <b class="p-name">{{ webmention.author.name }}</b>
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="webmention__content p-content">
+              {% if webmention.content %}
+                {{ webmention.content }}
+              {% else %}
+                {{ webmention.title }}
+              {% endif %}
+            </div>
+            
+            <div class="webmention__meta">
+              {% if webmention.pubdate %}
+                <time class="webmention__pubdate dt-published"
+                      datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              {% endif %}
+              {% if webmention.pubdate and webmention.url %}|{% endif %}
+              {% if webmention.url %}
+                <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">Permalink</a>
+              {% endif %}
+            </div>
+          </article>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No webmentions were found.</p>
+  {% endif %}
+</div></template>
+  
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://plausible.io/xxchan.github.io">Blog Analytics</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Just for fun.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="This Week in RisingWave #1 (20230217)">
+    <meta itemprop="description" content="RisingWave is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.">
+    <meta itemprop="datePublished" content="2023-02-17T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1.html" class="u-url" itemprop="url">This Week in RisingWave #1 (20230217)
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#most-exciting-things-">Most exciting things 🤩</a><ul><li><a href="#huge-reduce-of-ci-time">Huge reduce of CI time</a></li><li><a href="#ddl-ux-improvements">DDL UX improvements</a></li></ul></li><li><a href="#most-intersting-things-">Most intersting things 😄</a><ul><li><a href="#opendal-into-risingwave">OpenDAL into RisingWave!</a></li></ul></li><li><a href="#rusty-stuff-️">Rusty stuff 🦀️</a><ul><li><a href="#-clippyor_fun_call-"> clippy::or_fun_call </a></li><li><a href="#zip_eq---exactsizeiterator-">zip_eq &amp;  ExactSizeIterator </a></li></ul></li><li><a href="#other-notable-things">Other notable things</a><ul><li><a href="#system-parameters">System Parameters</a></li><li><a href="#pg_catalog">pg_catalog</a></li><li><a href="#explain-format">EXPLAIN format</a></li><li><a href="#query-optimizer">Query optimizer</a></li></ul></li><li><a href="#last-but-not-least">Last but not least</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><a href="https://github.com/risingwavelabs/risingwave">RisingWave</a> is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.</p>
+
+<p>So why not share the excitement with more people (and also help myself to get a better understanding)? That’s why I decided to write this blog post about what’s happening in the project. Hope you will enjoy it!</p>
+
+<blockquote>
+  <p>This blog series is <em>my personal comments</em> about (part of) the development of <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a>.</p>
+
+  <p>Please take it as an unofficial and no-promise supplement.</p>
+</blockquote>
+
+<h2 id="most-exciting-things-">Most exciting things 🤩</h2>
+
+<h3 id="huge-reduce-of-ci-time">Huge reduce of CI time</h3>
+
+<p>As my last post mentioned, last week I found some <a href="/cs/2023/02/17/optimize-rust-comptime-en.html">stupidly effective ways to optimize Rust compile time</a>. I managed to reduce the CI time from <strong>main 40min/PR 25min30s</strong> to <strong>main 28min/PR 16-19min</strong>, and it looks good this week!</p>
+
+<p>It’s quite a DX improvement. I’m very happy and would like to quote matklad’s <a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">blog</a> again:</p>
+
+<blockquote>
+  <p>Compilation time is a <em>multiplier</em> for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.</p>
+
+  <p>It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.</p>
+</blockquote>
+
+<p>Let’s take some time to prevent “<em>broken windows</em>”. The effort would pay off!</p>
+
+<h3 id="ddl-ux-improvements">DDL UX improvements</h3>
+
+<p>DDL can take very long time if there are already a lot of existing data to consume. Previously you can only sit there and wait. But now, you can:</p>
+
+<ul>
+  <li>Show DDL’s progress: (<a href="https://github.com/risingwavelabs/risingwave/pull/7914">by chenzl25 #7914</a>)</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dev</span><span class="o">=&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">rw_catalog</span><span class="p">.</span><span class="n">rw_ddl_progress</span><span class="p">;</span>
+  <span class="n">ddl_id</span> <span class="o">|</span>         <span class="n">ddl_statement</span>         <span class="o">|</span> <span class="n">progress</span>
+<span class="c1">--------+-------------------------------+----------</span>
+    <span class="mi">1026</span> <span class="o">|</span> <span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx</span> <span class="k">ON</span> <span class="n">sbtest1</span><span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="o">|</span> <span class="mi">69</span><span class="p">.</span><span class="mi">02</span><span class="o">%</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>and cancel streaming jobs by ctrl-c! (<a href="https://github.com/risingwavelabs/risingwave/pull/7917">by yezizp2012 #7917</a>)</li>
+</ul>
+
+<h2 id="most-intersting-things-">Most intersting things 😄</h2>
+
+<h3 id="opendal-into-risingwave">OpenDAL into RisingWave!</h3>
+
+<p><a href="https://github.com/datafuselabs/opendal">OpenDAL</a> is a unified data access layer which aims to help access data freely, painlessly, and efficiently.</p>
+
+<p>Previously, RisingWave only supports s3 as a storage backend (and also support other s3-compatible storage). Recently we are trying to add more storage backends.</p>
+
+<p>Last week, we used OpenDAL to add support for using HDFS as a storage backend. This week, we tried more things:</p>
+
+<ul>
+  <li>Tried using google cloud storage in RisingWave (<a href="https://github.com/risingwavelabs/risingwave/issues/7920">by wcy-fdu #7920</a>). In our initial benchmark, it seems OpenDAL can be faster than s3-compatible protocol!</li>
+  <li>Changed the implementation for oss from s3-compatible mode to OpenDAL (<a href="https://github.com/risingwavelabs/risingwave/pull/7969">by wcy-fdu #7969</a>). S3-compatible mode for oss doesn’t support <code class="language-plaintext highlighter-rouge">delete_objects</code>, and also suffers from some unstable issues.</li>
+</ul>
+
+<p>It seems that OpenDAL is quite promising!</p>
+
+<h2 id="rusty-stuff-️">Rusty stuff 🦀️</h2>
+
+<blockquote>
+  <p><a href="https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/">We ❤️ Rust!</a> This section is about some general Rust related issues.</p>
+</blockquote>
+
+<h3 id="-clippyor_fun_call-"><a href="https://rust-lang.github.io/rust-clippy/master/#or_fun_call"> <code class="language-plaintext highlighter-rouge">clippy::or_fun_call</code> </a></h3>
+
+<p>Compared with <code class="language-plaintext highlighter-rouge">or</code> , The <code class="language-plaintext highlighter-rouge">or_else</code> methods on <code class="language-plaintext highlighter-rouge">Option</code> and <code class="language-plaintext highlighter-rouge">Result</code> can help to avoid expensive computation in the <code class="language-plaintext highlighter-rouge">None</code> or <code class="language-plaintext highlighter-rouge">Err</code> case. (i.e., lazy evaluation!) And the <a href="https://rust-lang.github.io/rust-clippy/master/#or_fun_call"> <code class="language-plaintext highlighter-rouge">clippy::or_fun_call</code> </a> lint is for detecting that. It used to be <code class="language-plaintext highlighter-rouge">warn</code> by default, but unfortunately it seems to have a high false positive rate, and is now <code class="language-plaintext highlighter-rouge">allow</code> by default.</p>
+
+<p>But we met a case where it’s very wanted. In a function, we used <code class="language-plaintext highlighter-rouge">ok_or::&lt;RwError&gt;</code> 9 times, so 9 <code class="language-plaintext highlighter-rouge">RwError</code> is created regardless of whether it’s needed. But constructing <code class="language-plaintext highlighter-rouge">RwError</code> is very expensive because it captures the backtrace…</p>
+
+<p>What’s worse, on M1 Mac, capturing backtrace is <em>VERY SLOW</em> (~300ms <a href="https://github.com/risingwavelabs/risingwave/issues/6131">#6131</a>) and can even cause <em>SEGFAULT</em> (<a href="https://github.com/risingwavelabs/risingwave/issues/6205">#6205</a>)! 😇 It’s not completely resolved yet. We mitigated it by reducing unncessary backtrace capturing, but it’s still a problem.</p>
+
+<p>So for this issue, of course we should use <code class="language-plaintext highlighter-rouge">ok_or_else</code> instead (<a href="https://github.com/risingwavelabs/risingwave/pull/7945">by xxchan #7945</a>).</p>
+
+<h3 id="zip_eq---exactsizeiterator-"><a href="https://docs.rs/itertools/latest/itertools/fn.zip_eq.html"><code class="language-plaintext highlighter-rouge">zip_eq</code></a> &amp; <a href="https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html"> <code class="language-plaintext highlighter-rouge">ExactSizeIterator</code> </a></h3>
+
+<p><a href="https://docs.rs/itertools/latest/itertools/fn.zip_eq.html"><code class="language-plaintext highlighter-rouge">zip_eq</code></a> is a <em>safer</em> version of <code class="language-plaintext highlighter-rouge">zip</code> which checks if the two iterators have the same length. However, it’s notoriously slow (see <a href="https://github.com/risingwavelabs/risingwave/pull/6856">#6856 by wangrunji0408</a> for a benchmark), because in the naive implementation, every item in the iterator is checked.</p>
+
+<p>There’s a <a href="https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html"> <code class="language-plaintext highlighter-rouge">ExactSizeIterator</code> </a> trait and naturally it can have an optimized implementation. Such speciallized implementation does not exist because Rust doesn’t support specialization yet. (See <a href="https://github.com/rust-lang/rust/issues/31844">tracking issue for specialization (RFC 1210)</a>)</p>
+
+<p>So last week I added two new separated traits to replace <code class="language-plaintext highlighter-rouge">zip_eq</code> : (<a href="https://github.com/risingwavelabs/risingwave/blob/d8198fa138003e1f1431053f4f5f09e4a5fa8fd8/src/common/src/util/iter_util.rs">code here</a>)</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">zip_eq_debug</code>: uses <code class="language-plaintext highlighter-rouge">zip_eq</code> when <code class="language-plaintext highlighter-rouge">debug_assertions</code> is enabled, otherwise use <code class="language-plaintext highlighter-rouge">zip</code>. It’s a good trade-off between safety and performance, and can be a drop-in replacement for <code class="language-plaintext highlighter-rouge">zip_eq</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">zip_eq_fast</code>: speciallized implementation for <code class="language-plaintext highlighter-rouge">ExactSizeIterator</code>. (Actually <code class="language-plaintext highlighter-rouge">zip_eq_debug</code> can be good enough, but I still added this after playing with specialization for a while. Just for fun…!😄)</li>
+</ul>
+
+<p>This week, <code class="language-plaintext highlighter-rouge">ExactSizeIterator</code> are implemented for more our iterator implementations, so we can use <code class="language-plaintext highlighter-rouge">zip_eq_fast</code> more often… (<a href="https://github.com/risingwavelabs/risingwave/pull/7939">by BugenZhao #7939</a>)</p>
+
+<h2 id="other-notable-things">Other notable things</h2>
+
+<h3 id="system-parameters">System Parameters</h3>
+
+<p>Recently we are doing a large refactoring for system parameters in order to achive consistency and mutability for the cluster configurations (<a href="https://github.com/risingwavelabs/risingwave/issues/7381">Tracking Issue #7381</a>). This is a serious issue as RisingWave grows mature.</p>
+
+<p>This week, the meta part for <code class="language-plaintext highlighter-rouge">ALTER SYTEM</code> is implemented <a href="https://github.com/risingwavelabs/risingwave/pull/7954">by Gun9niR #7954</a>.</p>
+
+<h3 id="pg_catalog"><code class="language-plaintext highlighter-rouge">pg_catalog</code></h3>
+
+<p>Since RisingWave is PostgreSQL compatible, I had thought that supporting other database tools would be easy. But it turns out to be very hard 😭. The largest obstacles is that database tools ususally rely heavily on the system tables in <code class="language-plaintext highlighter-rouge">pg_catalog</code> to get the metadata of the database so that they can provide a better UX. But there are so many features in the system tables!</p>
+
+<p>We have been constantly making efforts to support more and more system tables in order to integrate RisingWave into other tools. This week, we:</p>
+
+<ul>
+  <li>Added <code class="language-plaintext highlighter-rouge">pg_catalog.pg_conversion</code> <a href="https://github.com/risingwavelabs/risingwave/pull/7964">by yezizp2012 #7964</a>. This is for DBeaver support.</li>
+  <li>Found it’s not possible to add <code class="language-plaintext highlighter-rouge">typarray</code> column in <code class="language-plaintext highlighter-rouge">pg_catalog.pg_type</code> <a href="https://github.com/risingwavelabs/risingwave/issues/7555">#7555</a>, which affects sqlalchemy support. But <a href="https://github.com/risingwavelabs/sqlalchemy-risingwave">sqlalchemy-risingwave</a> can be used as a substitute for the PG native plugin.</li>
+</ul>
+
+<h3 id="explain-format"><code class="language-plaintext highlighter-rouge">EXPLAIN</code> format</h3>
+
+<p><code class="language-plaintext highlighter-rouge">EXPLAIN</code> format is another thing I had thought would be easy. Although current situation is not so bad, it’s still far from perfect.</p>
+
+<p>This week, we tried to use a “global expression id” to make the plan more readable, but it still has some problems:</p>
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7953">feat: try to improve explain result by fuyufjh #7953</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/issues/8005">New project explain format makes planner test unstable #8005</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8006">refactor(optimizer): reset expression display id for explain by chenzl25 #8006</a></li>
+</ul>
+
+<p>By the way, here’s another intersting stuff: rewrite the <code class="language-plaintext highlighter-rouge">EXPLAIN</code> implementation using the (modified) Wadler-style algebraic pretty printer! See the <a href="https://github.com/risingwavelabs/rfcs/pull/42">RFC by ice1000</a></p>
+
+<h3 id="query-optimizer">Query optimizer</h3>
+
+<p>Although OLAP batch queries are not the main focus of RisingWave, we still want to make it better. This week, we have these optimizer improvements to make batch queries faster:</p>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7726">feat(optimizer): index accelerating <code class="language-plaintext highlighter-rouge">TopN</code> by Eurekaaw #7726</a></li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/7982">feat(optimizer): support like expression rewrite by chenzl25 #7982</a></li>
+</ul>
+
+<p>We are also trying to add constant relation in streaming (<a href="https://github.com/risingwavelabs/risingwave/issues/7854">#7854</a>). As a first step, we are doing “plan-level constant folding”, e.g., merge <code class="language-plaintext highlighter-rouge">Union</code> with <code class="language-plaintext highlighter-rouge">Values</code> inputs into <code class="language-plaintext highlighter-rouge">Values</code> <a href="https://github.com/risingwavelabs/risingwave/pull/7923">by jon-chuang #7923</a></p>
+
+<h2 id="last-but-not-least">Last but not least</h2>
+
+<ul>
+  <li><a href="https://github.com/risingwavelabs/risingwave/pull/8014">fix: fix idle exit in playground mode of compactor by yezizp2012 #8014</a>. During an HTTP server’s graceful shutdown (<code class="language-plaintext highlighter-rouge">serve_with_shutdown</code>), it will wait for all the connections to be closed. We ran into a situation where some connections were not closed and the server waits forever…</li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/issues/8018">Tracking: Monitoring, logging and tooling improvements #8018</a>. Observability matters!</li>
+  <li><a href="https://github.com/risingwavelabs/risingwave/issues/7863">Support error line/column number reporting during parsing #7863</a>. This is a lovely feature to increase UX, but it will require hard work :)</li>
+</ul>
+
+<p>By the way, welcome to join the RisingWave <a href="https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw">Slack community</a>. Also check out the <a href="https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc">good first issue</a> and <a href="https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22">help wanted</a> issues if you want to join the development of an open source database system!</p>
+
+<p>So much for this week. See you next week (hopefully)! 🤗</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#this-week-in-risingwave" class="page__taxonomy-item p-category" rel="tag">This-Week-in-RisingWave</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2023-02-17T00:00:00+00:00">February 17, 2023</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=This+Week+in+RisingWave+%231+%2820230217%29%20https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F17%2Ftwirw-1.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F17%2Ftwirw-1.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fthis-week-in-risingwave%2F2023%2F02%2F17%2Ftwirw-1.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" class="pagination--pager" title="Stupidly effective ways to optimize Rust compile time
+">Previous</a>
+    
+    
+      <a href="/this-week-in-risingwave/2023/02/25/twirw-2.html" class="pagination--pager" title="This Week in RisingWave #2 (20230225)
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    <!-- <div class="webmentions">
+      likes
+      <div class="webmentions webmentions--likes">
+  <p class="webmentions__not-found">No likes were found.</p>
+</div>
+      replies
+      <div class="webmentions webmentions--replies">
+  <p class="webmentions__not-found">No replies were found.</p>
+</div>
+      reposts
+      <div class="webmentions webmentions--reposts">
+  <p class="webmentions__not-found">No reposts were found.</p>
+</div>
+    </div> -->
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/25/twirw-6.html" rel="permalink">This Week in RisingWave #6 (20230325)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week, I talked about NULLS {FIRST | LAST}, renaming relations, bushy tree, zld, open source and more.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/18/twirw-5.html" rel="permalink">This Week in RisingWave #5 (20230318)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/10/twirw-4.html" rel="permalink">This Week in RisingWave #4 (20230310)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script>
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

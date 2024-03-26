@@ -1,0 +1,979 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>我如何动动小手就让 CI 时间减少了 10 分钟 - XX’s Blog</title>
+<meta name="description" content="Stupidly effective ways to optimize Rust compile time">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="我如何动动小手就让 CI 时间减少了 10 分钟">
+<meta property="og:url" content="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html">
+
+
+  <meta property="og:description" content="Stupidly effective ways to optimize Rust compile time">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-02-11T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- webmention -->
+<link rel="webmention" href="https://webmention.io/xxchan.github.io/webmention" />
+<link rel="pingback" href="https://webmention.io/xxchan.github.io/xmlrpc" />
+
+<!-- webmentions_head -->
+<link rel="dns-prefetch" href="https://webmention.io"><link rel="preconnect" href="https://webmention.io"><link rel="preconnect" href="ws://webmention.io:8080">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <script src="/js/JekyllWebmentionIO.js" async></script>
+<template style="display:none" id="webmention-bookmarks"><div class="webmentions webmentions--bookmarks">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No bookmarks were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-likes"><div class="webmentions webmentions--likes">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No likes were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-links"><div class="webmentions webmentions--links">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">{{ webmention.author.name }}</a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.url %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No links were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-posts"><div class="webmentions webmentions--posts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <a class="webmention__title webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">{{ webmention.title }}</a>
+          <div class="webmention__meta">
+            {% if webmention.pubdate %}
+              <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No posts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-replies"><div class="webmentions webmentions--replies">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__content p-content">
+            {{ webmention.content }}
+          </div>
+          <div class="webmention__meta">
+            {% if webmention.author %}
+              <a class="webmention__author h-card u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                {% if webmention.author.photo %}
+                  <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                {% endif %}
+                <b class="p-name">{{ webmention.author.name }}</b>
+              </a>
+            {% endif %}
+            {% if webmention.pubdate and webmention.author %}on{% endif %}
+            {% if webmention.pubdate %}
+              <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">
+                <time class="webmention__pubdate dt-published" datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No replies were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-reposts"><div class="webmentions webmentions--reposts">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No reposts were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-rsvps"><div class="webmentions webmentions--rsvps">
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item webmention webmention--{{ webmention.type }}">
+          <div class="webmention__author p-author h-card">
+            <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+              <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="Avatar for {{ webmention.author.name }}" title="{{ webmention.author.name }}">
+              <b class="p-name">{{ webmention.author.name }}</b>
+              {{ webmention.content }}
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No RSVPs were found.</p>
+  {% endif %}
+</div></template><template style="display:none" id="webmention-count">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<span class="webmention-count"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>{{ count }}</span></template><template style="display:none" id="webmention-webmentions">{% capture webmention_types %}{{ types | join: ',' }}{% endcapture %}
+<div class="webmentions"{% unless webmention_types=="" %} data-webmention-types="{{ webmention_types }}"{% endunless %}>
+  {% if webmentions.size > 0 %}
+    <ol class="webmentions__list">
+      {% for webmention in webmentions %}
+        <li id="webmention-{{ webmention.id }}" class="webmentions__item">
+          <article class="h-cite webmention webmention--{{ webmention.type }}
+            {% unless webmention.author %}webmention--no-author{% endunless %}
+            {% unless webmention.author.photo %}webmention--no-photo{% endunless %}
+            {% if webmention.source=='twitter' %}{% if webmention.type=='like' or webmention.type=='repost' %}webmention--author-starts{% endif %}{% endif %}
+            ">
+            {% if webmention.author %}
+              <div class="webmention__author p-author h-card">
+                <a class="u-url" href="{{ webmention.author.url }}" rel="nofollow">
+                  {% if webmention.author.photo %}
+                    <img class="webmention__author__photo u-photo" src="{{ webmention.author.photo }}" alt="" title="{{ webmention.author.name }}">
+                  {% endif %}
+                  <b class="p-name">{{ webmention.author.name }}</b>
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="webmention__content p-content">
+              {% if webmention.content %}
+                {{ webmention.content }}
+              {% else %}
+                {{ webmention.title }}
+              {% endif %}
+            </div>
+            
+            <div class="webmention__meta">
+              {% if webmention.pubdate %}
+                <time class="webmention__pubdate dt-published"
+                      datetime="{{ webmention.pubdate | date: '%FT%T%:z' }}">{{ webmention.pubdate | date: '%d %B %Y' }}</time>
+              {% endif %}
+              {% if webmention.pubdate and webmention.url %}|{% endif %}
+              {% if webmention.url %}
+                <a class="webmention__source u-url" href="{{ webmention.url }}" rel="nofollow">Permalink</a>
+              {% endif %}
+            </div>
+          </article>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="webmentions__not-found">No webmentions were found.</p>
+  {% endif %}
+</div></template>
+  
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://plausible.io/xxchan.github.io">Blog Analytics</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Just for fun.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="我如何动动小手就让 CI 时间减少了 10 分钟">
+    <meta itemprop="description" content="Stupidly effective ways to optimize Rust compile time">
+    <meta itemprop="datePublished" content="2023-02-11T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html" class="u-url" itemprop="url">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+          </h1>
+          
+
+    <p><em id="page-subtitle" class="page__subtitle p-name" itemprop="headline">
+    Stupidly effective ways to optimize Rust compile time
+    </em></p>
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 目录</h4></header>
+              <ul class="toc__menu"><li><a href="#可供参考的数据图表">可供参考的数据、图表</a><ul><li><a href="#ci-waterfall--dag-graph">CI waterfall &amp; dag graph</a></li><li><a href="#cargo-build---timings">cargo build --timings</a></li></ul></li><li><a href="#step-1-compilation-cache">Step 1: Compilation cache</a></li><li><a href="#step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</a></li><li><a href="#step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</a></li><li><a href="#step-4-single-binary-integration-test">Step 4: Single binary integration test</a></li><li><a href="#其他一些先前就存在的优化">其他一些先前就存在的优化</a></li><li><a href="#总结">总结</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><a href="/cs/2023/02/17/optimize-rust-comptime-en.html">English version of this post</a></p>
+
+<p>虽然经常有逸闻抱怨 Rust 编译速度臭名昭著地慢，但我们的项目 <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a> 在经过前人比如（<a href="https://github.com/skyzh">skyzh</a>，<a href="https://github.com/bugenzhao">BugenZhao</a>）的一些努力后，编译速度并不算慢，特别是我自从用上 M1 的 Macbook Pro 后，编译速度根本不是问题，全量 debug 编译也就两三分钟。</p>
+
+<p>然而随着时间推移，CI 里加了越来越多的东西，越来越臃肿了。现在 main workflow 需要大概 40min，PR workflow 需要大概 25min30s。虽然并不算特别慢，但是可以体感到比以前变慢了不少。</p>
+
+<p>于是我前两天心血来潮，决定花点时间研究一下能不能再优化一点编译速度。</p>
+
+<p>令我非常震惊的是，没想到存在着一些非常简单的方法，动动小手就产生了惊人的成效。感觉完全可以用 low-hanging fruits、silver bullet 甚至是 free lunch 来形容🤯。</p>
+
+<hr />
+
+<p>P.S. 很推荐 <a href="https://github.com/matklad">matklad</a>（IntelliJ Rust 和 rust-analyzer 的原作者）的 blog：</p>
+<ul>
+  <li><a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">Fast Rust Builds</a></li>
+  <li><a href="https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html">Delete Cargo Integration Tests</a></li>
+</ul>
+
+<p>我用到的大部分方法这里面都有讲到，而且他讲的清晰明了。如果没有另外说明，那么文中的 quote 都来自这里。</p>
+
+<p>本文算是我的实践记录，或者大概可以也当成一个 tl; dr 版。每一个优化点都带上了相应的 PR，可以结合 <a href="https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;branch=main&amp;qualified_name=refs%2Fheads%2Fmain">commit history</a> 点开每个优化点前后的页面对比效果。</p>
+
+<hr />
+
+<p>P.P.S. 优化完的结果：main 最快 27min，PR 最快 16min，大多在 17-19min 左右。</p>
+
+<h2 id="可供参考的数据图表">可供参考的数据、图表</h2>
+
+<blockquote>
+  <p>Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.</p>
+</blockquote>
+
+<p>前两天在研究 <a href="/cs/2023/02/08/profiling-101.html">profiling</a>，那现在提到要优化，当然应该看看有没有什么数据、图表看看，找到瓶颈在哪里再来优化。</p>
+
+<h3 id="ci-waterfall--dag-graph">CI waterfall &amp; dag graph</h3>
+
+<p>我们的 CI 用的是 Buildkite，正常点开一个页面（例如 <a href="https://buildkite.com/risingwavelabs/pull-request/builds/17099">Build #17099</a>）长这样：</p>
+
+<p><img src="/assets/img/comptime/buildkite-1.png" alt="buildkite-1.png" /></p>
+
+<p>Buildkite 有两个非常好用的隐藏页面，分别是在 <code class="language-plaintext highlighter-rouge">/waterfall</code> 和 <code class="language-plaintext highlighter-rouge">/dag</code> 里，可以看到：</p>
+
+<p><img src="/assets/img/comptime/buildkite-waterfall.png" alt="buildkite-waterfall.png" /></p>
+
+<p><img src="/assets/img/comptime/buildkite-dag.png" alt="buildkite-dag.png" /></p>
+
+<p>从图上我们可以清晰地看出，最大的瓶颈是 simulation build -&gt; recovery test</p>
+
+<h3 id="cargo-build---timings"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></h3>
+
+<p>Cargo 自带 profiling 编译时间的支持（貌似是去年 stablize 的），通过 <a href="https://doc.rust-lang.org/cargo/reference/timings.html">cargo build –timings</a> 启用，它长这样：</p>
+
+<p><img src="/assets/img/comptime/timings.png" alt="timings.png" /></p>
+
+<p>可以发现 <code class="language-plaintext highlighter-rouge">zstd-sys</code> ， <code class="language-plaintext highlighter-rouge">protobuf-src</code> 等几个依赖的编译时间非常长，应该想办法看看能不能优化掉。</p>
+
+<h2 id="step-1-compilation-cache">Step 1: Compilation cache</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7799">ci: try sccache #7799</a></p>
+
+<blockquote>
+  <p>If you think about it, it’s pretty obvious how a good caching strategy for CI should work.</p>
+
+  <p>Unfortunately, almost nobody does this.</p>
+</blockquote>
+
+<p><a href="https://xuanwo.io/reports/2023-04/">2023-04: 为什么你该试试 Sccache？</a> 在 xuanwo 的大力鼓吹下，我非常心动，也想尝试一下 sccache。这也算是我这次搞优化的一大 trigger。</p>
+
+<p>不用多说，非常简单好用。只需加两个环境变量就一键启动了：</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> RUSTC_WRAPPER=sccache</span>
+<span class="k">ENV</span><span class="s"> SCCACHE_BUCKET=ci-sccache-bucket</span>
+</code></pre></div></div>
+
+<p>（在这背后其实需要研究一下 Buildkite 和 AWS 的配置——实际上也非常傻瓜。Buildkite 可以通过 IAM Role 来获得权限，加一个 S3 bucket 的 policy 就 work 了，完全不用配置 secret key 之类的东西。我之前还在思考能不能在 CI 里把 key echo 出来，看来是完全不用担心这种事😄）</p>
+
+<p>效果立竿见影，simulation build 减少了 2.5min，非瓶颈的 debug build 减少了 4min。虽然并没有质变，但是免费的量变何乐而不为呢？</p>
+
+<h2 id="step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7816">build: remove unused deps #7816</a></p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">Cargo.toml</code> 中声明的依赖不管实际上有没有用到，都会被编译。更甚它可能会引入不必要的 syncronization point，影响编译的并行度。</p>
+
+<p>有个老工具 <a href="https://github.com/est31/cargo-udeps">cargo-udeps</a> 就是干这个的，但是首先它并不支持自动修复，而且它很慢。另外印象中有一个毛病是它不能和 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 一起用。这导致 RisingWave 中长期没有清理过 unused dependencies。典型的破窗效应🥲！</p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">cargo-udeps</code> 里关于自动 fix 的 issue 下面看到有人提了 <a href="https://github.com/bnjbvr/cargo-machete"> <code class="language-plaintext highlighter-rouge">cargo-machete</code> </a>（这个名字是大砍刀的意思🤣），觉得是骡子是马拉出来遛遛，发现它跑的飞快，也没有几个 false postive。虽然有几个小问题（参考上面 PR 的 commit history），但是都能容易地修掉。</p>
+
+<p>大砍刀的作者有一篇 <a href="https://blog.benj.me/2022/04/27/cargo-machete/">blog</a> 介绍了 unused dependencies 的危害以及 <code class="language-plaintext highlighter-rouge">cargo-machete</code> 的解法。具体说来，<code class="language-plaintext highlighter-rouge">cargo-udeps</code> 是用 <code class="language-plaintext highlighter-rouge">cargo check</code> 先编译了一遍再分析的，而 <code class="language-plaintext highlighter-rouge">cargo-machete</code> 是简单粗暴的 <code class="language-plaintext highlighter-rouge">ripgrep</code>。</p>
+
+<p>这个 PR 一下子删掉了大几十个 udeps，也是让我大吃一惊🤯。可惜的是，CI 的时间并没有进一步缩短，感觉这侧面说明了 cache 效果很好……我本地粗略地测了一下，大概快了十几二十秒。蚊子腿也是肉嘛，anyway it’s free!</p>
+
+<hr />
+
+<p>P.S. 其实 <code class="language-plaintext highlighter-rouge">cargo-udeps</code> 配一下也是能和 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 用的：<a href="https://github.com/risingwavelabs/risingwave/pull/7836">feat(risedev): add <code class="language-plaintext highlighter-rouge">check-udeps</code> #7836</a></p>
+
+<h2 id="step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7838">build: disable incremental build in CI #7838</a></p>
+
+<p>干完上面两个小工作之后本来已经想收工了，但有点心痒痒，觉得 simulation build 还是有点慢。于是我决定 profiling 一下看看。然后就看到了一开始贴的 <code class="language-plaintext highlighter-rouge">--timings</code> 的图中的几个庞然大物，我觉得这很不 make sense。</p>
+
+<p>我搜了搜 sccache non-cacheable 的原因，发现 incremental compilation 是个很大的 caveat，立马尝试了一下，然后我再次震惊了，效果 <em>stupidly</em> 好：</p>
+
+<p><img src="/assets/img/comptime/timings-2.png" alt="timings-2" /></p>
+
+<p>这让 simulation build 的时间瞬间下降了 4 分钟……</p>
+
+<p>实际上我们的 debug build 是很早之前就关掉了 incremental compilation：</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[profile.ci-dev]</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>但是后来加上新的 build profile 的时候没有考虑到这个问题。仔细想一想，incremental compilation 虽好，但它在 CI 里不太 make sense 啊！</p>
+
+<blockquote>
+  <p>CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of <code class="language-plaintext highlighter-rouge">./target</code>, which make caching less effective.</p>
+</blockquote>
+
+<p>于是我干脆在 CI 里加了个全局的 env var 来把它关掉，一劳永逸。</p>
+
+<h2 id="step-4-single-binary-integration-test">Step 4: Single binary integration test</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7842">build: single-binary integration test #7842</a></p>
+
+<p>又是一个 <em>stupidly effective</em> 的优化。tl;dr:</p>
+
+<p>Don’t do this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  foo.rs
+  bar.rs
+</code></pre></div></div>
+
+<p>Do this instead:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+</code></pre></div></div>
+
+<p>因为 <code class="language-plaintext highlighter-rouge">tests/</code> 下面的每个文件都会编译成一个单独的 binary（意味着会每个都 link 一下依赖）。除了编译慢，这甚至还可能导致测试跑的慢（<code class="language-plaintext highlighter-rouge">cargo test</code> 的缺陷）。</p>
+
+<p>这个优化没有减少我们的测试时间（可能是因为 <code class="language-plaintext highlighter-rouge">cargo nextest</code> 的优越性），但它一下子又减少了快 2 分钟的编译时间……另外说来有点可笑的是，它还减少了 2 分钟的 artifacts 上传下载、压缩解压的时间……（虽然后者在瓶颈上并没有影响）</p>
+
+<h2 id="其他一些先前就存在的优化">其他一些先前就存在的优化</h2>
+
+<p>以上就是我这次优化的主要过程了，这下终于可以心满意足地收工了。最后想再总结一些前人的努力，以供参考。</p>
+
+<ul>
+  <li>使用 <a href="https://github.com/nextest-rs/nextest"><code class="language-plaintext highlighter-rouge">cargo nextest</code></a> 替代 <code class="language-plaintext highlighter-rouge">cargo test</code>。</li>
+  <li>使用 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 技术：见 <a href="https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html"><code class="language-plaintext highlighter-rouge">cargo hakari</code></a>。</li>
+  <li>给 cargo registry 加 cache，或者使用刚刚 stablize 的 sparse index，可参考 <a href="https://github.com/dcjanus">DCjanus</a> 的这篇 <a href="https://blog.dcjanus.com/posts/cargo-registry-index-in-http/">blog</a>。</li>
+  <li>把巨大的 crate 拆分成多个小 create。</li>
+  <li>link time 的优化：link 很花时间，而且是单线程的，很可能成为瓶颈
+    <ul>
+      <li>使用更快的 linker：<code class="language-plaintext highlighter-rouge">mold</code> for Linux, <code class="language-plaintext highlighter-rouge">zld</code> for macOS. <code class="language-plaintext highlighter-rouge">lld</code> is the most mature option for production use.</li>
+      <li>在 debug build 上关掉 Link Time Optimization (LTO)。</li>
+    </ul>
+  </li>
+  <li>Trade-off between compile time and performance：CI 的总时间是编译+测试，那么编译优化（包括上面的 LTO）开不开，开多少实际上就是在前后者之间 trade-off，可以调整测试来达到一个整体最优的选择。例如 bugen gg 在我们的 build profile 上的骚操作：</li>
+</ul>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># The profile used for CI in pull requests.</span>
+<span class="c"># External dependencies are built with optimization enabled, while crates in this workspace are built</span>
+<span class="c"># with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.</span>
+<span class="nn">[profile.ci-dev]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="nn">[profile.ci-dev.package."*"]</span> <span class="c"># external dependencies</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="nn">[profile.ci-dev.package."tokio"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."async_stack_trace"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."indextree"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."task_stats_alloc"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+
+<span class="c"># The profile used for deterministic simulation tests in CI.</span>
+<span class="c"># The simulator can only run single-threaded, so optimization is required to make the running time</span>
+<span class="c"># reasonable. The optimization level is customized to speed up the build.</span>
+<span class="nn">[profile.ci-sim]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>除此以外的更多优化也有很多人都总结过，我就不多说（不懂）了，例如这篇 blog：<a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a></p>
+
+<h2 id="总结">总结</h2>
+
+<p>CI、开发者体验这种东西很容易就会在无人照料的情况下变得杂草丛生，但如果定期打理一下，可能会有意想不到的收获，一点点微小的努力就带来巨大的提升。</p>
+
+<p>最后再摘两段 matklad <a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">blog</a> 里的话作结：</p>
+
+<blockquote>
+  <p>Compilation time is a <em>multiplier</em> for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.</p>
+
+  <p>It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.</p>
+</blockquote>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2023-02-11T00:00:00+00:00">February 11, 2023</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E6%88%91%E5%A6%82%E4%BD%95%E5%8A%A8%E5%8A%A8%E5%B0%8F%E6%89%8B%E5%B0%B1%E8%AE%A9+CI+%E6%97%B6%E9%97%B4%E5%87%8F%E5%B0%91%E4%BA%86+10+%E5%88%86%E9%92%9F%20https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F11%2Foptimize-rust-comptime.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F11%2Foptimize-rust-comptime.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F11%2Foptimize-rust-comptime.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2023/02/08/profiling-101.html" class="pagination--pager" title="Profiling 101
+">Previous</a>
+    
+    
+      <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" class="pagination--pager" title="Stupidly effective ways to optimize Rust compile time
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    <!-- <div class="webmentions">
+      likes
+      <div class="webmentions webmentions--likes">
+  <p class="webmentions__not-found">No likes were found.</p>
+</div>
+      replies
+      <div class="webmentions webmentions--replies">
+  <p class="webmentions__not-found">No replies were found.</p>
+</div>
+      reposts
+      <div class="webmentions webmentions--reposts">
+  <p class="webmentions__not-found">No reposts were found.</p>
+</div>
+    </div> -->
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    
+
+    <p><em id="page-subtitle" class="page__subtitle p-name" itemprop="headline">
+    Stupidly effective ways to optimize Rust compile time
+    </em></p>
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/25/twirw-6.html" rel="permalink">This Week in RisingWave #6 (20230325)
+</a>
+      
+    </h2>
+    
+
+    <p><em id="page-subtitle" class="page__subtitle p-name" itemprop="headline">
+    Stupidly effective ways to optimize Rust compile time
+    </em></p>
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week, I talked about NULLS {FIRST | LAST}, renaming relations, bushy tree, zld, open source and more.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/18/twirw-5.html" rel="permalink">This Week in RisingWave #5 (20230318)
+</a>
+      
+    </h2>
+    
+
+    <p><em id="page-subtitle" class="page__subtitle p-name" itemprop="headline">
+    Stupidly effective ways to optimize Rust compile time
+    </em></p>
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/03/10/twirw-4.html" rel="permalink">This Week in RisingWave #4 (20230310)
+</a>
+      
+    </h2>
+    
+
+    <p><em id="page-subtitle" class="page__subtitle p-name" itemprop="headline">
+    Stupidly effective ways to optimize Rust compile time
+    </em></p>
+
+
+
+    <p class="archive__item-excerpt" itemprop="description">The exciting things happening in RisingWave
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script>
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,1445 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://xxchan.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://xxchan.me/" rel="alternate" type="text/html" /><updated>2024-03-26T06:59:53+00:00</updated><id>https://xxchan.me/feed.xml</id><title type="html">XX’s Blog</title><subtitle>Just some random thoughts of mine.</subtitle><author><name>xxchan</name></author><entry><title type="html">New site for This Week in RisingWave</title><link href="https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="alternate" type="text/html" title="New site for This Week in RisingWave" /><published>2023-04-02T00:00:00+00:00</published><updated>2023-04-02T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration.html">&lt;p&gt;This Week in RisingWave is now migrated to a new dedicated site: &lt;a href=&quot;https://this-week-in-risingwave.vercel.app&quot;&gt;this-week-in-risingwave.vercel.app&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;By the way, xxchan’s blog also has a new domain name: &lt;a href=&quot;https://xxchan.me&quot;&gt;xxchan.me&lt;/a&gt;. The old domain name &lt;a href=&quot;https://xxchan.github.io&quot;&gt;xxchan.github.io&lt;/a&gt; should still work.&lt;/p&gt;
+
+&lt;p&gt;Please tell me if any of the links or other things like RSS are broken! Thanks! 🥰&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.</summary></entry><entry><title type="html">This Week in RisingWave #6 (20230325)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/03/25/twirw-6.html" rel="alternate" type="text/html" title="This Week in RisingWave #6 (20230325)" /><published>2023-03-25T00:00:00+00:00</published><updated>2023-03-25T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/03/25/twirw-6</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/03/25/twirw-6.html">&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;features-updates-&quot;&gt;Features Updates 🌟&lt;/h2&gt;
+
+&lt;h3 id=&quot;nulls-first--last&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULLS {FIRST | LAST}&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8485&quot;&gt;feat(common): support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULLS {FIRST | LAST}&lt;/code&gt; by richardchien · Pull Request #8485&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s can be very tricky in SQL. Do you known you can specify its ordering?&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* nulls last */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------+&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nulls&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;--------+&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It was tricky to support because previously in RisingWave, we only considered ascending/descending ordering, but not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s’ ordering. That caused inconsistent &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s ordering around the system. When it comes to SQL query results, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; values were sometimes the largest, sometimes the smallest.&lt;/p&gt;
+
+&lt;p&gt;This also blocked our progress to test RisingWave against other database’s test suites, because in PostgreSQL, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s are the largest by default when compared against non-NULL values, while in SQLite and DuckDB they are the smallest by default. With inconsistent ordering of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s and no support for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULLS { FIRST | LAST }&lt;/code&gt; in order-by clauses, we can neither align with the behavior of one of these databases, nor specify a fixed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; ordering in test queries to align behaviors of all databases.&lt;/p&gt;
+
+&lt;p&gt;Recently, we did a thorough refactoring to force all components in our system to use an unified struct type representing ordering, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderType&lt;/code&gt; . As a result, this week we were finally able to implement &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULLS { FIRST | LAST }&lt;/code&gt; for order-by clauses at ease, by simply adding a new field, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NullsAre&lt;/code&gt; , to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderType&lt;/code&gt; , specifying whether &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s are largest or smallest. By setting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Largest&lt;/code&gt; as default value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NullsAre&lt;/code&gt; , we achieved the same default ordering behavior as PostgreSQL.&lt;/p&gt;
+
+&lt;h3 id=&quot;rename-relations&quot;&gt;Rename relations&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7745&quot;&gt;feat: support alter rename relations including table/mview/view/sink/index by yezizp2012 · Pull Request #7745&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;As I &lt;a href=&quot;https://xxchan.github.io/this-week-in-risingwave/2023/02/25/twirw-2.html#table-schema-change&quot;&gt;mentioned earlier&lt;/a&gt;, we are working on DDL support ( &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALTER TABLE&lt;/code&gt; ), which is quite tricky. We’ve already done quite some work for supporting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD/DROP COLUMN&lt;/code&gt; . Here’s another DDL: renaming relations is supported. This might be slightly easier than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD/DROP COLUMN&lt;/code&gt; , but there are still some tricky parts to consider carefully, like updating all related relations all at the same time.&lt;/p&gt;
+
+&lt;p&gt;For example, you can use the command &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALTER TABLE t_1 RENAME TO t_2&lt;/code&gt; to rename a table and its related relations will be modified recursively, which you can check with command such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SHOW CREATE MATERIALIZED VIEW mv_x&lt;/code&gt; . There is no effect on the stored data.&lt;/p&gt;
+
+&lt;h2 id=&quot;performance-optimizations-&quot;&gt;Performance Optimizations 💪&lt;/h2&gt;
+
+&lt;h3 id=&quot;bushy-tree-join-ordering&quot;&gt;Bushy tree join ordering&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8316#pullrequestreview-1345479333&quot;&gt;feat: Bushy tree join ordering by KveinAxel · Pull Request #8316&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;RisingWave is a streaming processing system that aims to provide real-time low latency for our users. By reducing the depth of the join tree, we can effectively minimize latency.&lt;/p&gt;
+
+&lt;p&gt;See the illustration below:&lt;/p&gt;
+
+&lt;p&gt;To reduce the distance that barriers from join inputs need to travel to the join output, we convert a left-deep tree with a height of 3 into a bushy tree with a height of 5.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/9352536/202991793-664ea3f9-3838-4e5f-af6c-e5416140ca40.png&quot; alt=&quot;https://user-images.githubusercontent.com/9352536/202991793-664ea3f9-3838-4e5f-af6c-e5416140ca40.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/9352536/202991855-998a6d28-a366-4120-8765-be3d5de20474.png&quot; alt=&quot;https://user-images.githubusercontent.com/9352536/202991855-998a6d28-a366-4120-8765-be3d5de20474.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;zld&quot;&gt;zld&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8608&quot;&gt;Cannot run risingwave binary on Mac OS M1 (when linked by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt; ) · Issue #8608&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ahmedriza&quot;&gt;@ahmedriza&lt;/a&gt; reported that he cannot run the binary on his Macbook M1 due to “symbol not found”.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ ./target/debug/risingwave
+dyld[14116]: symbol not found in flat namespace (__ZN15protobuf_native2io23DeleteCodedOutputStreamEPN6google8protobuf2io17CodedOutputStreamE)
+Abort trap: 6
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After some investigation, he found that it’s because he used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt; in his global cargo config, and RisingWave has a repository-level cargo config that uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lld&lt;/code&gt;. Although it is still not clear whether the error is caused by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt; or the conflict between the cargo configs, he could solve the problem by just using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lld&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is also one of the reasons why I enjoy open source: hackers are very willing to raise issues and even analyze and solve problems themselves. I can also learn a lot from their thoroughly analysis. From this issue, I learned:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;How &lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/config.html&quot;&gt;cargo config&lt;/a&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$HOME/.cargo/config.toml&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/projects/.cargo/config.toml&lt;/code&gt;) works in more detail&lt;/li&gt;
+  &lt;li&gt;There’s another linker &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt;. (But it’s already deprecated in favor of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lld&lt;/code&gt; .)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;new-contributors&quot;&gt;New Contributors&lt;/h2&gt;
+
+&lt;p&gt;(Of course, &lt;a href=&quot;https://github.com/ahmedriza&quot;&gt;@ahmedriza&lt;/a&gt; is also a great new contributor!)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8636&quot;&gt;feat: Add support for array_length function in psql by kamalesh0406 · Pull Request #8636&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This week we have another first-time contributor &lt;a href=&quot;https://github.com/kamalesh0406&quot;&gt;@kamalesh0406&lt;/a&gt;. He said “This is my first time writing rust code” 😲.&lt;/p&gt;
+
+&lt;p&gt;So it seems RisingWave’s &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt;s are a good way to learn and practice Rust. 😄 Don’t hesitate and just join us if you are also interested in the development of an open source database system, or Rust!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Finally, welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So much for this week. See you next week! 🤗&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">This week, I talked about `NULLS {FIRST | LAST}`, renaming relations, bushy tree, `zld`, open source and more.</summary></entry><entry><title type="html">This Week in RisingWave #5 (20230318)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/03/18/twirw-5.html" rel="alternate" type="text/html" title="This Week in RisingWave #5 (20230318)" /><published>2023-03-18T00:00:00+00:00</published><updated>2023-03-18T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/03/18/twirw-5</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/03/18/twirw-5.html">&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;notable-changes-&quot;&gt;Notable changes 🌟&lt;/h2&gt;
+
+&lt;h3 id=&quot;temporal-join&quot;&gt;Temporal join&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8123&quot;&gt;Tracking: Process time temporal join · Issue #8123&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/49/files&quot;&gt;RFC: Temporal Join by chenzl25 #49 · risingwavelabs/rfcs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Lots of production scenarios contain a fact table and several dimension tables, where users want to enrich (join) their fact table with dimension tables. Different from regular stream joins, under the enrichment scenario users may want to keep the previous join outputs unaffected when the dimension table is updated. This is because we only want to &lt;em&gt;enrich&lt;/em&gt; the fact table without &lt;em&gt;duplicated&lt;/em&gt; outputs.&lt;/p&gt;
+
+&lt;p&gt;Temporal join is for this scenario. More technically speaking, it joins an append-only stream (such as Kafka) with a temporal table (aka versioned table, e.g. backed by MySQL CDC). The stream side lookups the temporal table, which means the join is driven by the stream side only.&lt;/p&gt;
+
+&lt;p&gt;The syntax is like:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stream&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LEFT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;versioned&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SYSTEM_TIME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NOW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;versioned&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;interesting-sql-features-&quot;&gt;Interesting SQL features 😄&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I don’t know that much about SQL before I becoming a database developer. Every now and then I got some new surprise from SQL…&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;server-local-timezone&quot;&gt;Server local timezone&lt;/h3&gt;
+
+&lt;p&gt;Do you know SQL standard has two timestamp types: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;timestamp with/without time zone&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8551&quot;&gt;Support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SET TIME ZONE LOCAL&lt;/code&gt; syntax · Issue #8551&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The new syntax allows us to set the server’s local timezone, which is useful for local testing.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;              
+&lt;span class=&quot;c1&quot;&gt;-------------------------------&lt;/span&gt;
+ &lt;span class=&quot;mi&quot;&gt;2023&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;41&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;951&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;zone&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;local&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SET_VARIABLE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;              
+&lt;span class=&quot;c1&quot;&gt;-------------------------------&lt;/span&gt;
+ &lt;span class=&quot;mi&quot;&gt;2023&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;41&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;36&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;958&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;BTW, this is done via &lt;a href=&quot;https://github.com/strawlab/iana-time-zone&quot;&gt;strawlab/iana-time-zone: Rust crate to get the IANA time zone for the current system&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;intersting-bug&quot;&gt;Intersting Bug&lt;/h2&gt;
+
+&lt;h3 id=&quot;inverse-of-column-index-mapping&quot;&gt;Inverse of column index mapping&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8598&quot;&gt;fix(optimizer): fix hash join distribution by chenzl25 #8598&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I talked about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; in &lt;a href=&quot;https://xxchan.github.io/this-week-in-risingwave/2023/03/04/twirw-3.html#injectivity-of-column-index-mapping&quot;&gt;This Week in RisingWave #3&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Althought mathematically simple and intuitive, it’s not easy to do such mappings correctly in programs.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Well, then we met another bug related to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; this week 🥲. (Luckily, it’s not very easy to trigger it.) This time, it’s about the inverse of the mapping. Shortly speaking, suppose we have an array of index pairs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[(l1, r1), (l2, r2), ...]&lt;/code&gt;, naturally we can build two mappings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;l -&amp;gt; r&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r -&amp;gt; l&lt;/code&gt;. However, the inverse of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;l -&amp;gt; r&lt;/code&gt; is not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r -&amp;gt; l&lt;/code&gt;! Can you tell why?&lt;/p&gt;
+
+&lt;h2 id=&quot;reliability-improvements-&quot;&gt;Reliability Improvements 💪&lt;/h2&gt;
+
+&lt;h3 id=&quot;the-great-madsim&quot;&gt;The Great MadSim!&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8529&quot;&gt;fix: avoid panic when upstream input is closed for lookup #8529&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This week, we identified a new bug through &lt;a href=&quot;https://github.com/madsim-rs/madsim&quot;&gt;MadSim&lt;/a&gt; that deterministically shuts down and restarts nodes in a RisingWave cluster. This time, the bug was found during the execution path of the lookup executor. Thanks to MadSim, we were able to quickly identify the issue and resolve it.&lt;/p&gt;
+
+&lt;h3 id=&quot;interval-bugfixes-and-tests&quot;&gt;Interval bugfixes and tests&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8556&quot;&gt;fix(common): interval overflow panic / wrap during comparison and justify #8556&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8501&quot;&gt;fix(common): interval should have microsecond precision #8501&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8438&quot;&gt;test(regress): enable interval #8438&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Intervals are a fundamental data type for a streaming SQL database, but they can also be sophisticated in some ways. Recently, RisingWave has enhanced its support for intervals and migrated many related tests from Postgres.&lt;/p&gt;
+
+&lt;h3 id=&quot;opendal&quot;&gt;OpenDAL&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8528&quot;&gt;feat(test): add e2e test for OpenDAL fs backend #8528&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Since February, RisingWave has been using &lt;a href=&quot;https://github.com/apache/incubator-opendal&quot;&gt;OpenDAL&lt;/a&gt; as one of its underlying object storage implementations. OpenDAL greatly reduces our efforts in supporting various cloud storage systems, especially HDFS. This PR uses opendal fs engine to mock memory objects store.&lt;/p&gt;
+
+&lt;p&gt;By the way, OpenDAL is now an Apache Incubator project! 🎉&lt;/p&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;be-more-careful-about-error-creation&quot;&gt;Be more careful about error creation!&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8538&quot;&gt;fix(expr): do not construct error for extracting time subfield by BugenZhao #8538&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Error creation can be very expensive!&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href=&quot;https://xxchan.github.io/this-week-in-risingwave/2023/02/17/twirw-1.html#-clippyor_fun_call-&quot;&gt;This Week in RisingWave #1&lt;/a&gt;, I mentioned we can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ok_or_else&lt;/code&gt; to create expensive error lazily. This time the errors are not actually needed. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Option&lt;/code&gt; is enough. Basically, I mean cases like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;// Don't do this!&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;outer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;Err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+          &lt;span class=&quot;c&quot;&gt;// try a different computation&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;My takeaway is: Think more about the definition of error types and try to keep it small. If it’s unavoidably large, then we have to think more when we use it.&lt;/p&gt;
+
+&lt;p&gt;BTW, kudos to &lt;a href=&quot;https://github.com/bugenzhao&quot;&gt;@BugenZhao&lt;/a&gt; for catching this issue (again)!&lt;/p&gt;
+
+&lt;p&gt;P.S., this PR brings us 1000%+ throughput improvement (🤯) on nexmark q14, which is a simple &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;extract(hour from date_time)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-contributors&quot;&gt;New Contributors&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8490&quot;&gt;Support optional parameter offset in tumble and hop by Eridanus117 #8490&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the second PR by &lt;a href=&quot;https://github.com/Eridanus117&quot;&gt;@Eridanus117&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8509&quot;&gt;feat(expr): support builtin function pi. by broccoliSpicy #8509&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the second PR by &lt;a href=&quot;https://github.com/broccoliSpicy&quot;&gt;@broccoliSpicy&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It’s great to see new contributors joining in, and even better when they show interest in diving deeper and contributing continuously! 🥰&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8482&quot;&gt;CREATE SINK panic · Issue #8482&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I remember &lt;a href=&quot;https://github.com/JuchangGit&quot;&gt;@JuchangGit&lt;/a&gt; had submitted 2 issues in the past. This week he submits another one. I’d like to mention this because open source contribution is not only about code (PRs). Playing with the software and reporting issues are also very important contributions!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Finally, welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;. Also check out the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt; and &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22&quot;&gt;help wanted&lt;/a&gt; issues if you want to join the development of an open source database system!&lt;/p&gt;
+
+&lt;p&gt;So much for this week. See you next week (hopefully)! 🤗&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">The exciting things happening in RisingWave</summary></entry><entry><title type="html">This Week in RisingWave #4 (20230310)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/03/10/twirw-4.html" rel="alternate" type="text/html" title="This Week in RisingWave #4 (20230310)" /><published>2023-03-10T00:00:00+00:00</published><updated>2023-03-10T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/03/10/twirw-4</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/03/10/twirw-4.html">&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;notable-changes-&quot;&gt;Notable changes 🌟&lt;/h2&gt;
+
+&lt;h3 id=&quot;serial-type&quot;&gt;Serial type&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8392&quot;&gt;feat(common): Add support for DataType::Serial&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/45/files&quot;&gt;RFC: add serial type&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7621&quot;&gt;remove the redundant exchange after append-only source executor&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As a distributed database system, RisingWave has multiple instances of operators to achieve a high degree of parallelism. Some operators require specific input distribution to ensure the correctness of the result, so data must be shuffled at that point, which is represented by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Exchange&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;p&gt;At the same time, RisingWave generates hidden &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_row_id&lt;/code&gt; columns for sources without primary keys (aka append-only sources), also for the correctness of the system. Previously the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_row_id&lt;/code&gt; is randomly distributed, which leads to the result that we must insert a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashExchange&lt;/code&gt; later after the source operator to enforce its distribution.&lt;/p&gt;
+
+&lt;p&gt;Since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_row_id&lt;/code&gt; is fully controlled by us, why don’t we directly generate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_row_id&lt;/code&gt; with desired distribution? So an optimization of using a new internal type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Serial&lt;/code&gt; for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_row_id&lt;/code&gt; with specialized shuffling logic is proposed to remove the unnecessary &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Exchange&lt;/code&gt; operators.&lt;/p&gt;
+
+&lt;h3 id=&quot;auto-execution-mode-selection&quot;&gt;Auto execution mode selection&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8274&quot;&gt;feat(batch): support auto execution mode #8274&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Currently, RisingWave has 2 kinds of execution mode: local and distributed, which can be tuned by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SET query_mode = [local | distributed]&lt;/code&gt; . Lower latency can be achieved by running OLTP queries in local execution mode, and running OLAP queries in distributed execution mode.&lt;/p&gt;
+
+&lt;p&gt;However, previously we leave the choice to users which makes our distributed execution useless to some extent, because most users don’t know or understand what those options exactly mean. As a database, we have the ability and should make a good choice for users to reduce their tuning works.&lt;/p&gt;
+
+&lt;h3 id=&quot;aws-private-link-support&quot;&gt;AWS Private link support&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8247&quot;&gt;feat(source): support private link for kafka connector #8247&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When using a cloud environment, users may face connection issues when attempting to create a source in RisingWave due to their AWS MSK service being located in a different VPC. To solve this, AWS PrivateLink can be used to establish a connection between RisingWave’s VPC and the user’s VPC. Users can set up an endpoint service to expose their MSK service, allowing RisingWave to easily create an endpoint to access it.&lt;/p&gt;
+
+&lt;h3 id=&quot;sink-validation&quot;&gt;Sink Validation&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8417&quot;&gt;feat(meta): introduce sink validation in meta #8417&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Recently we already implemented MySQL/Postgres sink support. We are now working hard to keep improving its stability and usability. This PR Introduced validation for sink so that we can catch errors in an earlier phase and give better error messages.&lt;/p&gt;
+
+&lt;h2 id=&quot;reliability-improvements-&quot;&gt;Reliability Improvements 💪&lt;/h2&gt;
+
+&lt;h3 id=&quot;fuzzing-tests&quot;&gt;Fuzzing Tests&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8395&quot;&gt;feat(sqlsmith): Generate more join expressions #8395&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This week we added more targeted testing for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join&lt;/code&gt; expressions. We increased the number of joins, added generation for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;non_equi&lt;/code&gt; joins and added more &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;equi&lt;/code&gt; join predicates.&lt;/p&gt;
+
+&lt;p&gt;The goal of these changes is to increase the coverage of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join&lt;/code&gt; executors in streaming and batch, since the functionality of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JOIN&lt;/code&gt; s are often complex.&lt;/p&gt;
+
+&lt;h3 id=&quot;deterministic-tests&quot;&gt;Deterministic Tests&lt;/h3&gt;
+
+&lt;p&gt;During the past week, &lt;a href=&quot;https://github.com/madsim-rs/madsim&quot;&gt;MadSim&lt;/a&gt;, our deterministic testing framework, identified more than five issues that we promptly resolved. We are confident in the effectiveness of our framework. Additionally, I’m eagerly anticipating &lt;a href=&quot;https://github.com/wangrunji0408&quot;&gt;@wangrunji0408&lt;/a&gt;’s upcoming blog post about MadSim internals. 🤩&lt;/p&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;reduce-debuginfo-size&quot;&gt;Reduce debuginfo size&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Although I already briefly mentioned this in the previous blog, let me elaborate it a little here.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8326&quot;&gt;fix: reduce debuginfo size #8326&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We noticed unexpected 2GB of memory consumption on Meta node. The cause is quite interesting.&lt;/p&gt;
+
+&lt;p&gt;We found the memory consumption happens when meta node writes a log with backtrace included. To get the backtrace, debuginfo in the risingwave binary is loaded (and cached!). This is somewhat reasonable, but should the debuginfo be so large?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://users.rust-lang.org/t/why-are-debug-symbols-so-huge/81117&quot;&gt;Why are debug symbols so huge?&lt;/a&gt; is a good post explaining what is debuginfo. Inspired by that, we tuned the level of debuginfo. This is a trade-off between binary size and utility (we still have most useful information for debug). At the same time, we also disabled debuginfo compression. This is another trade-off between binary size and memory overhead.&lt;/p&gt;
+
+&lt;h3 id=&quot;capture-unrecognized-fields-in-serde&quot;&gt;Capture unrecognized fields in serde&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8325&quot;&gt;https://github.com/risingwavelabs/risingwave/pull/8325&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;By default, serde ignores unknown fields. By &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#[serde(deny_unknown_fields)]&lt;/code&gt; , serde rejects unknown fields. But what if you want to tolerate them, but produce a useful warning about it at the same time? Here’s a useful tip: By &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#[serde(flatten)]&lt;/code&gt; you can capture the unknown fields:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;#[derive(Serialize,&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;Deserialize)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;// ...&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;#[serde(flatten)]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unrecognized&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;serde_json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;auto-derive-a-prefixed-alias-for-protobuf-message-types&quot;&gt;Auto derive a prefixed alias for protobuf message types&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8426&quot;&gt;refactor(proto): auto derive a Pb-prefixed alias for proto message types by BugenZhao · Pull Request #8426 · risingwavelabs/risingwave&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When using protobuf for communication, one thing might be defined multiple times in different places for different purposes. e.g., if we have a protobuf message &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Msg&lt;/code&gt; , a crate using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Msg&lt;/code&gt; might have it’s own type for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Msg&lt;/code&gt; at the same time, which might include useful methods and maybe a different data structure representation with the protobuf one. Previously, we need to manually alias it to avoid conflict. e.g.,&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pb_crate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Msg&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PbMsg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Msg&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Msg&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;to_proto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PbMsg&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;c&quot;&gt;// ...&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we came up with a method to mitigate this problem. Thanks to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prost&lt;/code&gt; ’s ability to customize generated code for protobuf messages, we can add type alias &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pub type PbMsg = Msg&lt;/code&gt; at the same time of defining &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Msg&lt;/code&gt; . In this way, when trying to type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PbMsg&lt;/code&gt; , the IDE will be able to find the type and automatically import it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Finally, welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;. Also check out the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt; and &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22&quot;&gt;help wanted&lt;/a&gt; issues if you want to join the development of an open source database system!&lt;/p&gt;
+
+&lt;p&gt;So much for this week. See you next week (hopefully)! 🤗&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">The exciting things happening in RisingWave</summary></entry><entry><title type="html">This Week in RisingWave #3 (20230304)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/03/04/twirw-3.html" rel="alternate" type="text/html" title="This Week in RisingWave #3 (20230304)" /><published>2023-03-04T00:00:00+00:00</published><updated>2023-03-04T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/03/04/twirw-3</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/03/04/twirw-3.html">&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;notable-changes&quot;&gt;Notable changes&lt;/h2&gt;
+
+&lt;h3 id=&quot;memory-control-policy&quot;&gt;Memory control policy&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7767&quot;&gt;feat(memory): introduce memory control policy for computing tasks by xx01cyx #7767&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8228&quot;&gt;Tracking: refactor user-configurable memory control policy #8228&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8253&quot;&gt;refactor: introduce memory control policy abstraction by xx01cyx #8253&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Recently we have implemented memory control mechanism, and now we are introducing the policy. Since RisingWave is a “streaming database”, it is crucial for us to consider both batch and streaming tasks while balancing the usage of memory between them.&lt;/p&gt;
+
+&lt;h3 id=&quot;move-memtable&quot;&gt;Move memtable&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7183&quot;&gt;feat(storage): move memtable down to local state store by wenym1 #7183&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Our streaming executors access storage via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;StateTable&lt;/code&gt; interface, and storage layer exposes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LocalStateStore&lt;/code&gt; interface. This PR wants to move part of the former (memtable) to the latter. It might help to implement more features in the storage layer, and also make it easier to implement other storage engines for bench purpose.&lt;/p&gt;
+
+&lt;h3 id=&quot;optimizer-updates&quot;&gt;Optimizer updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8192&quot;&gt;refactor(optimizer): divide logical optimizer into one for batch and one for streaming. by chenzl25 #8192&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8200&quot;&gt;perf(agg): reuse existing agg calls while building &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LogicalAgg&lt;/code&gt; by richardchien #8200&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8316&quot;&gt;feat: Bushy tree join ordering by KveinAxel #8316&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;RisingWave is a streaming processing system which aims to provide real time low latency for our users. Making the join tree shallower helps to reduce the latency.&lt;/p&gt;
+
+&lt;p&gt;See the illustration below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/9352536/202991793-664ea3f9-3838-4e5f-af6c-e5416140ca40.png&quot; alt=&quot;Left Deep Tree&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/9352536/202991855-998a6d28-a366-4120-8765-be3d5de20474.png&quot; alt=&quot;Bushy Tree&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;async-expr&quot;&gt;Async expr&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8229&quot;&gt;refactor(expr): make evaluation async by wangrunji0408 #8229&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;… to prevent blocking when evaluting UDFs&lt;/p&gt;
+
+&lt;h3 id=&quot;rfc-suspend-mv&quot;&gt;RFC: suspend MV&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/54&quot;&gt;RFC: Suspend MV on Non-Recoverable Errors by hzxa21 #54&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Last time, I mentioned that RisingWave currently tolerates compute errors by default and we are in the process of implementing an error reporting mechanism. However, we had previously discussed another mechanism for handling errors which involved suspending MV. This RFC reintroduces this idea.&lt;/p&gt;
+
+&lt;h2 id=&quot;intersting-bug&quot;&gt;Intersting Bug&lt;/h2&gt;
+
+&lt;h3 id=&quot;injectivity-of-column-index-mapping&quot;&gt;Injectivity of column index mapping&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8216&quot;&gt;bug: mv with join and duplicate output columns has row indices hidden #8216&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; is an important utility in optimizer used when we wants to map an input column (index) to an output column. It’s a partial mapping from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[0, n)&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[0, m)&lt;/code&gt; , where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; is the number of columns in the input, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;m&lt;/code&gt; is the number of columns in the output.&lt;/p&gt;
+
+&lt;p&gt;When I began to work on RisingWave (one year ago 😲), I worked on column pruning, which removes unnecessary columns from the plan nodes. Naturally it involves a lot with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; . Althought mathematically simple and intuitive, it’s not easy to do such mappings correctly in programs. I had a hard time understanding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; at that time, and added many comments and did some refactor to make it less confusing and error-prone.&lt;/p&gt;
+
+&lt;p&gt;After long, we met this new bug related to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ColIndexMapping&lt;/code&gt; again.. Under curtain circumstances, a plan node will have a non-injective mapping and duplicate columns in the output. In this case, the duplicate columns are unexpectedly hidden after mapping. We fixed this bug by considering the injectivity of the mapping. A more systematic solution is also proposed: &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8277&quot;&gt;Proposal (frontend): Prune duplicate columns #8277&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;publish-await-tree&quot;&gt;Publish &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;await-tree&lt;/code&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8254&quot;&gt;refactor: switch &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;async_stack_trace&lt;/code&gt; to the crates.io version of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;await-tree&lt;/code&gt; by BugenZhao #8254&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://crates.io/crates/await-tree&quot;&gt;await-tree - crates.io: Rust Package Registry&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We have a tracing mechanism called &lt;em&gt;async stack trace&lt;/em&gt; in our system, which allows us to “capture a snapshot” of where, why, and how long the async tasks are pending in real-time. It helped us locate some stuck issues, e.g., streaming deadlock, which would be very hard to debug in other ways.&lt;/p&gt;
+
+&lt;p&gt;Now we have published it to crates.io, and renamed it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;await-tree&lt;/code&gt; . I already invited &lt;a href=&quot;https://github.com/bugenzhao&quot;&gt;@BugenZhao&lt;/a&gt; to write a blog post to introduce it, and can’t wait to see it. 😍&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8330&quot;&gt;feat(dashboard): dump await-tree of compute nodes by BugenZhao #8330&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We also integrated it into the RisingWave dashboard to make it more convenient to use. 😋&lt;/p&gt;
+
+&lt;h3 id=&quot;large-memory-usage-by-backtrace-and-debuginfo&quot;&gt;Large memory usage by backtrace and debuginfo&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8326&quot;&gt;fix: reduce debuginfo size by fuyufjh #8326&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We noticed unexpected memory consumption on Meta node. And the cause is (again) backtrace…&lt;/p&gt;
+
+&lt;h2 id=&quot;new-contributor&quot;&gt;New contributor&lt;/h2&gt;
+
+&lt;p&gt;So happy to see another 3 first-time contributors this week! 😲🥳&lt;/p&gt;
+
+&lt;p&gt;(BTW, I’m also quite interested in where they come from. Are they encouraged by my posts? If so, please let me know! 🤔🤣)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8315&quot;&gt;feat(expr): support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;array_distinct&lt;/code&gt; by snipekill #8315&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8338&quot;&gt;fix(parser): disable single-quoted strings as aliases for column or table by Eridanus117 #8338&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/erichgess&quot;&gt;@erichgess&lt;/a&gt; submitted 2 PRs. I’m quite impressed by the thoroughness of their communication in issue and PR discussions regarding the problem’s situation, cause, and solution. This is one of the biggest reasons why I love open source or working in public; transparent over-communication benefits both current collaborators’ reviews and future contributors’ learning. 🤗&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8309&quot;&gt;fix(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exp&lt;/code&gt; PG compatibility): if a very large or very small operand is used, then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exp&lt;/code&gt; errors by erichgess #8309&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8278&quot;&gt;bug(unit tests): Cache unit tests fail when &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/tmp&lt;/code&gt; is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tmpfs&lt;/code&gt; drive #8278&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt; and &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22&quot;&gt;help wanted&lt;/a&gt; issues if you also want to join force! (They are usually carefully chosen. Not just random chore work. It’s a good way to get started!)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. Welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So much for this week. See you next week (hopefully)!&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">The exciting things happening in RisingWave</summary></entry><entry><title type="html">This Week in RisingWave #2 (20230225)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2.html" rel="alternate" type="text/html" title="This Week in RisingWave #2 (20230225)" /><published>2023-02-25T00:00:00+00:00</published><updated>2023-02-25T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/02/25/twirw-2.html">&lt;blockquote&gt;
+  &lt;p&gt;See &lt;a href=&quot;/this-week-in-risingwave/2023/02/17/twirw-1.html&quot;&gt;#1&lt;/a&gt; for an introduction of this series.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;most-exciting-things-&quot;&gt;Most exciting things 🤩&lt;/h2&gt;
+
+&lt;h3 id=&quot;common-sub-plan-sharing&quot;&gt;Common sub-plan sharing&lt;/h3&gt;
+
+&lt;p&gt;We decided to refactor tree-structured plan node into a DAG some time ago (See &lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/28&quot;&gt;RFC #28&lt;/a&gt;). The largest benefit is to enable common sub-plan sharing.&lt;/p&gt;
+
+&lt;p&gt;Previously we already implemented &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LogicalShare&lt;/code&gt; , which represents the plan node that will be shared, and used it to share source/subquery/CTE/view. Now comes the last piece of the puzzle: common sub-plan sharing.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7865&quot;&gt;feat(optimizer): Common sub-plan detection. by wsx-ucb #7865&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8159&quot;&gt;chore(streaming): rewrite nexmark q5 to benefit from common sub-plan sharing by chenzl25 #8159&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;python-udf&quot;&gt;Python UDF&lt;/h3&gt;
+
+&lt;p&gt;Unlike Flink, RisingWave’s uses SQL as the main interface, to make it easier for users to use. But sometimes users do want some custom logic… We are doing some interesting experiments on this topic, and this is a little milestone. Basically you can already play with Python UDF now!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7943&quot;&gt;feat(udf): minimal Python UDF SDK by wangrunji0408 #7943&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;other-notable-things&quot;&gt;Other notable things&lt;/h2&gt;
+
+&lt;h3 id=&quot;telemetry&quot;&gt;Telemetry&lt;/h3&gt;
+
+&lt;p&gt;Telemetry can greatly help us understand and improve how the system behaves in real-world scenarios!&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7384&quot;&gt;feat: telemetry by odysa #7384&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/53&quot;&gt;RisingWave Telemetry Design by odysa #53&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;replace-bloom-filter-with-xor-filter&quot;&gt;Replace Bloom filter with XOR filter&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8081&quot;&gt;perf(bloom filter): replace bloom filter with xor filter by soundOfDestiny #8081&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;We are also &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7406&quot;&gt;investigating Ribbon filter · Issue #7406&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;stream-error-reporting&quot;&gt;Stream error reporting&lt;/h3&gt;
+
+&lt;p&gt;RisingWave tolerates compute errors by default (see &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/4625&quot;&gt;#4625&lt;/a&gt;), but previously errors are only shown in the log. Now we are trying to report the errors to users (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7824&quot;&gt;See #7824&lt;/a&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7832&quot;&gt;feat(stream): Report &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;compute_error_count&lt;/code&gt; to prometheus by jon-chuang #7832&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7877&quot;&gt;feat(stream): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;source_error_count&lt;/code&gt; reporting to prometheus by jon-chuang #7877&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8132&quot;&gt;feat(stream): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ErrorSuppressor&lt;/code&gt; for user compute errors by jon-chuang #8132&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8037&quot;&gt;test(stream): Test reporting of stream errors in e2e setting · Issue #8037&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;table-schema-change&quot;&gt;Table schema change&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALTER TABLE&lt;/code&gt; is quite tricky for streaming… &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD COLOMN&lt;/code&gt; is somewhat reasonable, and we are working on it as the first step.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8094&quot;&gt;feat(streaming): support output indices in dispatchers by BugenZhao #8094&lt;/a&gt;: This ensures existing downstream MV to receive old output columns and new downstream MV receive all columns. It also enables a perf optimization for MV on MV.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8063&quot;&gt;feat: adding column of table schema change by BugenZhao #8063&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;new-major-sql-features&quot;&gt;New major SQL features&lt;/h2&gt;
+
+&lt;h3 id=&quot;jsonb-data-type&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; data type&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;json&lt;/code&gt; data type stores an exact copy of the input text, which processing functions must reparse on each execution; while &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; data is stored in a decomposed binary format that makes it slightly slower to input due to added conversion overhead, but significantly faster to process, since no reparsing is needed. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; also supports indexing, which can be a significant advantage.&lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;https://www.postgresql.org/docs/current/datatype-json.html&quot;&gt;https://www.postgresql.org/docs/current/datatype-json.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8144&quot;&gt;feat(sqlparser): support jsonb operator &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-&amp;gt;&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-&amp;gt;&amp;gt;&lt;/code&gt; by xiangjinwu #8144&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7714&quot;&gt;Tracking: jsonb operations · Issue #7714&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;new-array-function-array_to_string&quot;&gt;New array function: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;array_to_string&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8027&quot;&gt;feat(expr): support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;array_to_string&lt;/code&gt; by fuyufjh #8027&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array_to_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;array_to_string&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;-----------------&lt;/span&gt;
+ &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array_to_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;array_to_string&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;-----------------&lt;/span&gt;
+ &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It’s also called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;array_join&lt;/code&gt; in some other systems, and we added that alias as well.&lt;/p&gt;
+
+&lt;h3 id=&quot;new-aggregate-function-stddev--stdvar&quot;&gt;New aggregate function: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stddev&lt;/code&gt; / &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stdvar&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7952&quot;&gt;feat: implement stddev/var function by shanicky #7952&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;mind-blowing-sql-surprise-&quot;&gt;Mind-blowing SQL surprise 🤯&lt;/h2&gt;
+
+&lt;p&gt;I don’t know that much about SQL before I becoming a database developer. Every now and then I got some new surprise from SQL…&lt;/p&gt;
+
+&lt;h3 id=&quot;operator-&quot;&gt;Operator &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|/&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8174/files&quot;&gt;fix(sqlparser): align operator precedence with PostgreSQL by xiangjinwu #8174&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Do you know Postgres has a square root operator &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|/&lt;/code&gt; …? The operator precedence might also surprise you.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;null-s-hurt-our-head--full-outer-join-in-steraming&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt; s hurt our head – FULL OUTER JOIN in steraming&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8084&quot;&gt;Should we ban full outer join for streaming query? · Issue #8084&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;primary&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;materialized&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;view&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;full&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;v&lt;/code&gt; will have primary key &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(t1.a, t2.a)&lt;/code&gt; , but …&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;left  side: +[null] --&amp;gt; Full Join -&amp;gt; +[null, null]
+right side: +[null] --&amp;gt; Full Join -&amp;gt; +[null, null]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;error-handling&quot;&gt;Error handling&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8074&quot;&gt;Is appropriate return a Enum Type Error? · Issue #8074&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Error handling is quite a topic in Rust (or any language). We ran into this discussion again.&lt;/p&gt;
+
+&lt;h3 id=&quot;chacharng&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ChaChaRng&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8068&quot;&gt;feat(sqlsmith): use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ChaChaRng&lt;/code&gt; for determinism by kwannoel #8068&lt;/a&gt;: Use a reproducible rng so that deterministic fuzz test results can be (more) reproduceable.&lt;/p&gt;
+
+&lt;h3 id=&quot;private-marker-trait&quot;&gt;Private marker trait&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8122&quot;&gt;refactor(meta): list all implementors of MetadataModel by zwang28 #8122&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Just show you the code! 😲&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;/// A marker trait helps to collect all implementors of `MetadataModel` in&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;/// `for_all_metadata_models`. The trait should only be implemented by adding item in&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;/// `for_all_metadata_models`.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;trait&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MetadataModelMarker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;trait&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MetadataModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Debug&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;private&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MetadataModelMarker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;macro_rules!&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;for_all_metadata_models&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$macro:ident&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$macro&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// These items should be included in a meta snapshot.&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// So be sure to update meta backup/restore when adding new items.&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;risingwave_pb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;hummock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HummockVersion&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// ...&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;macro_rules!&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;impl_metadata_model_marker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$target_type:ty&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;private&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MetadataModelMarker&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$target_type&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;for_all_metadata_models!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;impl_metadata_model_marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;new-contributors&quot;&gt;New Contributors&lt;/h2&gt;
+
+&lt;p&gt;As I mentioned last time, RisingWave is an open source project, and new contributors are always welcome. So happy to see we do have some new contributors this week:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8013&quot;&gt;fix(executor): exit early when limit = 0 by Dousir9 #8013&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8171&quot;&gt;fix(parser): disallow empty object names by broccoliSpicy #8171&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7693&quot;&gt;fix(sqlparser): disallow JOIN without CROSS/ON/USING by sun-jacobi #7693&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt; and &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22&quot;&gt;help wanted&lt;/a&gt; issues if you also want to join force! (They are usually carefully chosen. Not just random chore work. It’s a good way to get started!)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. Welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So much for this week. (I also havn’t fully learned the details of many of them yet…) See you next week (hopefully)! 🤗&lt;/p&gt;
+
+&lt;p&gt;P.P.S I’m also considering deep diving into one or few interesting things every week, instead of writing a weekly summary like this. What do you think? 🤔&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">The exciting things happening in RisingWave</summary></entry><entry><title type="html">Stupidly effective ways to optimize Rust compile time</title><link href="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html" rel="alternate" type="text/html" title="Stupidly effective ways to optimize Rust compile time" /><published>2023-02-17T00:00:00+00:00</published><updated>2023-02-17T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html">&lt;p&gt;&lt;a href=&quot;/cs/2023/02/11/optimize-rust-comptime.html&quot;&gt;本文的中文版&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Although there are often complaints saying Rust’compilation speed is notorious slow, our project &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt; is not very slow to compile, especially since previously contributors like (&lt;a href=&quot;https://github.com/skyzh&quot;&gt;skyzh&lt;/a&gt;, &lt;a href=&quot;https://github.com/bugenzhao&quot;&gt;BugenZhao&lt;/a&gt;) have put in a lot of effort. After using an M1 MacBook Pro, compiling is not a problem at all. A full debug compilation only takes 2-3 minutes.&lt;/p&gt;
+
+&lt;p&gt;However, over time, more and more things have been added to our CI, making it increasingly bloated. The main workflow now takes about 40 minutes, while the PR workflow takes about 25 minutes 30 seconds. Although it is still not intolerably slow, it is already noticeably slower than before.&lt;/p&gt;
+
+&lt;p&gt;So a few days ago, I decided to spend some time researching whether I could optimize the compilation speed a bit more.&lt;/p&gt;
+
+&lt;p&gt;What shocked me was that there were some very simple methods that, with just a little effort, produced astonishing results. I feel like I can describe them as low-hanging fruits, silver bullets, or even free lunch 🤯.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. I highly recommend &lt;a href=&quot;https://github.com/matklad&quot;&gt;matklad&lt;/a&gt;’s blog (He is the original author of IntelliJ Rust and rust-analyzer):&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://matklad.github.io/2021/09/04/fast-rust-builds.html&quot;&gt;Fast Rust Builds&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html&quot;&gt;Delete Cargo Integration Tests&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Most of the methods I used are discussed there, and he explains them clearly. If not otherwise indicated, all quotes in this article come from there.&lt;/p&gt;
+
+&lt;p&gt;Although there are quite some articles talking about how to optimize Rust compilation speed (e.g., &lt;a href=&quot;https://endler.dev/2020/rust-compile-times/&quot;&gt;Tips for Faster Rust Compile Times&lt;/a&gt;), I still want to write another one to share my step-by-step process. Each optimization point comes with a corresponding PR, and you can combine the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;amp;branch=main&amp;amp;qualified_name=refs%2Fheads%2Fmain&quot;&gt;commit history&lt;/a&gt; to see the effect of each optimization point by comparing the CI pages before and after its PR.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.P.S. Results after optimization: main workflow is now 27 minutes at the fastest, and PR workflow is now 16 minutes at the fastest, with most taking around 17-19 minutes.&lt;/p&gt;
+
+&lt;h2 id=&quot;valuable-data-and-charts-to-find-the-bottlenecks&quot;&gt;Valuable data and charts to find the bottlenecks&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;When trying to optimize anything, it would be good to have some profiling data and charts to find out the bottlenecks. Luckily, we do have some nice ones for optimizing CI time.&lt;/p&gt;
+
+&lt;h3 id=&quot;ci-waterfall--dag-graph&quot;&gt;CI Waterfall &amp;amp; DAG Graph&lt;/h3&gt;
+
+&lt;p&gt;We use Buildkite for our CI, and the normal view of a page (such as &lt;a href=&quot;https://buildkite.com/risingwavelabs/pull-request/builds/17099&quot;&gt;Build #17099&lt;/a&gt;) looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-1.png&quot; alt=&quot;buildkite-1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Buildkite has two very useful hidden pages, located at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/waterfall&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dag&lt;/code&gt;, respectively, which show:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-waterfall.png&quot; alt=&quot;buildkite-waterfall.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-dag.png&quot; alt=&quot;buildkite-dag.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;From the waferfall graph, we can see recovery test finishes last. Two large steps finish before it: build (deterministic simulation) and check. The DAG graph shows that recovery test depends only on simulation build, so we can forget about the check step for now, and conclude the biggest bottleneck is in the path of simulation build -&amp;gt; recovery test.&lt;/p&gt;
+
+&lt;h3 id=&quot;cargo-build---timings&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo build --timings&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Cargo comes with built-in support for profiling build times (it was stabilized last year), which can be enabled by running &lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/timings.html&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo build --timings&lt;/code&gt;&lt;/a&gt;. It produces output like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/timings.png&quot; alt=&quot;timings.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can see that the compilation times for some dependencies such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zstd-sys&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;protobuf-src&lt;/code&gt; are very long, so we should try to optimize them.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1-compilation-cache&quot;&gt;Step 1: Compilation cache&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7799&quot;&gt;ci: try sccache #7799&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If you think about it, it’s pretty obvious how a good caching strategy for CI should work.&lt;/p&gt;
+
+  &lt;p&gt;Unfortunately, almost nobody does this.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://xuanwo.io/en-us/reports/2023-04/&quot;&gt;Why should you give Sccache a try?&lt;/a&gt; With xuanwo’s strong recommendation, I was very tempted to try sccache, which was also a major trigger for my optimization efforts this time.&lt;/p&gt;
+
+&lt;p&gt;It’s so easy to use. Just add two environment variables to start it up:&lt;/p&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; RUSTC_WRAPPER=sccache&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; SCCACHE_BUCKET=ci-sccache-bucket&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;(Well, behind the scenes, you actually need to study Buildkite and AWS configurations - which are also very simple. Buildkite can obtain permissions through IAM roles, so I just need to a policy for the role to access an S3 bucket, without the need to configure things like secret keys. I had been thinking about whether I could echo the key out in CI before, but it seems there’s no need to worry about that. 😄)&lt;/p&gt;
+
+&lt;p&gt;The effect was immediately apparent, reducing the simulation build time by 2.5 minutes and the non-bottleneck debug build time by 4 minutes. Although it didn’t bring about a qualitative change, why not make use of the (almost free) quantitative change?&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2-remove-unused-dependencies&quot;&gt;Step 2: Remove unused dependencies&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7816&quot;&gt;build: remove unused deps #7816&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;All dependencies declared in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cargo.toml&lt;/code&gt; will be compiled regardless of whether they are actually used or not. Moreover, they may introduce unnecessary synchronization points, affecting the parallelism of compilation.&lt;/p&gt;
+
+&lt;p&gt;An old tool &lt;a href=&quot;https://github.com/est31/cargo-udeps&quot;&gt;cargo-udeps&lt;/a&gt; is used to remove unused dependencies. But firstly, it does not support automatic fixing, and it is also very slow. Also, I had an impression that it cannot be used together with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt;. This has led to RisingWave not cleaning up unused dependencies for a long time – a typical broken window effect 🥲!&lt;/p&gt;
+
+&lt;p&gt;In an issue of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; about automatic fix, someone mentioned &lt;a href=&quot;https://github.com/bnjbvr/cargo-machete&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt;&lt;/a&gt;. Without many investigation I just gave it a shot, hoping it works. It turned out to be very fast and there were not many false positives! Although there were a few small problems (see the commit history of the above PR), they were easily fixed.&lt;/p&gt;
+
+&lt;p&gt;The author of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt; has a &lt;a href=&quot;https://blog.benj.me/2022/04/27/cargo-machete/&quot;&gt;blog&lt;/a&gt; introducing the harm of unused dependencies and the solution of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt;. Specifically, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; first compiles the project via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo check&lt;/code&gt; and then analyzes it, while &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt; uses a simple and stupid approach: just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ripgrep&lt;/code&gt; it.&lt;/p&gt;
+
+&lt;p&gt;This PR immediately removed dozens of unused dependencies, which surprised me again 🤯. Unfortunately, the CI time did not decrease further, which seems to indicate that sccache works very well… I roughly tested it locally, and it was faster by about ten to twenty seconds. It seems not a thing, but anyway it’s free :)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. In fact, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; can also be used with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt; by configuring it: &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7836&quot;&gt;feat(risedev): add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;check-udeps&lt;/code&gt; #7836&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-3-disable-incremental-compilation&quot;&gt;Step 3: Disable incremental compilation&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7838&quot;&gt;build: disable incremental build in CI #7838&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;After finishing the previous two steps, I almost wanted to finish my work, but I still felt a bit itchy and thought that the simulation build was still a little slow. So I decided to do some profiling. Then I saw the monsters in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--timings&lt;/code&gt; graph that I posted above. I felt that it didn’t make sense.&lt;/p&gt;
+
+&lt;p&gt;I tried to search the possible reasons why the build artifacts can be non-cacheable for sccache, and found that incremental compilation is a big caveat. I tried to disable it immediately and was shocked again. The effect was stupidly good:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/timings-2.png&quot; alt=&quot;timings-2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This instantly reduced the time for simulation build by 4 minutes…&lt;/p&gt;
+
+&lt;p&gt;Actually, we turned off incremental compilation for our debug build a long time ago:&lt;/p&gt;
+
+&lt;div class=&quot;language-toml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But when we added a new build profile &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ci-sim&lt;/code&gt; later, we didn’t consider this issue. If you think about it, you can find although incremental compilation is good, it doesn’t make sense in CI!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./target&lt;/code&gt;, which make caching less effective.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So I simply added a global env var in CI to turn it off once and for all.&lt;/p&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; CARGO_INCREMENTAL=0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;step-4-single-binary-integration-test&quot;&gt;Step 4: Single binary integration test&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7842&quot;&gt;build: single-binary integration test #7842&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It’s another &lt;em&gt;stupidly effective&lt;/em&gt; optimization. tl;dr:&lt;/p&gt;
+
+&lt;p&gt;Don’t do this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tests/
+  foo.rs
+  bar.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Do this instead:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It’s because every file under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tests/&lt;/code&gt; will be compiled into a separate binary (meaning every one will link dependencies). Apart from slow compilation, this can even slow down test runnings (a flaw in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo test&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;This optimization didn’t reduce our test time (probably due to the superiority of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo nextest&lt;/code&gt;), but it immediately reduced the compilation time by another 2 minutes… It’s also a bit funny that it also reduced the time for uploading/downloading, compressing/decompressing artifacts by 2 minutes…(although the latter did not affect the bottleneck).&lt;/p&gt;
+
+&lt;h2 id=&quot;some-previous-efforts&quot;&gt;Some previous efforts&lt;/h2&gt;
+
+&lt;p&gt;The above is the main process of my optimization this time, and now I can finally be satisfied with the work. Finally, I would like to summarize some of our previous efforts for reference.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use &lt;a href=&quot;https://github.com/nextest-rs/nextest&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo nextest&lt;/code&gt;&lt;/a&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo test&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt; technique: see &lt;a href=&quot;https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo hakari&lt;/code&gt;&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Add cache to the cargo registry, or use the recently stabilized &lt;a href=&quot;https://blog.rust-lang.org/inside-rust/2023/01/30/cargo-sparse-protocol.html&quot;&gt;sparse index&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Split a huge crate into multiple smaller crates.&lt;/li&gt;
+  &lt;li&gt;Try to reduce linking time: linking takes a lot of time and is single-threaded, so it may probably become a bottleneck.
+    &lt;ul&gt;
+      &lt;li&gt;Use a faster linker: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mold&lt;/code&gt; for Linux, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt; for macOS. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lld&lt;/code&gt; is the most mature option for production use.&lt;/li&gt;
+      &lt;li&gt;Turn off Link Time Optimization (LTO) on debug builds.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Trade-off between compile time and performance: The total time of CI is compile time + test time, so whether to turn on compile optimization (including LTO mentioned above), and how much to turn on, is actually a trade-off between the two. You can test and adjust that in order to achieve an overall optimal choice. For example, here’s our build profile tuned by &lt;a href=&quot;https://github.com/bugenzhao&quot;&gt;BugenZhao&lt;/a&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-toml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The profile used for CI in pull requests.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# External dependencies are built with optimization enabled, while crates in this workspace are built&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;inherits&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dev&quot;&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;*&quot;]&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# external dependencies&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;tokio&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;async_stack_trace&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;indextree&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;task_stats_alloc&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# The profile used for deterministic simulation tests in CI.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The simulator can only run single-threaded, so optimization is required to make the running time&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# reasonable. The optimization level is customized to speed up the build.&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-sim]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;inherits&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dev&quot;&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For more optimization techniques, you may refer to other posts like &lt;a href=&quot;https://endler.dev/2020/rust-compile-times/&quot;&gt;Tips for Faster Rust Compile Times&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Things like CI and DX are easy to become messy if they are not taken care of regularly. My story shows that if you do some maintenance from time to time, you may get unexpected gains. A little effort can bring huge improvements.&lt;/p&gt;
+
+&lt;p&gt;Finally I’d like to quote matklad’s &lt;a href=&quot;https://matklad.github.io/2021/09/04/fast-rust-builds.html&quot;&gt;blog&lt;/a&gt; again as a conclusion:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Compilation time is a &lt;em&gt;multiplier&lt;/em&gt; for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.&lt;/p&gt;
+
+  &lt;p&gt;It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Let’s take some time to prevent “&lt;em&gt;broken windows&lt;/em&gt;”. The effort would pay off!&lt;/p&gt;</content><author><name>xxchan</name></author><category term="CS" /><summary type="html">How I reduced 10 minutes of CI time without much effort</summary></entry><entry><title type="html">This Week in RisingWave #1 (20230217)</title><link href="https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1.html" rel="alternate" type="text/html" title="This Week in RisingWave #1 (20230217)" /><published>2023-02-17T00:00:00+00:00</published><updated>2023-02-17T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/02/17/twirw-1.html">&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt; is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.&lt;/p&gt;
+
+&lt;p&gt;So why not share the excitement with more people (and also help myself to get a better understanding)? That’s why I decided to write this blog post about what’s happening in the project. Hope you will enjoy it!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This blog series is &lt;em&gt;my personal comments&lt;/em&gt; about (part of) the development of &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;p&gt;Please take it as an unofficial and no-promise supplement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;most-exciting-things-&quot;&gt;Most exciting things 🤩&lt;/h2&gt;
+
+&lt;h3 id=&quot;huge-reduce-of-ci-time&quot;&gt;Huge reduce of CI time&lt;/h3&gt;
+
+&lt;p&gt;As my last post mentioned, last week I found some &lt;a href=&quot;/cs/2023/02/17/optimize-rust-comptime-en.html&quot;&gt;stupidly effective ways to optimize Rust compile time&lt;/a&gt;. I managed to reduce the CI time from &lt;strong&gt;main 40min/PR 25min30s&lt;/strong&gt; to &lt;strong&gt;main 28min/PR 16-19min&lt;/strong&gt;, and it looks good this week!&lt;/p&gt;
+
+&lt;p&gt;It’s quite a DX improvement. I’m very happy and would like to quote matklad’s &lt;a href=&quot;https://matklad.github.io/2021/09/04/fast-rust-builds.html&quot;&gt;blog&lt;/a&gt; again:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Compilation time is a &lt;em&gt;multiplier&lt;/em&gt; for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.&lt;/p&gt;
+
+  &lt;p&gt;It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Let’s take some time to prevent “&lt;em&gt;broken windows&lt;/em&gt;”. The effort would pay off!&lt;/p&gt;
+
+&lt;h3 id=&quot;ddl-ux-improvements&quot;&gt;DDL UX improvements&lt;/h3&gt;
+
+&lt;p&gt;DDL can take very long time if there are already a lot of existing data to consume. Previously you can only sit there and wait. But now, you can:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Show DDL’s progress: (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7914&quot;&gt;by chenzl25 #7914&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rw_catalog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rw_ddl_progress&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ddl_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;ddl_statement&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;progress&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;--------+-------------------------------+----------&lt;/span&gt;
+    &lt;span class=&quot;mi&quot;&gt;1026&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sbtest1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;69&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;02&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;and cancel streaming jobs by ctrl-c! (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7917&quot;&gt;by yezizp2012 #7917&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;most-intersting-things-&quot;&gt;Most intersting things 😄&lt;/h2&gt;
+
+&lt;h3 id=&quot;opendal-into-risingwave&quot;&gt;OpenDAL into RisingWave!&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/datafuselabs/opendal&quot;&gt;OpenDAL&lt;/a&gt; is a unified data access layer which aims to help access data freely, painlessly, and efficiently.&lt;/p&gt;
+
+&lt;p&gt;Previously, RisingWave only supports s3 as a storage backend (and also support other s3-compatible storage). Recently we are trying to add more storage backends.&lt;/p&gt;
+
+&lt;p&gt;Last week, we used OpenDAL to add support for using HDFS as a storage backend. This week, we tried more things:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Tried using google cloud storage in RisingWave (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7920&quot;&gt;by wcy-fdu #7920&lt;/a&gt;). In our initial benchmark, it seems OpenDAL can be faster than s3-compatible protocol!&lt;/li&gt;
+  &lt;li&gt;Changed the implementation for oss from s3-compatible mode to OpenDAL (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7969&quot;&gt;by wcy-fdu #7969&lt;/a&gt;). S3-compatible mode for oss doesn’t support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete_objects&lt;/code&gt;, and also suffers from some unstable issues.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It seems that OpenDAL is quite promising!&lt;/p&gt;
+
+&lt;h2 id=&quot;rusty-stuff-️&quot;&gt;Rusty stuff 🦀️&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://www.risingwave-labs.com/blog/building-a-cloud-database-from-scratch-why-we-moved-from-cpp-to-rust/&quot;&gt;We ❤️ Rust!&lt;/a&gt; This section is about some general Rust related issues.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;-clippyor_fun_call-&quot;&gt;&lt;a href=&quot;https://rust-lang.github.io/rust-clippy/master/#or_fun_call&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clippy::or_fun_call&lt;/code&gt; &lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Compared with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;or&lt;/code&gt; , The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;or_else&lt;/code&gt; methods on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Option&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Result&lt;/code&gt; can help to avoid expensive computation in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;None&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Err&lt;/code&gt; case. (i.e., lazy evaluation!) And the &lt;a href=&quot;https://rust-lang.github.io/rust-clippy/master/#or_fun_call&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clippy::or_fun_call&lt;/code&gt; &lt;/a&gt; lint is for detecting that. It used to be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;warn&lt;/code&gt; by default, but unfortunately it seems to have a high false positive rate, and is now &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;allow&lt;/code&gt; by default.&lt;/p&gt;
+
+&lt;p&gt;But we met a case where it’s very wanted. In a function, we used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ok_or::&amp;lt;RwError&amp;gt;&lt;/code&gt; 9 times, so 9 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RwError&lt;/code&gt; is created regardless of whether it’s needed. But constructing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RwError&lt;/code&gt; is very expensive because it captures the backtrace…&lt;/p&gt;
+
+&lt;p&gt;What’s worse, on M1 Mac, capturing backtrace is &lt;em&gt;VERY SLOW&lt;/em&gt; (~300ms &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/6131&quot;&gt;#6131&lt;/a&gt;) and can even cause &lt;em&gt;SEGFAULT&lt;/em&gt; (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/6205&quot;&gt;#6205&lt;/a&gt;)! 😇 It’s not completely resolved yet. We mitigated it by reducing unncessary backtrace capturing, but it’s still a problem.&lt;/p&gt;
+
+&lt;p&gt;So for this issue, of course we should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ok_or_else&lt;/code&gt; instead (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7945&quot;&gt;by xxchan #7945&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h3 id=&quot;zip_eq---exactsizeiterator-&quot;&gt;&lt;a href=&quot;https://docs.rs/itertools/latest/itertools/fn.zip_eq.html&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq&lt;/code&gt;&lt;/a&gt; &amp;amp; &lt;a href=&quot;https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExactSizeIterator&lt;/code&gt; &lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.rs/itertools/latest/itertools/fn.zip_eq.html&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq&lt;/code&gt;&lt;/a&gt; is a &lt;em&gt;safer&lt;/em&gt; version of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip&lt;/code&gt; which checks if the two iterators have the same length. However, it’s notoriously slow (see &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/6856&quot;&gt;#6856 by wangrunji0408&lt;/a&gt; for a benchmark), because in the naive implementation, every item in the iterator is checked.&lt;/p&gt;
+
+&lt;p&gt;There’s a &lt;a href=&quot;https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExactSizeIterator&lt;/code&gt; &lt;/a&gt; trait and naturally it can have an optimized implementation. Such speciallized implementation does not exist because Rust doesn’t support specialization yet. (See &lt;a href=&quot;https://github.com/rust-lang/rust/issues/31844&quot;&gt;tracking issue for specialization (RFC 1210)&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;So last week I added two new separated traits to replace &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq&lt;/code&gt; : (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/blob/d8198fa138003e1f1431053f4f5f09e4a5fa8fd8/src/common/src/util/iter_util.rs&quot;&gt;code here&lt;/a&gt;)&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq_debug&lt;/code&gt;: uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq&lt;/code&gt; when &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;debug_assertions&lt;/code&gt; is enabled, otherwise use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip&lt;/code&gt;. It’s a good trade-off between safety and performance, and can be a drop-in replacement for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq_fast&lt;/code&gt;: speciallized implementation for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExactSizeIterator&lt;/code&gt;. (Actually &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq_debug&lt;/code&gt; can be good enough, but I still added this after playing with specialization for a while. Just for fun…!😄)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This week, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExactSizeIterator&lt;/code&gt; are implemented for more our iterator implementations, so we can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_eq_fast&lt;/code&gt; more often… (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7939&quot;&gt;by BugenZhao #7939&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h2 id=&quot;other-notable-things&quot;&gt;Other notable things&lt;/h2&gt;
+
+&lt;h3 id=&quot;system-parameters&quot;&gt;System Parameters&lt;/h3&gt;
+
+&lt;p&gt;Recently we are doing a large refactoring for system parameters in order to achive consistency and mutability for the cluster configurations (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7381&quot;&gt;Tracking Issue #7381&lt;/a&gt;). This is a serious issue as RisingWave grows mature.&lt;/p&gt;
+
+&lt;p&gt;This week, the meta part for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALTER SYTEM&lt;/code&gt; is implemented &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7954&quot;&gt;by Gun9niR #7954&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;pg_catalog&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_catalog&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Since RisingWave is PostgreSQL compatible, I had thought that supporting other database tools would be easy. But it turns out to be very hard 😭. The largest obstacles is that database tools ususally rely heavily on the system tables in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_catalog&lt;/code&gt; to get the metadata of the database so that they can provide a better UX. But there are so many features in the system tables!&lt;/p&gt;
+
+&lt;p&gt;We have been constantly making efforts to support more and more system tables in order to integrate RisingWave into other tools. This week, we:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Added &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_catalog.pg_conversion&lt;/code&gt; &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7964&quot;&gt;by yezizp2012 #7964&lt;/a&gt;. This is for DBeaver support.&lt;/li&gt;
+  &lt;li&gt;Found it’s not possible to add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;typarray&lt;/code&gt; column in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_catalog.pg_type&lt;/code&gt; &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7555&quot;&gt;#7555&lt;/a&gt;, which affects sqlalchemy support. But &lt;a href=&quot;https://github.com/risingwavelabs/sqlalchemy-risingwave&quot;&gt;sqlalchemy-risingwave&lt;/a&gt; can be used as a substitute for the PG native plugin.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;explain-format&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXPLAIN&lt;/code&gt; format&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXPLAIN&lt;/code&gt; format is another thing I had thought would be easy. Although current situation is not so bad, it’s still far from perfect.&lt;/p&gt;
+
+&lt;p&gt;This week, we tried to use a “global expression id” to make the plan more readable, but it still has some problems:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7953&quot;&gt;feat: try to improve explain result by fuyufjh #7953&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8005&quot;&gt;New project explain format makes planner test unstable #8005&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8006&quot;&gt;refactor(optimizer): reset expression display id for explain by chenzl25 #8006&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;By the way, here’s another intersting stuff: rewrite the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXPLAIN&lt;/code&gt; implementation using the (modified) Wadler-style algebraic pretty printer! See the &lt;a href=&quot;https://github.com/risingwavelabs/rfcs/pull/42&quot;&gt;RFC by ice1000&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;query-optimizer&quot;&gt;Query optimizer&lt;/h3&gt;
+
+&lt;p&gt;Although OLAP batch queries are not the main focus of RisingWave, we still want to make it better. This week, we have these optimizer improvements to make batch queries faster:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7726&quot;&gt;feat(optimizer): index accelerating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TopN&lt;/code&gt; by Eurekaaw #7726&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7982&quot;&gt;feat(optimizer): support like expression rewrite by chenzl25 #7982&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We are also trying to add constant relation in streaming (&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7854&quot;&gt;#7854&lt;/a&gt;). As a first step, we are doing “plan-level constant folding”, e.g., merge &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Union&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Values&lt;/code&gt; inputs into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Values&lt;/code&gt; &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7923&quot;&gt;by jon-chuang #7923&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;last-but-not-least&quot;&gt;Last but not least&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/8014&quot;&gt;fix: fix idle exit in playground mode of compactor by yezizp2012 #8014&lt;/a&gt;. During an HTTP server’s graceful shutdown (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serve_with_shutdown&lt;/code&gt;), it will wait for all the connections to be closed. We ran into a situation where some connections were not closed and the server waits forever…&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/8018&quot;&gt;Tracking: Monitoring, logging and tooling improvements #8018&lt;/a&gt;. Observability matters!&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues/7863&quot;&gt;Support error line/column number reporting during parsing #7863&lt;/a&gt;. This is a lovely feature to increase UX, but it will require hard work :)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;By the way, welcome to join the RisingWave &lt;a href=&quot;https://join.slack.com/t/risingwave-community/shared_invite/zt-120rft0mr-d8uGk3d~NZiZAQWPnElOfw&quot;&gt;Slack community&lt;/a&gt;. Also check out the &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+label%3A%22good+first+issue%22+sort%3Aupdated-desc&quot;&gt;good first issue&lt;/a&gt; and &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/issues?q=is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22&quot;&gt;help wanted&lt;/a&gt; issues if you want to join the development of an open source database system!&lt;/p&gt;
+
+&lt;p&gt;So much for this week. See you next week (hopefully)! 🤗&lt;/p&gt;</content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html">RisingWave is a distributed SQL database for stream processing written in Rust. As a developer of RisingWave, I’m always excited (and also a little bit overwhelmed) about its progress every day.</summary></entry><entry><title type="html">我如何动动小手就让 CI 时间减少了 10 分钟</title><link href="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html" rel="alternate" type="text/html" title="我如何动动小手就让 CI 时间减少了 10 分钟" /><published>2023-02-11T00:00:00+00:00</published><updated>2023-02-11T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/11/optimize-rust-comptime</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html">&lt;p&gt;&lt;a href=&quot;/cs/2023/02/17/optimize-rust-comptime-en.html&quot;&gt;English version of this post&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;虽然经常有逸闻抱怨 Rust 编译速度臭名昭著地慢，但我们的项目 &lt;a href=&quot;https://github.com/risingwavelabs/risingwave&quot;&gt;RisingWave&lt;/a&gt; 在经过前人比如（&lt;a href=&quot;https://github.com/skyzh&quot;&gt;skyzh&lt;/a&gt;，&lt;a href=&quot;https://github.com/bugenzhao&quot;&gt;BugenZhao&lt;/a&gt;）的一些努力后，编译速度并不算慢，特别是我自从用上 M1 的 Macbook Pro 后，编译速度根本不是问题，全量 debug 编译也就两三分钟。&lt;/p&gt;
+
+&lt;p&gt;然而随着时间推移，CI 里加了越来越多的东西，越来越臃肿了。现在 main workflow 需要大概 40min，PR workflow 需要大概 25min30s。虽然并不算特别慢，但是可以体感到比以前变慢了不少。&lt;/p&gt;
+
+&lt;p&gt;于是我前两天心血来潮，决定花点时间研究一下能不能再优化一点编译速度。&lt;/p&gt;
+
+&lt;p&gt;令我非常震惊的是，没想到存在着一些非常简单的方法，动动小手就产生了惊人的成效。感觉完全可以用 low-hanging fruits、silver bullet 甚至是 free lunch 来形容🤯。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. 很推荐 &lt;a href=&quot;https://github.com/matklad&quot;&gt;matklad&lt;/a&gt;（IntelliJ Rust 和 rust-analyzer 的原作者）的 blog：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://matklad.github.io/2021/09/04/fast-rust-builds.html&quot;&gt;Fast Rust Builds&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html&quot;&gt;Delete Cargo Integration Tests&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我用到的大部分方法这里面都有讲到，而且他讲的清晰明了。如果没有另外说明，那么文中的 quote 都来自这里。&lt;/p&gt;
+
+&lt;p&gt;本文算是我的实践记录，或者大概可以也当成一个 tl; dr 版。每一个优化点都带上了相应的 PR，可以结合 &lt;a href=&quot;https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;amp;branch=main&amp;amp;qualified_name=refs%2Fheads%2Fmain&quot;&gt;commit history&lt;/a&gt; 点开每个优化点前后的页面对比效果。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.P.S. 优化完的结果：main 最快 27min，PR 最快 16min，大多在 17-19min 左右。&lt;/p&gt;
+
+&lt;h2 id=&quot;可供参考的数据图表&quot;&gt;可供参考的数据、图表&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;前两天在研究 &lt;a href=&quot;/cs/2023/02/08/profiling-101.html&quot;&gt;profiling&lt;/a&gt;，那现在提到要优化，当然应该看看有没有什么数据、图表看看，找到瓶颈在哪里再来优化。&lt;/p&gt;
+
+&lt;h3 id=&quot;ci-waterfall--dag-graph&quot;&gt;CI waterfall &amp;amp; dag graph&lt;/h3&gt;
+
+&lt;p&gt;我们的 CI 用的是 Buildkite，正常点开一个页面（例如 &lt;a href=&quot;https://buildkite.com/risingwavelabs/pull-request/builds/17099&quot;&gt;Build #17099&lt;/a&gt;）长这样：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-1.png&quot; alt=&quot;buildkite-1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Buildkite 有两个非常好用的隐藏页面，分别是在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/waterfall&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dag&lt;/code&gt; 里，可以看到：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-waterfall.png&quot; alt=&quot;buildkite-waterfall.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/buildkite-dag.png&quot; alt=&quot;buildkite-dag.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图上我们可以清晰地看出，最大的瓶颈是 simulation build -&amp;gt; recovery test&lt;/p&gt;
+
+&lt;h3 id=&quot;cargo-build---timings&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo build --timings&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Cargo 自带 profiling 编译时间的支持（貌似是去年 stablize 的），通过 &lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/timings.html&quot;&gt;cargo build –timings&lt;/a&gt; 启用，它长这样：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/timings.png&quot; alt=&quot;timings.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以发现 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zstd-sys&lt;/code&gt; ， &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;protobuf-src&lt;/code&gt; 等几个依赖的编译时间非常长，应该想办法看看能不能优化掉。&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1-compilation-cache&quot;&gt;Step 1: Compilation cache&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7799&quot;&gt;ci: try sccache #7799&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If you think about it, it’s pretty obvious how a good caching strategy for CI should work.&lt;/p&gt;
+
+  &lt;p&gt;Unfortunately, almost nobody does this.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://xuanwo.io/reports/2023-04/&quot;&gt;2023-04: 为什么你该试试 Sccache？&lt;/a&gt; 在 xuanwo 的大力鼓吹下，我非常心动，也想尝试一下 sccache。这也算是我这次搞优化的一大 trigger。&lt;/p&gt;
+
+&lt;p&gt;不用多说，非常简单好用。只需加两个环境变量就一键启动了：&lt;/p&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; RUSTC_WRAPPER=sccache&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; SCCACHE_BUCKET=ci-sccache-bucket&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;（在这背后其实需要研究一下 Buildkite 和 AWS 的配置——实际上也非常傻瓜。Buildkite 可以通过 IAM Role 来获得权限，加一个 S3 bucket 的 policy 就 work 了，完全不用配置 secret key 之类的东西。我之前还在思考能不能在 CI 里把 key echo 出来，看来是完全不用担心这种事😄）&lt;/p&gt;
+
+&lt;p&gt;效果立竿见影，simulation build 减少了 2.5min，非瓶颈的 debug build 减少了 4min。虽然并没有质变，但是免费的量变何乐而不为呢？&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2-remove-unused-dependencies&quot;&gt;Step 2: Remove unused dependencies&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7816&quot;&gt;build: remove unused deps #7816&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cargo.toml&lt;/code&gt; 中声明的依赖不管实际上有没有用到，都会被编译。更甚它可能会引入不必要的 syncronization point，影响编译的并行度。&lt;/p&gt;
+
+&lt;p&gt;有个老工具 &lt;a href=&quot;https://github.com/est31/cargo-udeps&quot;&gt;cargo-udeps&lt;/a&gt; 就是干这个的，但是首先它并不支持自动修复，而且它很慢。另外印象中有一个毛病是它不能和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt; 一起用。这导致 RisingWave 中长期没有清理过 unused dependencies。典型的破窗效应🥲！&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; 里关于自动 fix 的 issue 下面看到有人提了 &lt;a href=&quot;https://github.com/bnjbvr/cargo-machete&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt; &lt;/a&gt;（这个名字是大砍刀的意思🤣），觉得是骡子是马拉出来遛遛，发现它跑的飞快，也没有几个 false postive。虽然有几个小问题（参考上面 PR 的 commit history），但是都能容易地修掉。&lt;/p&gt;
+
+&lt;p&gt;大砍刀的作者有一篇 &lt;a href=&quot;https://blog.benj.me/2022/04/27/cargo-machete/&quot;&gt;blog&lt;/a&gt; 介绍了 unused dependencies 的危害以及 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt; 的解法。具体说来，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; 是用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo check&lt;/code&gt; 先编译了一遍再分析的，而 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-machete&lt;/code&gt; 是简单粗暴的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ripgrep&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这个 PR 一下子删掉了大几十个 udeps，也是让我大吃一惊🤯。可惜的是，CI 的时间并没有进一步缩短，感觉这侧面说明了 cache 效果很好……我本地粗略地测了一下，大概快了十几二十秒。蚊子腿也是肉嘛，anyway it’s free!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;P.S. 其实 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo-udeps&lt;/code&gt; 配一下也是能和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt; 用的：&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7836&quot;&gt;feat(risedev): add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;check-udeps&lt;/code&gt; #7836&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-3-disable-incremental-compilation&quot;&gt;Step 3: Disable incremental compilation&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7838&quot;&gt;build: disable incremental build in CI #7838&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;干完上面两个小工作之后本来已经想收工了，但有点心痒痒，觉得 simulation build 还是有点慢。于是我决定 profiling 一下看看。然后就看到了一开始贴的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--timings&lt;/code&gt; 的图中的几个庞然大物，我觉得这很不 make sense。&lt;/p&gt;
+
+&lt;p&gt;我搜了搜 sccache non-cacheable 的原因，发现 incremental compilation 是个很大的 caveat，立马尝试了一下，然后我再次震惊了，效果 &lt;em&gt;stupidly&lt;/em&gt; 好：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/comptime/timings-2.png&quot; alt=&quot;timings-2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这让 simulation build 的时间瞬间下降了 4 分钟……&lt;/p&gt;
+
+&lt;p&gt;实际上我们的 debug build 是很早之前就关掉了 incremental compilation：&lt;/p&gt;
+
+&lt;div class=&quot;language-toml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;但是后来加上新的 build profile 的时候没有考虑到这个问题。仔细想一想，incremental compilation 虽好，但它在 CI 里不太 make sense 啊！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./target&lt;/code&gt;, which make caching less effective.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;于是我干脆在 CI 里加了个全局的 env var 来把它关掉，一劳永逸。&lt;/p&gt;
+
+&lt;h2 id=&quot;step-4-single-binary-integration-test&quot;&gt;Step 4: Single binary integration test&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/risingwavelabs/risingwave/pull/7842&quot;&gt;build: single-binary integration test #7842&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;又是一个 &lt;em&gt;stupidly effective&lt;/em&gt; 的优化。tl;dr:&lt;/p&gt;
+
+&lt;p&gt;Don’t do this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tests/
+  foo.rs
+  bar.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Do this instead:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;因为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tests/&lt;/code&gt; 下面的每个文件都会编译成一个单独的 binary（意味着会每个都 link 一下依赖）。除了编译慢，这甚至还可能导致测试跑的慢（&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo test&lt;/code&gt; 的缺陷）。&lt;/p&gt;
+
+&lt;p&gt;这个优化没有减少我们的测试时间（可能是因为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo nextest&lt;/code&gt; 的优越性），但它一下子又减少了快 2 分钟的编译时间……另外说来有点可笑的是，它还减少了 2 分钟的 artifacts 上传下载、压缩解压的时间……（虽然后者在瓶颈上并没有影响）&lt;/p&gt;
+
+&lt;h2 id=&quot;其他一些先前就存在的优化&quot;&gt;其他一些先前就存在的优化&lt;/h2&gt;
+
+&lt;p&gt;以上就是我这次优化的主要过程了，这下终于可以心满意足地收工了。最后想再总结一些前人的努力，以供参考。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用 &lt;a href=&quot;https://github.com/nextest-rs/nextest&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo nextest&lt;/code&gt;&lt;/a&gt; 替代 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo test&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workspace-hack&lt;/code&gt; 技术：见 &lt;a href=&quot;https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cargo hakari&lt;/code&gt;&lt;/a&gt;。&lt;/li&gt;
+  &lt;li&gt;给 cargo registry 加 cache，或者使用刚刚 stablize 的 sparse index，可参考 &lt;a href=&quot;https://github.com/dcjanus&quot;&gt;DCjanus&lt;/a&gt; 的这篇 &lt;a href=&quot;https://blog.dcjanus.com/posts/cargo-registry-index-in-http/&quot;&gt;blog&lt;/a&gt;。&lt;/li&gt;
+  &lt;li&gt;把巨大的 crate 拆分成多个小 create。&lt;/li&gt;
+  &lt;li&gt;link time 的优化：link 很花时间，而且是单线程的，很可能成为瓶颈
+    &lt;ul&gt;
+      &lt;li&gt;使用更快的 linker：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mold&lt;/code&gt; for Linux, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zld&lt;/code&gt; for macOS. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lld&lt;/code&gt; is the most mature option for production use.&lt;/li&gt;
+      &lt;li&gt;在 debug build 上关掉 Link Time Optimization (LTO)。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Trade-off between compile time and performance：CI 的总时间是编译+测试，那么编译优化（包括上面的 LTO）开不开，开多少实际上就是在前后者之间 trade-off，可以调整测试来达到一个整体最优的选择。例如 bugen gg 在我们的 build profile 上的骚操作：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-toml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The profile used for CI in pull requests.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# External dependencies are built with optimization enabled, while crates in this workspace are built&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;inherits&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dev&quot;&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;*&quot;]&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# external dependencies&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;tokio&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;async_stack_trace&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;indextree&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-dev.package.&quot;task_stats_alloc&quot;]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# The profile used for deterministic simulation tests in CI.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The simulator can only run single-threaded, so optimization is required to make the running time&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# reasonable. The optimization level is customized to speed up the build.&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[profile.ci-sim]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;inherits&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dev&quot;&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;opt-level&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;incremental&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;除此以外的更多优化也有很多人都总结过，我就不多说（不懂）了，例如这篇 blog：&lt;a href=&quot;https://endler.dev/2020/rust-compile-times/&quot;&gt;Tips for Faster Rust Compile Times&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
+
+&lt;p&gt;CI、开发者体验这种东西很容易就会在无人照料的情况下变得杂草丛生，但如果定期打理一下，可能会有意想不到的收获，一点点微小的努力就带来巨大的提升。&lt;/p&gt;
+
+&lt;p&gt;最后再摘两段 matklad &lt;a href=&quot;https://matklad.github.io/2021/09/04/fast-rust-builds.html&quot;&gt;blog&lt;/a&gt; 里的话作结：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Compilation time is a &lt;em&gt;multiplier&lt;/em&gt; for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.&lt;/p&gt;
+
+  &lt;p&gt;It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>xxchan</name></author><category term="CS" /><summary type="html">Stupidly effective ways to optimize Rust compile time</summary></entry><entry><title type="html">Profiling 101</title><link href="https://xxchan.me/cs/2023/02/08/profiling-101.html" rel="alternate" type="text/html" title="Profiling 101" /><published>2023-02-08T00:00:00+00:00</published><updated>2023-02-08T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/08/profiling-101</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/08/profiling-101.html">&lt;p&gt;以前也浅尝辄止地试图 profile 过，但是被一大堆概念和工具搞的头昏脑涨，全是问题：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;什么是 profiling，这个词什么意思？&lt;/li&gt;
+  &lt;li&gt;CPU profiling 和 memory profiling 有什么区别？为什么都是火焰图？&lt;/li&gt;
+  &lt;li&gt;Instrument 又是什么意思？&lt;/li&gt;
+  &lt;li&gt;Golang 的 pprof package 和 pprof tool 有什么区别？&lt;/li&gt;
+  &lt;li&gt;Mac 的 XCode Instruments 可以比较傻瓜式地 profile，但是没有 flamegraph，怎么办？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;然后平时要么没有需求用不到 profiling，要么遇到问题很急，就病急乱投医，各种工具瞎试一通，最后不了了之，也没搞懂在干什么。&lt;/p&gt;
+
+&lt;p&gt;这两天在尝试用 profiling 工具查内存问题，虽然最后问题没让我看出来，但是这回终于基本搞懂他们到底是在干什么了，趁热打铁水一篇博客记录一下。&lt;/p&gt;
+
+&lt;p&gt;本文不包括：如何根据 profiling 的结果来进行性能优化（这是最终目标，需要大量经验），profiling 的各种具体实现技术。&lt;/p&gt;
+
+&lt;p&gt;本文主要科普基本概念，理解 profiling 在干什么，这算是一切后续工作的前提。因此本文目标读者是像我一样可能听说过一些，但是没怎么上手搞过 profiling，对基本概念也不太理解的朋友。&lt;/p&gt;
+
+&lt;h2 id=&quot;tl-dr&quot;&gt;TL; DR&lt;/h2&gt;
+
+&lt;p&gt;Profiling 其实包括&lt;em&gt;分开&lt;/em&gt;的两个步骤：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;收集程序运行的信息&lt;/li&gt;
+  &lt;li&gt;分析/展示信息&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Flamegraph 只是一种数据可视化方法，属于 profiling 的第二步。它不包括第一步收集信息，profiling 也可以不用它来展示信息。&lt;/p&gt;
+
+&lt;h2 id=&quot;什么是-flamegraph&quot;&gt;什么是 flamegraph&lt;/h2&gt;
+
+&lt;p&gt;就算不太懂 profiling 原理或者实践，看到这样的火焰图也会觉得非常直观，基本上能猜个大概是什么意思。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://camo.githubusercontent.com/eecfbf00e6cc5baf6ae2b66283573d765f8fe29f1d3df10f4ce3423d942c0af3/687474703a2f2f7777772e6272656e64616e67726567672e636f6d2f466c616d654772617068732f6370752d626173682d666c616d6567726170682e737667&quot; alt=&quot;Example&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这一定程度上导致对门外汉来说提到 profiling 和 flamegraph 就觉得是绑定在一起的两个概念，但实际上不是。&lt;/p&gt;
+
+&lt;p&gt;其实它只是一种可视化工具，只负责展示信息。它的 input 可以是任何长得像 &lt;strong&gt;stacktrace&lt;/strong&gt; 的东西。它的主要优点也正是可以明了地看出 stacktrace 和占比。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/brendangregg/FlameGraph&quot;&gt;brendangregg/FlameGraph&lt;/a&gt;&lt;/strong&gt; 这个 repo 作者 Brendan Gregg 是 flamegraph 的发明者。这个 repo 里包含了一系列（perl 写的）flamegraph 工具。里面包括：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flamegraph.pl&lt;/code&gt; 是最重要的用来生成 flamegraph SVG 图片的工具&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stackcollapse-*.pl&lt;/code&gt; 系列可以把各种格式的 stacktrace 转换成 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flamegraph.pl&lt;/code&gt; 的 input 格式&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以实际上我手写一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;flamegraph.pl&lt;/code&gt; 的输入格式的东西，也可以生成一个 flamegraph。例如这样：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a 1
+a;b 0
+a;b;c 1
+a;b;c;e 1.5
+a;b;d 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/flamegraph.svg&quot; alt=&quot;flamegraph.svg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上面这个例子应该很好地解释了 flamegraph 的原理。每一行是一个函数的完整的调用栈，最后一个数字是它&lt;em&gt;自己&lt;/em&gt;的（时间/内存/…）占用数量。&lt;/p&gt;
+
+&lt;h3 id=&quot;把-stacktrace-转换成-flamegraph&quot;&gt;把 stacktrace 转换成 flamegraph&lt;/h3&gt;
+
+&lt;p&gt;现在很多 profiling 工具应该都可以直接生成 flamegraph，如果不行的话，可以自己想办法弄个脚本转换一下。例如 XCode Instruments 其实可以导出（它里面叫 Deep Copy… 并且还需要先选中才好导）这样的 stacktrace 文本（内存，CPU 什么的都可以导） ：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Allocation
+Bytes Used	Count		Symbol Name
+   9.75 KB     100.0%	56	 	_pthread_start
+   9.75 KB     100.0%	56	 	 std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+
+# Time Profiler
+Weight	Self Weight		Symbol Name
+74.00 ms  100.0%	0 s	 	thread_start
+74.00 ms  100.0%	0 s	 	 _pthread_start
+74.00 ms  100.0%	0 s	 	  std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+
+# CPU Profiler
+Weight	Self Weight		Symbol Name
+34.35 Mc  100.0%	-	 	thread_start
+34.35 Mc  100.0%	-	 	 _pthread_start
+34.35 Mc  100.0%	-	 	  std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我想要把 Allocation（内存 profile）的结果弄成 flamegraph，发现没有现成的工具。上面的工具包里有一个 &lt;a href=&quot;https://github.com/brendangregg/FlameGraph/blob/master/stackcollapse-instruments.pl&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stackcollapse-instruments.pl&lt;/code&gt; &lt;/a&gt;，实际上处理的是 Time Profiler 的格式：&lt;/p&gt;
+
+&lt;div class=&quot;language-perl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;chomp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;sr&quot;&gt;/\d+\.\d+ (?:min|s|ms)\s+\d+\.\d+%\s+(\d+(?:\.\d+)?) (min|s|ms)\t \t(\s*)(.+)/&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$func&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$depth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$stack&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$depth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;..&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$depth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$stack&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&quot;;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;eq&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&quot;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;nv&quot;&gt;$time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;eq&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&quot;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;nv&quot;&gt;$time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;%s %.0f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&quot;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这个 perl 代码和正则表达式虽然都看不懂，但是可以目测感受一下就是先做个匹配，然后根据空格缩进的数量处理 stack，最后再把时间单位转换一下就行了。&lt;/p&gt;
+
+&lt;p&gt;祭出 &lt;a href=&quot;https://regex101.com/&quot;&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;regex101&lt;/code&gt; &lt;/a&gt;（其实我也第一次用）鉴定一下正则表达式：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/regex.png&quot; alt=&quot;regex.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;再回头结合代码中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$2, $3, $4&lt;/code&gt; 的用法，可以非常确信每个变量的含义。&lt;/p&gt;
+
+&lt;p&gt;然后想要转 Allocation 的格式的话，依葫芦画瓢小改一下正则表达式和单位就行了（可以结合 regex101 的 debug 功能，看正则匹配到哪儿挂了，相当好用）。注意 Allocation 的信息里默认不包括 &lt;em&gt;Self Bytes&lt;/em&gt;，可以手动打开一下。&lt;/p&gt;
+
+&lt;h2 id=&quot;什么是-profiling&quot;&gt;什么是 profiling&lt;/h2&gt;
+
+&lt;h3 id=&quot;profiling-这个词的含义&quot;&gt;profiling 这个词的含义&lt;/h3&gt;
+
+&lt;p&gt;翻了翻词典和 wiki 的解释：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;the recording and analysis of a person’s psychological and behavioral characteristics, so as to assess or predict their capabilities in a certain sphere or to assist in identifying a particular subgroup of people&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Profiling&lt;/strong&gt;, the extrapolation of information about something, based on known qualities&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;感觉是个非常 general 的词，但感觉差不多就是通过收集信息（观测）来分析推断的意思。常见其他用法包括心理学中的罪犯心理画像侧写，都差不多是一回事。&lt;/p&gt;
+
+&lt;p&gt;从第一个解释也可以看出，profiling 其实有两个步骤：收集信息和分析信息。例如 golang 自带的 &lt;a href=&quot;https://pkg.go.dev/runtime/pprof&quot;&gt;pprof 包&lt;/a&gt;提供了多种方式启用 profiling：go test、HTTP 服务、手动在程序里启用，其实做的事情都是收集信息。以前我还搞不清楚它和 pprof tool 的关系，实际上后者是个分析、可视化工具，前者收集信息，收集成后者定义的输入格式。&lt;/p&gt;
+
+&lt;h3 id=&quot;收集信息&quot;&gt;收集信息&lt;/h3&gt;
+
+&lt;p&gt;主要有两种收集信息的方式：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Statistical sampling：probes the target program’s call stack at regular intervals using operating system interrupts.&lt;/li&gt;
+  &lt;li&gt;Code instrumentation：either inject code into a binary file that captures timing information or by using callback hooks.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;后者比前者更精确，但是 overhead 也更大。前面提到的 Mac 上的 XCode Instruments，想必就是以后面这种方式来收集信息的。&lt;/p&gt;
+
+&lt;h4 id=&quot;instrumenation-这个词的含义&quot;&gt;instrumenation 这个词的含义&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Instrumentation&lt;/strong&gt; a collective term for measuring instruments that are used for indicating, measuring and recording physical quantities. The term has its origins in the art and science of scientific instrument-making.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Scientific instruments 实际上指科学仪器，that are used for &lt;strong&gt;indicating, measuring and recording&lt;/strong&gt; physical quantities。Instrumentation 可以指&lt;em&gt;使用&lt;/em&gt;科学仪器。&lt;/p&gt;
+
+&lt;p&gt;那么在软件的语境下， instrumentation 就指往代码中加入一些“仪器”，从而可以&lt;em&gt;观测&lt;/em&gt;到软件的行为。它的中文好像叫“插桩”，也挺形象，就是感觉不太符合原意。&lt;/p&gt;
+
+&lt;p&gt;插入软件里的东西可能包括：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Collect profiling statistics：profiling 实际上就是 measuring dynamic program behaviors，非常像做科学实验&lt;/li&gt;
+  &lt;li&gt;Run-time checking：像 AddressSanitizer 这种也被算作是 instrumentation，感觉稍微有点词义扩大的感觉&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不过这么说来，我感觉 sampling 在更广义的角度看也可以算是一种“instrumentation”……&lt;/p&gt;
+
+&lt;h3 id=&quot;分析展示信息&quot;&gt;分析/展示信息&lt;/h3&gt;
+
+&lt;p&gt;分析除了 flamegraph，其他还有像下面这样的 graphviz 图等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://go.dev/blog/pprof/havlak1a-75.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;也可以不可视化，就看一看一些统计信息，例如 TopN。&lt;/p&gt;
+
+&lt;p&gt;不同的收集工具接受不同的 input 格式，相应地做的事情也会不一样，例如有的分析工具可能还有把 debug symbol 转成 source code address 这一步，而像之前的 flamegraph 就是接受现成的处理好的（collapsed）stacktrace。pprof 的输入格式是一个 &lt;a href=&quot;https://github.com/google/pprof/blob/main/proto/profile.proto&quot;&gt;protobuffer 定义&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;cpu-profiling--memory-profiling&quot;&gt;CPU profiling &amp;amp; memory profiling&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;CPU profiling 和 memory profiling 有什么区别？为什么都是火焰图？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;现在看这个问题就很简单了，它们要做的事情都是收集信息、分析信息这两步，只是具体收集的方法不一样而已。例如 jemalloc 的 heap profile 就是把 memory dump 一坨下来，然后可以用它的 jeprof 工具来分析，包括转成火焰图的格式。&lt;/p&gt;
+
+&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
+
+&lt;p&gt;我终于理解了一切，所以那然后该怎么看懂火焰图，定位解决性能问题呢？😭&lt;/p&gt;</content><author><name>xxchan</name></author><category term="CS" /><summary type="html">A beginner's guide to profiling</summary></entry></feed>
