@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Why is Paxos Hard?"
+title: "Why is Paxos So Hard to Understand?"
 excerpt: "Because it requires a different mindset"
 categories:
   - CS
@@ -118,7 +118,7 @@ Second, Raft chooses the **leader-based** approach: only the leader can interact
 
 Finally, inconsistent states exist in the replicate log, and the leader will fix it by overwriting.
 
-So is Raft easy? Its core idea is also not hard. It's just single-leader majority-write, … with some additional but simple tricks (to ensure majority-write work).
+So is Raft easy? Its core idea is also not hard. It's just single-leader majority-write, ... with some additional but simple tricks (to ensure majority-write work).
 
 To summarize, Raft
 - Implements replicated log directly.
