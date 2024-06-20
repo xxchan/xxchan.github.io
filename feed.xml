@@ -1,0 +1,1431 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://xxchan.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://xxchan.me/" rel="alternate" type="text/html" /><updated>2024-06-20T14:57:22+00:00</updated><id>https://xxchan.me/feed.xml</id><title type="html">XX&apos;s Blog</title><subtitle>Just some random thoughts of mine.</subtitle><author><name>xxchan</name></author><entry><title type="html">Why English Quote (&apos;) looks bad in my blog?</title><link href="https://xxchan.me/misc/2024/06/12/quotation-mark.html" rel="alternate" type="text/html" title="Why English Quote (&apos;) looks bad in my blog?" /><published>2024-06-12T00:00:00+00:00</published><updated>2024-06-12T00:00:00+00:00</updated><id>https://xxchan.me/misc/2024/06/12/quotation-mark</id><content type="html" xml:base="https://xxchan.me/misc/2024/06/12/quotation-mark.html"><![CDATA[<p>As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply put them together without a language switcher or any filtering. Admittedly, I haven't figured out how to implement this in Jekyll due to a lack of motivation.</p>
+
+<p>One issue I encountered was the font, as Chinese characters looked unattractive with the default settings. I also don't want different configurations for each language, but some Chinese fonts don't support English characters. Currently, I'm using <a href="https://fonts.google.com/noto/specimen/Noto+Serif+SC">Noto Serif SC</a>, which looks decent enough.</p>
+
+<p>This setup works well for the most part, except for two small, puzzling clouds..</p>
+<ol>
+  <li>The HTML header is <code class="language-plaintext highlighter-rouge">&lt;html lang="zh"&gt;</code> for all pages. I'm unsure of the impact, so I haven't have enough motivation to address it yet.</li>
+  <li>(The main topic of this post) The quotation mark <code class="language-plaintext highlighter-rouge">'</code> is displayed as a full-width character (<code class="language-plaintext highlighter-rouge">’</code>), which looks quite strange.</li>
+</ol>
+
+<p><img src="/assets/img/quotation-mark.png" alt="quotation-mark.png" /></p>
+
+<p>Initially, I thought it was a font issue. However, testing revealed that the Noto Serif SC font could render <code class="language-plaintext highlighter-rouge">'</code> nicely. Copying the rendered character showed it was indeed converted to <code class="language-plaintext highlighter-rouge">’</code>, rather than just being rendered differently.</p>
+
+<p>I suspected it might be a Jekyll issue, but found no similar questions. Eventually, I broadened my search to "Jekyll Quotes" and discovered some related issues: <a href="https://github.com/jekyll/jekyll/issues/1858">All quotes in markup text had to be escaped · Issue #1858 · jekyll/jekyll</a>. In their case, the quotation mark was even more problematic. I tried escaping it in my blog with <code class="language-plaintext highlighter-rouge">\'</code>, which could also solve my issue.</p>
+
+<p><img src="/assets/img/quotation-mark-2.png" alt="quotation-mark-2.png" /></p>
+
+<p>I began to realize that it's a feature (not a bug) of the markdown processor (not Jekyll), called "smart quotes", which performs the conversion. And here's a blog about the rationale behind it: <a href="https://webdesignledger.com/common-typography-mistakes-apostrophes-versus-quotation-marks/">Common Typography Mistakes: Apostrophes Versus Quotation Marks</a></p>
+
+<p>To summarize, the reason why <code class="language-plaintext highlighter-rouge">'</code> looks bad in my blog is because it's first converted to <code class="language-plaintext highlighter-rouge">’</code>, and since I'm using a Chinese font, it is rendered in full-width, which looks awkward among English words.</p>
+
+<p>Why aren't others complaining about this? Perhaps because few people mix English and Chinese posts together..</p>
+
+<p>How should I solve this problem? According to the post mentioned, the conversion is legitimate, and the quotation mark should not be used. 
+However, this would require using different fonts for English and Chinese. 
+I'd rather not be so "correct" and opt for a simpler workaround: disable the "smart quotes" feature and live with the quotation marks.</p>
+
+<hr />
+
+<p>At this point, I'm considering whether I should switch to a better multilingual solution or even abandon Jekyll altogether. 
+Maybe I should develop my own blog without using any static site generator, as my blog is noting fancy just markdown to HTML?</p>
+
+<blockquote>
+  <p>Static Site Generators are an example of the template method pattern, where the framework provides the overall control flow, but also includes copious extension points for customizing behaviors. Template method allows for some code re-use at the cost of obscure and indirect control flow. This pattern pays off when you have many different invocations of template method with few, if any, non-trivial customizations. Conversely, a template method with a single, highly customized call-site probably should be refactored away in favor of direct control flow.</p>
+
+  <p>If you maintain dozens mostly identical websites, you definitely need a static site generator. If you have only one site to maintain, you might consider writing the overall scaffolding yourself.</p>
+
+  <p><a href="https://matklad.github.io/2023/11/07/dta-oriented-blogging.html">Data Oriented Blogging</a> by matklad</p>
+</blockquote>]]></content><author><name>xxchan</name></author><category term="Misc" /><summary type="html"><![CDATA[As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply put them together without a language switcher or any filtering. Admittedly, I haven't figured out how to implement this in Jekyll due to a lack of motivation.]]></summary></entry><entry><title type="html">New site for This Week in RisingWave</title><link href="https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="alternate" type="text/html" title="New site for This Week in RisingWave" /><published>2023-04-02T00:00:00+00:00</published><updated>2023-04-02T00:00:00+00:00</updated><id>https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration</id><content type="html" xml:base="https://xxchan.me/this-week-in-risingwave/2023/04/02/twirw-migration.html"><![CDATA[<p>This Week in RisingWave is now migrated to a new dedicated site: <a href="https://this-week-in-risingwave.vercel.app">this-week-in-risingwave.vercel.app</a>.</p>
+
+<p>By the way, xxchan's blog also has a new domain name: <a href="https://xxchan.me">xxchan.me</a>. The old domain name <a href="https://xxchan.github.io">xxchan.github.io</a> should still work.</p>
+
+<p>Please tell me if any of the links or other things like RSS are broken! Thanks! 🥰</p>]]></content><author><name>xxchan</name></author><category term="This-Week-in-RisingWave" /><summary type="html"><![CDATA[This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.]]></summary></entry><entry><title type="html">Stupidly effective ways to optimize Rust compile time</title><link href="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html" rel="alternate" type="text/html" title="Stupidly effective ways to optimize Rust compile time" /><published>2023-02-17T00:00:00+00:00</published><updated>2023-02-17T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html"><![CDATA[<p><a href="/cs/2023/02/11/optimize-rust-comptime.html">本文的中文版</a></p>
+
+<p>Although there are often complaints saying Rust's compilation speed is notorious slow, our project <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a> is not very slow to compile, especially since previously contributors like (<a href="https://github.com/skyzh">skyzh</a>, <a href="https://github.com/bugenzhao">BugenZhao</a>) have put in a lot of effort. After using an M1 MacBook Pro, compiling is not a problem at all. A full debug compilation only takes 2-3 minutes.</p>
+
+<p>However, over time, more and more things have been added to our CI, making it increasingly bloated. The main workflow now takes about 40 minutes, while the PR workflow takes about 25 minutes 30 seconds. Although it is still not intolerably slow, it is already noticeably slower than before.</p>
+
+<p>So a few days ago, I decided to spend some time researching whether I could optimize the compilation speed a bit more.</p>
+
+<p>What shocked me was that there were some very simple methods that, with just a little effort, produced astonishing results. I feel like I can describe them as low-hanging fruits, silver bullets, or even free lunch 🤯.</p>
+
+<hr />
+
+<p>P.S. I highly recommend <a href="https://github.com/matklad">matklad</a>'s blog (He is the original author of IntelliJ Rust and rust-analyzer):</p>
+<ul>
+  <li><a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">Fast Rust Builds</a></li>
+  <li><a href="https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html">Delete Cargo Integration Tests</a></li>
+</ul>
+
+<p>Most of the methods I used are discussed there, and he explains them clearly. If not otherwise indicated, all quotes in this article come from there.</p>
+
+<p>Although there are quite some articles talking about how to optimize Rust compilation speed (e.g., <a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a>), I still want to write another one to share my step-by-step process. Each optimization point comes with a corresponding PR, and you can combine the <a href="https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;branch=main&amp;qualified_name=refs%2Fheads%2Fmain">commit history</a> to see the effect of each optimization point by comparing the CI pages before and after its PR.</p>
+
+<hr />
+
+<p>P.P.S. Results after optimization: main workflow is now 27 minutes at the fastest, and PR workflow is now 16 minutes at the fastest, with most taking around 17-19 minutes.</p>
+
+<h2 id="valuable-data-and-charts-to-find-the-bottlenecks">Valuable data and charts to find the bottlenecks</h2>
+
+<blockquote>
+  <p>Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.</p>
+</blockquote>
+
+<p>When trying to optimize anything, it would be good to have some profiling data and charts to find out the bottlenecks. Luckily, we do have some nice ones for optimizing CI time.</p>
+
+<h3 id="ci-waterfall--dag-graph">CI Waterfall &amp; DAG Graph</h3>
+
+<p>We use Buildkite for our CI, and the normal view of a page (such as <a href="https://buildkite.com/risingwavelabs/pull-request/builds/17099">Build #17099</a>) looks like this:</p>
+
+<p><img src="/assets/img/comptime/buildkite-1.png" alt="buildkite-1.png" /></p>
+
+<p>Buildkite has two very useful hidden pages, located at <code class="language-plaintext highlighter-rouge">/waterfall</code> and <code class="language-plaintext highlighter-rouge">/dag</code>, respectively, which show:</p>
+
+<p><img src="/assets/img/comptime/buildkite-waterfall.png" alt="buildkite-waterfall.png" /></p>
+
+<p><img src="/assets/img/comptime/buildkite-dag.png" alt="buildkite-dag.png" /></p>
+
+<p>From the waferfall graph, we can see recovery test finishes last. Two large steps finish before it: build (deterministic simulation) and check. The DAG graph shows that recovery test depends only on simulation build, so we can forget about the check step for now, and conclude the biggest bottleneck is in the path of simulation build -&gt; recovery test.</p>
+
+<h3 id="cargo-build---timings"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></h3>
+
+<p>Cargo comes with built-in support for profiling build times (it was stabilized last year), which can be enabled by running <a href="https://doc.rust-lang.org/cargo/reference/timings.html"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></a>. It produces output like this:</p>
+
+<p><img src="/assets/img/comptime/timings.png" alt="timings.png" /></p>
+
+<p>We can see that the compilation times for some dependencies such as <code class="language-plaintext highlighter-rouge">zstd-sys</code> and <code class="language-plaintext highlighter-rouge">protobuf-src</code> are very long, so we should try to optimize them.</p>
+
+<h2 id="step-1-compilation-cache">Step 1: Compilation cache</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7799">ci: try sccache #7799</a></p>
+
+<blockquote>
+  <p>If you think about it, it’s pretty obvious how a good caching strategy for CI should work.</p>
+
+  <p>Unfortunately, almost nobody does this.</p>
+</blockquote>
+
+<p><a href="https://xuanwo.io/en-us/reports/2023-04/">Why should you give Sccache a try?</a> With xuanwo's strong recommendation, I was very tempted to try sccache, which was also a major trigger for my optimization efforts this time.</p>
+
+<p>It's so easy to use. Just add two environment variables to start it up:</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> RUSTC_WRAPPER=sccache</span>
+<span class="k">ENV</span><span class="s"> SCCACHE_BUCKET=ci-sccache-bucket</span>
+</code></pre></div></div>
+<p>(Well, behind the scenes, you actually need to study Buildkite and AWS configurations - which are also very simple. Buildkite can obtain permissions through IAM roles, so I just need to a policy for the role to access an S3 bucket, without the need to configure things like secret keys. I had been thinking about whether I could echo the key out in CI before, but it seems there's no need to worry about that. 😄)</p>
+
+<p>The effect was immediately apparent, reducing the simulation build time by 2.5 minutes and the non-bottleneck debug build time by 4 minutes. Although it didn't bring about a qualitative change, why not make use of the (almost free) quantitative change?</p>
+
+<h2 id="step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7816">build: remove unused deps #7816</a></p>
+
+<p>All dependencies declared in <code class="language-plaintext highlighter-rouge">Cargo.toml</code> will be compiled regardless of whether they are actually used or not. Moreover, they may introduce unnecessary synchronization points, affecting the parallelism of compilation.</p>
+
+<p>An old tool <a href="https://github.com/est31/cargo-udeps">cargo-udeps</a> is used to remove unused dependencies. But firstly, it does not support automatic fixing, and it is also very slow. Also, I had an impression that it cannot be used together with <code class="language-plaintext highlighter-rouge">workspace-hack</code>. This has led to RisingWave not cleaning up unused dependencies for a long time – a typical broken window effect 🥲!</p>
+
+<p>In an issue of <code class="language-plaintext highlighter-rouge">cargo-udeps</code> about automatic fix, someone mentioned <a href="https://github.com/bnjbvr/cargo-machete"><code class="language-plaintext highlighter-rouge">cargo-machete</code></a>. Without many investigation I just gave it a shot, hoping it works. It turned out to be very fast and there were not many false positives! Although there were a few small problems (see the commit history of the above PR), they were easily fixed.</p>
+
+<p>The author of <code class="language-plaintext highlighter-rouge">cargo-machete</code> has a <a href="https://blog.benj.me/2022/04/27/cargo-machete/">blog</a> introducing the harm of unused dependencies and the solution of <code class="language-plaintext highlighter-rouge">cargo-machete</code>. Specifically, <code class="language-plaintext highlighter-rouge">cargo-udeps</code> first compiles the project via <code class="language-plaintext highlighter-rouge">cargo check</code> and then analyzes it, while <code class="language-plaintext highlighter-rouge">cargo-machete</code> uses a simple and stupid approach: just <code class="language-plaintext highlighter-rouge">ripgrep</code> it.</p>
+
+<p>This PR immediately removed dozens of unused dependencies, which surprised me again 🤯. Unfortunately, the CI time did not decrease further, which seems to indicate that sccache works very well… I roughly tested it locally, and it was faster by about ten to twenty seconds. It seems not a thing, but anyway it's free :)</p>
+
+<hr />
+
+<p>P.S. In fact, <code class="language-plaintext highlighter-rouge">cargo-udeps</code> can also be used with <code class="language-plaintext highlighter-rouge">workspace-hack</code> by configuring it: <a href="https://github.com/risingwavelabs/risingwave/pull/7836">feat(risedev): add <code class="language-plaintext highlighter-rouge">check-udeps</code> #7836</a></p>
+
+<h2 id="step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7838">build: disable incremental build in CI #7838</a></p>
+
+<p>After finishing the previous two steps, I almost wanted to finish my work, but I still felt a bit itchy and thought that the simulation build was still a little slow. So I decided to do some profiling. Then I saw the monsters in the <code class="language-plaintext highlighter-rouge">--timings</code> graph that I posted above. I felt that it didn't make sense.</p>
+
+<p>I tried to search the possible reasons why the build artifacts can be non-cacheable for sccache, and found that incremental compilation is a big caveat. I tried to disable it immediately and was shocked again. The effect was stupidly good:</p>
+
+<p><img src="/assets/img/comptime/timings-2.png" alt="timings-2" /></p>
+
+<p>This instantly reduced the time for simulation build by 4 minutes…</p>
+
+<p>Actually, we turned off incremental compilation for our debug build a long time ago:</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[profile.ci-dev]</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>But when we added a new build profile <code class="language-plaintext highlighter-rouge">ci-sim</code> later, we didn't consider this issue. If you think about it, you can find although incremental compilation is good, it doesn't make sense in CI!</p>
+
+<blockquote>
+  <p>CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of <code class="language-plaintext highlighter-rouge">./target</code>, which make caching less effective.</p>
+</blockquote>
+
+<p>So I simply added a global env var in CI to turn it off once and for all.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> CARGO_INCREMENTAL=0</span>
+</code></pre></div></div>
+
+<h2 id="step-4-single-binary-integration-test">Step 4: Single binary integration test</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7842">build: single-binary integration test #7842</a></p>
+
+<p>It's another <em>stupidly effective</em> optimization. tl;dr:</p>
+
+<p>Don’t do this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  foo.rs
+  bar.rs
+</code></pre></div></div>
+
+<p>Do this instead:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+</code></pre></div></div>
+
+<p>It's because every file under <code class="language-plaintext highlighter-rouge">tests/</code> will be compiled into a separate binary (meaning every one will link dependencies). Apart from slow compilation, this can even slow down test runnings (a flaw in <code class="language-plaintext highlighter-rouge">cargo test</code>).</p>
+
+<p>This optimization didn't reduce our test time (probably due to the superiority of <code class="language-plaintext highlighter-rouge">cargo nextest</code>), but it immediately reduced the compilation time by another 2 minutes… It's also a bit funny that it also reduced the time for uploading/downloading, compressing/decompressing artifacts by 2 minutes…(although the latter did not affect the bottleneck).</p>
+
+<h2 id="some-previous-efforts">Some previous efforts</h2>
+
+<p>The above is the main process of my optimization this time, and now I can finally be satisfied with the work. Finally, I would like to summarize some of our previous efforts for reference.</p>
+
+<ul>
+  <li>Use <a href="https://github.com/nextest-rs/nextest"><code class="language-plaintext highlighter-rouge">cargo nextest</code></a> instead of <code class="language-plaintext highlighter-rouge">cargo test</code>.</li>
+  <li>Use the <code class="language-plaintext highlighter-rouge">workspace-hack</code> technique: see <a href="https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html"><code class="language-plaintext highlighter-rouge">cargo hakari</code></a>.</li>
+  <li>Add cache to the cargo registry, or use the recently stabilized <a href="https://blog.rust-lang.org/inside-rust/2023/01/30/cargo-sparse-protocol.html">sparse index</a>.</li>
+  <li>Split a huge crate into multiple smaller crates.</li>
+  <li>Try to reduce linking time: linking takes a lot of time and is single-threaded, so it may probably become a bottleneck.
+    <ul>
+      <li>Use a faster linker: <code class="language-plaintext highlighter-rouge">mold</code> for Linux, <code class="language-plaintext highlighter-rouge">zld</code> for macOS. <code class="language-plaintext highlighter-rouge">lld</code> is the most mature option for production use.</li>
+      <li>Turn off Link Time Optimization (LTO) on debug builds.</li>
+    </ul>
+  </li>
+  <li>Trade-off between compile time and performance: The total time of CI is compile time + test time, so whether to turn on compile optimization (including LTO mentioned above), and how much to turn on, is actually a trade-off between the two. You can test and adjust that in order to achieve an overall optimal choice. For example, here's our build profile tuned by <a href="https://github.com/bugenzhao">BugenZhao</a>:</li>
+</ul>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># The profile used for CI in pull requests.</span>
+<span class="c"># External dependencies are built with optimization enabled, while crates in this workspace are built</span>
+<span class="c"># with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.</span>
+<span class="nn">[profile.ci-dev]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="nn">[profile.ci-dev.package."*"]</span> <span class="c"># external dependencies</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="nn">[profile.ci-dev.package."tokio"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."async_stack_trace"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."indextree"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."task_stats_alloc"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+
+<span class="c"># The profile used for deterministic simulation tests in CI.</span>
+<span class="c"># The simulator can only run single-threaded, so optimization is required to make the running time</span>
+<span class="c"># reasonable. The optimization level is customized to speed up the build.</span>
+<span class="nn">[profile.ci-sim]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>For more optimization techniques, you may refer to other posts like <a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a>.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Things like CI and DX are easy to become messy if they are not taken care of regularly. My story shows that if you do some maintenance from time to time, you may get unexpected gains. A little effort can bring huge improvements.</p>
+
+<p>Finally I'd like to quote matklad's <a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">blog</a> again as a conclusion:</p>
+
+<blockquote>
+  <p>Compilation time is a <em>multiplier</em> for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.</p>
+
+  <p>It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.</p>
+</blockquote>
+
+<p>Let's take some time to prevent "<em>broken windows</em>". The effort would pay off!</p>]]></content><author><name>xxchan</name></author><category term="CS" /><summary type="html"><![CDATA[How I reduced 10 minutes of CI time without much effort]]></summary></entry><entry><title type="html">我如何动动小手就让 CI 时间减少了 10 分钟</title><link href="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html" rel="alternate" type="text/html" title="我如何动动小手就让 CI 时间减少了 10 分钟" /><published>2023-02-11T00:00:00+00:00</published><updated>2023-02-11T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/11/optimize-rust-comptime</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/11/optimize-rust-comptime.html"><![CDATA[<p><a href="/cs/2023/02/17/optimize-rust-comptime-en.html">English version of this post</a></p>
+
+<p>虽然经常有逸闻抱怨 Rust 编译速度臭名昭著地慢，但我们的项目 <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a> 在经过前人比如（<a href="https://github.com/skyzh">skyzh</a>，<a href="https://github.com/bugenzhao">BugenZhao</a>）的一些努力后，编译速度并不算慢，特别是我自从用上 M1 的 Macbook Pro 后，编译速度根本不是问题，全量 debug 编译也就两三分钟。</p>
+
+<p>然而随着时间推移，CI 里加了越来越多的东西，越来越臃肿了。现在 main workflow 需要大概 40min，PR workflow 需要大概 25min30s。虽然并不算特别慢，但是可以体感到比以前变慢了不少。</p>
+
+<p>于是我前两天心血来潮，决定花点时间研究一下能不能再优化一点编译速度。</p>
+
+<p>令我非常震惊的是，没想到存在着一些非常简单的方法，动动小手就产生了惊人的成效。感觉完全可以用 low-hanging fruits、silver bullet 甚至是 free lunch 来形容🤯。</p>
+
+<hr />
+
+<p>P.S. 很推荐 <a href="https://github.com/matklad">matklad</a>（IntelliJ Rust 和 rust-analyzer 的原作者）的 blog：</p>
+<ul>
+  <li><a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">Fast Rust Builds</a></li>
+  <li><a href="https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html">Delete Cargo Integration Tests</a></li>
+</ul>
+
+<p>我用到的大部分方法这里面都有讲到，而且他讲的清晰明了。如果没有另外说明，那么文中的 quote 都来自这里。</p>
+
+<p>本文算是我的实践记录，或者大概可以也当成一个 tl; dr 版。每一个优化点都带上了相应的 PR，可以结合 <a href="https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;branch=main&amp;qualified_name=refs%2Fheads%2Fmain">commit history</a> 点开每个优化点前后的页面对比效果。</p>
+
+<hr />
+
+<p>P.P.S. 优化完的结果：main 最快 27min，PR 最快 16min，大多在 17-19min 左右。</p>
+
+<h2 id="可供参考的数据图表">可供参考的数据、图表</h2>
+
+<blockquote>
+  <p>Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.</p>
+</blockquote>
+
+<p>前两天在研究 <a href="/cs/2023/02/08/profiling-101.html">profiling</a>，那现在提到要优化，当然应该看看有没有什么数据、图表看看，找到瓶颈在哪里再来优化。</p>
+
+<h3 id="ci-waterfall--dag-graph">CI waterfall &amp; dag graph</h3>
+
+<p>我们的 CI 用的是 Buildkite，正常点开一个页面（例如 <a href="https://buildkite.com/risingwavelabs/pull-request/builds/17099">Build #17099</a>）长这样：</p>
+
+<p><img src="/assets/img/comptime/buildkite-1.png" alt="buildkite-1.png" /></p>
+
+<p>Buildkite 有两个非常好用的隐藏页面，分别是在 <code class="language-plaintext highlighter-rouge">/waterfall</code> 和 <code class="language-plaintext highlighter-rouge">/dag</code> 里，可以看到：</p>
+
+<p><img src="/assets/img/comptime/buildkite-waterfall.png" alt="buildkite-waterfall.png" /></p>
+
+<p><img src="/assets/img/comptime/buildkite-dag.png" alt="buildkite-dag.png" /></p>
+
+<p>从图上我们可以清晰地看出，最大的瓶颈是 simulation build -&gt; recovery test</p>
+
+<h3 id="cargo-build---timings"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></h3>
+
+<p>Cargo 自带 profiling 编译时间的支持（貌似是去年 stablize 的），通过 <a href="https://doc.rust-lang.org/cargo/reference/timings.html">cargo build –timings</a> 启用，它长这样：</p>
+
+<p><img src="/assets/img/comptime/timings.png" alt="timings.png" /></p>
+
+<p>可以发现 <code class="language-plaintext highlighter-rouge">zstd-sys</code> ， <code class="language-plaintext highlighter-rouge">protobuf-src</code> 等几个依赖的编译时间非常长，应该想办法看看能不能优化掉。</p>
+
+<h2 id="step-1-compilation-cache">Step 1: Compilation cache</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7799">ci: try sccache #7799</a></p>
+
+<blockquote>
+  <p>If you think about it, it’s pretty obvious how a good caching strategy for CI should work.</p>
+
+  <p>Unfortunately, almost nobody does this.</p>
+</blockquote>
+
+<p><a href="https://xuanwo.io/reports/2023-04/">2023-04: 为什么你该试试 Sccache？</a> 在 xuanwo 的大力鼓吹下，我非常心动，也想尝试一下 sccache。这也算是我这次搞优化的一大 trigger。</p>
+
+<p>不用多说，非常简单好用。只需加两个环境变量就一键启动了：</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> RUSTC_WRAPPER=sccache</span>
+<span class="k">ENV</span><span class="s"> SCCACHE_BUCKET=ci-sccache-bucket</span>
+</code></pre></div></div>
+
+<p>（在这背后其实需要研究一下 Buildkite 和 AWS 的配置——实际上也非常傻瓜。Buildkite 可以通过 IAM Role 来获得权限，加一个 S3 bucket 的 policy 就 work 了，完全不用配置 secret key 之类的东西。我之前还在思考能不能在 CI 里把 key echo 出来，看来是完全不用担心这种事😄）</p>
+
+<p>效果立竿见影，simulation build 减少了 2.5min，非瓶颈的 debug build 减少了 4min。虽然并没有质变，但是免费的量变何乐而不为呢？</p>
+
+<h2 id="step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7816">build: remove unused deps #7816</a></p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">Cargo.toml</code> 中声明的依赖不管实际上有没有用到，都会被编译。更甚它可能会引入不必要的 syncronization point，影响编译的并行度。</p>
+
+<p>有个老工具 <a href="https://github.com/est31/cargo-udeps">cargo-udeps</a> 就是干这个的，但是首先它并不支持自动修复，而且它很慢。另外印象中有一个毛病是它不能和 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 一起用。这导致 RisingWave 中长期没有清理过 unused dependencies。典型的破窗效应🥲！</p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">cargo-udeps</code> 里关于自动 fix 的 issue 下面看到有人提了 <a href="https://github.com/bnjbvr/cargo-machete"> <code class="language-plaintext highlighter-rouge">cargo-machete</code> </a>（这个名字是大砍刀的意思🤣），觉得是骡子是马拉出来遛遛，发现它跑的飞快，也没有几个 false postive。虽然有几个小问题（参考上面 PR 的 commit history），但是都能容易地修掉。</p>
+
+<p>大砍刀的作者有一篇 <a href="https://blog.benj.me/2022/04/27/cargo-machete/">blog</a> 介绍了 unused dependencies 的危害以及 <code class="language-plaintext highlighter-rouge">cargo-machete</code> 的解法。具体说来，<code class="language-plaintext highlighter-rouge">cargo-udeps</code> 是用 <code class="language-plaintext highlighter-rouge">cargo check</code> 先编译了一遍再分析的，而 <code class="language-plaintext highlighter-rouge">cargo-machete</code> 是简单粗暴的 <code class="language-plaintext highlighter-rouge">ripgrep</code>。</p>
+
+<p>这个 PR 一下子删掉了大几十个 udeps，也是让我大吃一惊🤯。可惜的是，CI 的时间并没有进一步缩短，感觉这侧面说明了 cache 效果很好……我本地粗略地测了一下，大概快了十几二十秒。蚊子腿也是肉嘛，anyway it's free!</p>
+
+<hr />
+
+<p>P.S. 其实 <code class="language-plaintext highlighter-rouge">cargo-udeps</code> 配一下也是能和 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 用的：<a href="https://github.com/risingwavelabs/risingwave/pull/7836">feat(risedev): add <code class="language-plaintext highlighter-rouge">check-udeps</code> #7836</a></p>
+
+<h2 id="step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7838">build: disable incremental build in CI #7838</a></p>
+
+<p>干完上面两个小工作之后本来已经想收工了，但有点心痒痒，觉得 simulation build 还是有点慢。于是我决定 profiling 一下看看。然后就看到了一开始贴的 <code class="language-plaintext highlighter-rouge">--timings</code> 的图中的几个庞然大物，我觉得这很不 make sense。</p>
+
+<p>我搜了搜 sccache non-cacheable 的原因，发现 incremental compilation 是个很大的 caveat，立马尝试了一下，然后我再次震惊了，效果 <em>stupidly</em> 好：</p>
+
+<p><img src="/assets/img/comptime/timings-2.png" alt="timings-2" /></p>
+
+<p>这让 simulation build 的时间瞬间下降了 4 分钟……</p>
+
+<p>实际上我们的 debug build 是很早之前就关掉了 incremental compilation：</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[profile.ci-dev]</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>但是后来加上新的 build profile 的时候没有考虑到这个问题。仔细想一想，incremental compilation 虽好，但它在 CI 里不太 make sense 啊！</p>
+
+<blockquote>
+  <p>CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of <code class="language-plaintext highlighter-rouge">./target</code>, which make caching less effective.</p>
+</blockquote>
+
+<p>于是我干脆在 CI 里加了个全局的 env var 来把它关掉，一劳永逸。</p>
+
+<h2 id="step-4-single-binary-integration-test">Step 4: Single binary integration test</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7842">build: single-binary integration test #7842</a></p>
+
+<p>又是一个 <em>stupidly effective</em> 的优化。tl;dr:</p>
+
+<p>Don’t do this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  foo.rs
+  bar.rs
+</code></pre></div></div>
+
+<p>Do this instead:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+</code></pre></div></div>
+
+<p>因为 <code class="language-plaintext highlighter-rouge">tests/</code> 下面的每个文件都会编译成一个单独的 binary（意味着会每个都 link 一下依赖）。除了编译慢，这甚至还可能导致测试跑的慢（<code class="language-plaintext highlighter-rouge">cargo test</code> 的缺陷）。</p>
+
+<p>这个优化没有减少我们的测试时间（可能是因为 <code class="language-plaintext highlighter-rouge">cargo nextest</code> 的优越性），但它一下子又减少了快 2 分钟的编译时间……另外说来有点可笑的是，它还减少了 2 分钟的 artifacts 上传下载、压缩解压的时间……（虽然后者在瓶颈上并没有影响）</p>
+
+<h2 id="其他一些先前就存在的优化">其他一些先前就存在的优化</h2>
+
+<p>以上就是我这次优化的主要过程了，这下终于可以心满意足地收工了。最后想再总结一些前人的努力，以供参考。</p>
+
+<ul>
+  <li>使用 <a href="https://github.com/nextest-rs/nextest"><code class="language-plaintext highlighter-rouge">cargo nextest</code></a> 替代 <code class="language-plaintext highlighter-rouge">cargo test</code>。</li>
+  <li>使用 <code class="language-plaintext highlighter-rouge">workspace-hack</code> 技术：见 <a href="https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html"><code class="language-plaintext highlighter-rouge">cargo hakari</code></a>。</li>
+  <li>给 cargo registry 加 cache，或者使用刚刚 stablize 的 sparse index，可参考 <a href="https://github.com/dcjanus">DCjanus</a> 的这篇 <a href="https://blog.dcjanus.com/posts/cargo-registry-index-in-http/">blog</a>。</li>
+  <li>把巨大的 crate 拆分成多个小 create。</li>
+  <li>link time 的优化：link 很花时间，而且是单线程的，很可能成为瓶颈
+    <ul>
+      <li>使用更快的 linker：<code class="language-plaintext highlighter-rouge">mold</code> for Linux, <code class="language-plaintext highlighter-rouge">zld</code> for macOS. <code class="language-plaintext highlighter-rouge">lld</code> is the most mature option for production use.</li>
+      <li>在 debug build 上关掉 Link Time Optimization (LTO)。</li>
+    </ul>
+  </li>
+  <li>Trade-off between compile time and performance：CI 的总时间是编译+测试，那么编译优化（包括上面的 LTO）开不开，开多少实际上就是在前后者之间 trade-off，可以调整测试来达到一个整体最优的选择。例如 bugen gg 在我们的 build profile 上的骚操作：</li>
+</ul>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># The profile used for CI in pull requests.</span>
+<span class="c"># External dependencies are built with optimization enabled, while crates in this workspace are built</span>
+<span class="c"># with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.</span>
+<span class="nn">[profile.ci-dev]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="nn">[profile.ci-dev.package."*"]</span> <span class="c"># external dependencies</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="nn">[profile.ci-dev.package."tokio"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."async_stack_trace"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."indextree"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."task_stats_alloc"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+
+<span class="c"># The profile used for deterministic simulation tests in CI.</span>
+<span class="c"># The simulator can only run single-threaded, so optimization is required to make the running time</span>
+<span class="c"># reasonable. The optimization level is customized to speed up the build.</span>
+<span class="nn">[profile.ci-sim]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>除此以外的更多优化也有很多人都总结过，我就不多说（不懂）了，例如这篇 blog：<a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a></p>
+
+<h2 id="总结">总结</h2>
+
+<p>CI、开发者体验这种东西很容易就会在无人照料的情况下变得杂草丛生，但如果定期打理一下，可能会有意想不到的收获，一点点微小的努力就带来巨大的提升。</p>
+
+<p>最后再摘两段 matklad <a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">blog</a> 里的话作结：</p>
+
+<blockquote>
+  <p>Compilation time is a <em>multiplier</em> for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.</p>
+
+  <p>It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.</p>
+</blockquote>]]></content><author><name>xxchan</name></author><category term="CS" /><summary type="html"><![CDATA[Stupidly effective ways to optimize Rust compile time]]></summary></entry><entry><title type="html">Profiling 101</title><link href="https://xxchan.me/cs/2023/02/08/profiling-101.html" rel="alternate" type="text/html" title="Profiling 101" /><published>2023-02-08T00:00:00+00:00</published><updated>2023-02-08T00:00:00+00:00</updated><id>https://xxchan.me/cs/2023/02/08/profiling-101</id><content type="html" xml:base="https://xxchan.me/cs/2023/02/08/profiling-101.html"><![CDATA[<p>以前也浅尝辄止地试图 profile 过，但是被一大堆概念和工具搞的头昏脑涨，全是问题：</p>
+<ul>
+  <li>什么是 profiling，这个词什么意思？</li>
+  <li>CPU profiling 和 memory profiling 有什么区别？为什么都是火焰图？</li>
+  <li>Instrument 又是什么意思？</li>
+  <li>Golang 的 pprof package 和 pprof tool 有什么区别？</li>
+  <li>Mac 的 XCode Instruments 可以比较傻瓜式地 profile，但是没有 flamegraph，怎么办？</li>
+</ul>
+
+<p>然后平时要么没有需求用不到 profiling，要么遇到问题很急，就病急乱投医，各种工具瞎试一通，最后不了了之，也没搞懂在干什么。</p>
+
+<p>这两天在尝试用 profiling 工具查内存问题，虽然最后问题没让我看出来，但是这回终于基本搞懂他们到底是在干什么了，趁热打铁水一篇博客记录一下。</p>
+
+<p>本文不包括：如何根据 profiling 的结果来进行性能优化（这是最终目标，需要大量经验），profiling 的各种具体实现技术。</p>
+
+<p>本文主要科普基本概念，理解 profiling 在干什么，这算是一切后续工作的前提。因此本文目标读者是像我一样可能听说过一些，但是没怎么上手搞过 profiling，对基本概念也不太理解的朋友。</p>
+
+<h2 id="tl-dr">TL; DR</h2>
+
+<p>Profiling 其实包括<em>分开</em>的两个步骤：</p>
+<ol>
+  <li>收集程序运行的信息</li>
+  <li>分析/展示信息</li>
+</ol>
+
+<p>Flamegraph 只是一种数据可视化方法，属于 profiling 的第二步。它不包括第一步收集信息，profiling 也可以不用它来展示信息。</p>
+
+<h2 id="什么是-flamegraph">什么是 flamegraph</h2>
+
+<p>就算不太懂 profiling 原理或者实践，看到这样的火焰图也会觉得非常直观，基本上能猜个大概是什么意思。</p>
+
+<p><img src="https://camo.githubusercontent.com/eecfbf00e6cc5baf6ae2b66283573d765f8fe29f1d3df10f4ce3423d942c0af3/687474703a2f2f7777772e6272656e64616e67726567672e636f6d2f466c616d654772617068732f6370752d626173682d666c616d6567726170682e737667" alt="Example" /></p>
+
+<p>这一定程度上导致对门外汉来说提到 profiling 和 flamegraph 就觉得是绑定在一起的两个概念，但实际上不是。</p>
+
+<p>其实它只是一种可视化工具，只负责展示信息。它的 input 可以是任何长得像 <strong>stacktrace</strong> 的东西。它的主要优点也正是可以明了地看出 stacktrace 和占比。</p>
+
+<p><strong><a href="https://github.com/brendangregg/FlameGraph">brendangregg/FlameGraph</a></strong> 这个 repo 作者 Brendan Gregg 是 flamegraph 的发明者。这个 repo 里包含了一系列（perl 写的）flamegraph 工具。里面包括：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">flamegraph.pl</code> 是最重要的用来生成 flamegraph SVG 图片的工具</li>
+  <li><code class="language-plaintext highlighter-rouge">stackcollapse-*.pl</code> 系列可以把各种格式的 stacktrace 转换成 <code class="language-plaintext highlighter-rouge">flamegraph.pl</code> 的 input 格式</li>
+</ul>
+
+<p>所以实际上我手写一个 <code class="language-plaintext highlighter-rouge">flamegraph.pl</code> 的输入格式的东西，也可以生成一个 flamegraph。例如这样：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a 1
+a;b 0
+a;b;c 1
+a;b;c;e 1.5
+a;b;d 2
+</code></pre></div></div>
+
+<p><img src="/assets/img/flamegraph.svg" alt="flamegraph.svg" /></p>
+
+<p>上面这个例子应该很好地解释了 flamegraph 的原理。每一行是一个函数的完整的调用栈，最后一个数字是它<em>自己</em>的（时间/内存/…）占用数量。</p>
+
+<h3 id="把-stacktrace-转换成-flamegraph">把 stacktrace 转换成 flamegraph</h3>
+
+<p>现在很多 profiling 工具应该都可以直接生成 flamegraph，如果不行的话，可以自己想办法弄个脚本转换一下。例如 XCode Instruments 其实可以导出（它里面叫 Deep Copy… 并且还需要先选中才好导）这样的 stacktrace 文本（内存，CPU 什么的都可以导） ：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Allocation
+Bytes Used	Count		Symbol Name
+   9.75 KB     100.0%	56	 	_pthread_start
+   9.75 KB     100.0%	56	 	 std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+
+# Time Profiler
+Weight	Self Weight		Symbol Name
+74.00 ms  100.0%	0 s	 	thread_start
+74.00 ms  100.0%	0 s	 	 _pthread_start
+74.00 ms  100.0%	0 s	 	  std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+
+# CPU Profiler
+Weight	Self Weight		Symbol Name
+34.35 Mc  100.0%	-	 	thread_start
+34.35 Mc  100.0%	-	 	 _pthread_start
+34.35 Mc  100.0%	-	 	  std::sys::unix::thread::Thread::new::thread_start::h8134a9cc26f143c2
+...
+</code></pre></div></div>
+
+<p>我想要把 Allocation（内存 profile）的结果弄成 flamegraph，发现没有现成的工具。上面的工具包里有一个 <a href="https://github.com/brendangregg/FlameGraph/blob/master/stackcollapse-instruments.pl"> <code class="language-plaintext highlighter-rouge">stackcollapse-instruments.pl</code> </a>，实际上处理的是 Time Profiler 的格式：</p>
+
+<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;&gt;</span><span class="p">;</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="o">&lt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nb">chomp</span><span class="p">;</span>
+	<span class="sr">/\d+\.\d+ (?:min|s|ms)\s+\d+\.\d+%\s+(\d+(?:\.\d+)?) (min|s|ms)\t \t(\s*)(.+)/</span> <span class="ow">or</span> <span class="nb">die</span><span class="p">;</span>
+	<span class="k">my</span> <span class="nv">$func</span> <span class="o">=</span> <span class="err">$</span><span class="mi">4</span><span class="p">;</span>
+	<span class="k">my</span> <span class="nv">$depth</span> <span class="o">=</span> <span class="nb">length</span> <span class="p">(</span><span class="err">$</span><span class="mi">3</span><span class="p">);</span>
+	<span class="nv">$stack</span> <span class="p">[</span><span class="nv">$depth</span><span class="p">]</span> <span class="o">=</span> <span class="err">$</span><span class="mi">4</span><span class="p">;</span>
+	<span class="k">foreach</span> <span class="k">my</span> <span class="nv">$i</span> <span class="p">(</span><span class="mi">0</span> <span class="o">..</span> <span class="nv">$depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">print</span> <span class="nv">$stack</span> <span class="p">[</span><span class="nv">$i</span><span class="p">];</span>
+		<span class="k">print</span> <span class="p">"</span><span class="s2">;</span><span class="p">";</span>
+	<span class="p">}</span>
+
+	<span class="k">my</span> <span class="nv">$time</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">+</span> <span class="err">$</span><span class="mi">1</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span> <span class="ow">eq</span> <span class="p">"</span><span class="s2">min</span><span class="p">")</span> <span class="p">{</span>
+		<span class="nv">$time</span> <span class="o">*=</span> <span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="p">;</span>
+	<span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span> <span class="ow">eq</span> <span class="p">"</span><span class="s2">s</span><span class="p">")</span> <span class="p">{</span>
+		<span class="nv">$time</span> <span class="o">*=</span> <span class="mi">1000</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="nb">printf</span><span class="p">("</span><span class="s2">%s %.0f</span><span class="se">\n</span><span class="p">",</span> <span class="nv">$func</span><span class="p">,</span> <span class="nv">$time</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>这个 perl 代码和正则表达式虽然都看不懂，但是可以目测感受一下就是先做个匹配，然后根据空格缩进的数量处理 stack，最后再把时间单位转换一下就行了。</p>
+
+<p>祭出 <a href="https://regex101.com/"> <code class="language-plaintext highlighter-rouge">regex101</code> </a>（其实我也第一次用）鉴定一下正则表达式：</p>
+
+<p><img src="/assets/img/regex.png" alt="regex.png" /></p>
+
+<p>再回头结合代码中 <code class="language-plaintext highlighter-rouge">$2, $3, $4</code> 的用法，可以非常确信每个变量的含义。</p>
+
+<p>然后想要转 Allocation 的格式的话，依葫芦画瓢小改一下正则表达式和单位就行了（可以结合 regex101 的 debug 功能，看正则匹配到哪儿挂了，相当好用）。注意 Allocation 的信息里默认不包括 <em>Self Bytes</em>，可以手动打开一下。</p>
+
+<h2 id="什么是-profiling">什么是 profiling</h2>
+
+<h3 id="profiling-这个词的含义">profiling 这个词的含义</h3>
+
+<p>翻了翻词典和 wiki 的解释：</p>
+
+<blockquote>
+  <p>the recording and analysis of a person's psychological and behavioral characteristics, so as to assess or predict their capabilities in a certain sphere or to assist in identifying a particular subgroup of people</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Profiling</strong>, the extrapolation of information about something, based on known qualities</p>
+</blockquote>
+
+<p>感觉是个非常 general 的词，但感觉差不多就是通过收集信息（观测）来分析推断的意思。常见其他用法包括心理学中的罪犯心理画像侧写，都差不多是一回事。</p>
+
+<p>从第一个解释也可以看出，profiling 其实有两个步骤：收集信息和分析信息。例如 golang 自带的 <a href="https://pkg.go.dev/runtime/pprof">pprof 包</a>提供了多种方式启用 profiling：go test、HTTP 服务、手动在程序里启用，其实做的事情都是收集信息。以前我还搞不清楚它和 pprof tool 的关系，实际上后者是个分析、可视化工具，前者收集信息，收集成后者定义的输入格式。</p>
+
+<h3 id="收集信息">收集信息</h3>
+
+<p>主要有两种收集信息的方式：</p>
+<ul>
+  <li>Statistical sampling：probes the target program's call stack at regular intervals using operating system interrupts.</li>
+  <li>Code instrumentation：either inject code into a binary file that captures timing information or by using callback hooks.</li>
+</ul>
+
+<p>后者比前者更精确，但是 overhead 也更大。前面提到的 Mac 上的 XCode Instruments，想必就是以后面这种方式来收集信息的。</p>
+
+<h4 id="instrumenation-这个词的含义">instrumenation 这个词的含义</h4>
+
+<blockquote>
+  <p><strong>Instrumentation</strong> a collective term for measuring instruments that are used for indicating, measuring and recording physical quantities. The term has its origins in the art and science of scientific instrument-making.</p>
+</blockquote>
+
+<p>Scientific instruments 实际上指科学仪器，that are used for <strong>indicating, measuring and recording</strong> physical quantities。Instrumentation 可以指<em>使用</em>科学仪器。</p>
+
+<p>那么在软件的语境下， instrumentation 就指往代码中加入一些“仪器”，从而可以<em>观测</em>到软件的行为。它的中文好像叫“插桩”，也挺形象，就是感觉不太符合原意。</p>
+
+<p>插入软件里的东西可能包括：</p>
+<ul>
+  <li>Collect profiling statistics：profiling 实际上就是 measuring dynamic program behaviors，非常像做科学实验</li>
+  <li>Run-time checking：像 AddressSanitizer 这种也被算作是 instrumentation，感觉稍微有点词义扩大的感觉</li>
+</ul>
+
+<p>不过这么说来，我感觉 sampling 在更广义的角度看也可以算是一种“instrumentation”……</p>
+
+<h3 id="分析展示信息">分析/展示信息</h3>
+
+<p>分析除了 flamegraph，其他还有像下面这样的 graphviz 图等等。</p>
+
+<p><img src="https://go.dev/blog/pprof/havlak1a-75.png" alt="" /></p>
+
+<p>也可以不可视化，就看一看一些统计信息，例如 TopN。</p>
+
+<p>不同的收集工具接受不同的 input 格式，相应地做的事情也会不一样，例如有的分析工具可能还有把 debug symbol 转成 source code address 这一步，而像之前的 flamegraph 就是接受现成的处理好的（collapsed）stacktrace。pprof 的输入格式是一个 <a href="https://github.com/google/pprof/blob/main/proto/profile.proto">protobuffer 定义</a>。</p>
+
+<h2 id="cpu-profiling--memory-profiling">CPU profiling &amp; memory profiling</h2>
+
+<blockquote>
+  <p>CPU profiling 和 memory profiling 有什么区别？为什么都是火焰图？</p>
+</blockquote>
+
+<p>现在看这个问题就很简单了，它们要做的事情都是收集信息、分析信息这两步，只是具体收集的方法不一样而已。例如 jemalloc 的 heap profile 就是把 memory dump 一坨下来，然后可以用它的 jeprof 工具来分析，包括转成火焰图的格式。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>我终于理解了一切，所以那然后该怎么看懂火焰图，定位解决性能问题呢？😭</p>]]></content><author><name>xxchan</name></author><category term="CS" /><summary type="html"><![CDATA[A beginner's guide to profiling]]></summary></entry><entry><title type="html">递归改写成迭代的通用方法</title><link href="https://xxchan.me/cs/2022/02/15/recursion-to-iteration.html" rel="alternate" type="text/html" title="递归改写成迭代的通用方法" /><published>2022-02-15T00:00:00+00:00</published><updated>2022-02-15T00:00:00+00:00</updated><id>https://xxchan.me/cs/2022/02/15/recursion-to-iteration</id><content type="html" xml:base="https://xxchan.me/cs/2022/02/15/recursion-to-iteration.html"><![CDATA[<blockquote>
+  <p>递归是像呼吸一般自然的事情。</p>
+
+  <p>——罗宸<a href="https://zhuanlan.zhihu.com/p/84452538">《谈递归（一）：递归的五种定式》</a></p>
+</blockquote>
+
+<p>喜欢刷 LeetCode 或者刚学数据结构的同学一定很熟悉二叉树的各种遍历，包括递归和迭代写法。显然递归写起来更简洁自然，迭代则需要一些 trick，尤其是后序遍历，入栈出栈，连续往左往右什么的，刚学难免有点挠头。总有时候，我们被迫要用非递归的方式实现，比如面试官强力要求，或者要实现迭代器（如 <a href="https://leetcode-cn.com/problems/binary-search-tree-iterator/">LeetCode 173. 二叉搜索树迭代器（中序遍历）</a>）。这可咋办呢？</p>
+
+<p>有一个通用的方法，可以非常容易地把任意的递归代码重写成迭代的代码，这就好比在呼吸受限的情况下，还可以戴上氧气面罩。这个方法就是：手动模拟递归执行，或者说手动模拟函数调用栈。</p>
+
+<h2 id="函数调用栈">函数调用栈</h2>
+
+<p>为了理解这个方法，首先需要知道一点计算机的运行原理。其实很好懂，这里简单介绍一下。由于有各种控制语句，还有函数调用，代码的执行不是顺序的，那 CPU 怎么知道下一条指令是什么？答案是维护了一个寄存器 PC (program counter)，指向下一条要执行的指令。对于控制语句，我跳走了就没事了不需要回来了，所以只需要修改 PC，但是函数调用完了还需要回来，这可怎么办呢？答案是每当要进行函数调用时我就保存现场，把 PC 存起来就行了。这就是函数调用栈的作用。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>函数调用栈（这个图是瞎画的，仅示意）
+-----------------------
+(many frames ...)
+-----------------------
+(last frame, caller)
+parameters
+pc (我最后执行到哪儿了，同时也是下一个函数的返回地址)
+-----------------------
+(current frame, callee)
+parameters
+-----------------------
+</code></pre></div></div>
+
+<h2 id="手动模拟函数调用栈">手动模拟函数调用栈</h2>
+
+<p>接下来就进入正题。直接上代码说明问题。</p>
+
+<p>一个一般的递归函数。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>   <span class="c1"># pc = 0
+</span>    <span class="n">foo</span><span class="p">(</span><span class="n">param_1</span><span class="p">)</span>  <span class="c1"># pc = 1
+</span>    <span class="n">foo</span><span class="p">(</span><span class="n">param_2</span><span class="p">)</span>  <span class="c1"># pc = 2
+</span>    <span class="c1"># ...
+</span>    <span class="n">foo</span><span class="p">(</span><span class="n">param_i</span><span class="p">)</span>  <span class="c1"># pc = i
+</span>    <span class="n">do_some_thing</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+    <span class="c1"># ...
+</span>    <span class="n">foo</span><span class="p">(</span><span class="n">param_n</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>转化成迭代的代码。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StackFrame</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">pc</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">param</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="n">pc</span>
+
+<span class="k">def</span> <span class="nf">foo_iter</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="c1"># 模拟 CPU 执行
+</span>    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># 下一条指令是
+</span>            <span class="c1"># foo(param_1) # pc = 1
+</span>            <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">param_1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># 下一条指令是
+</span>            <span class="c1"># foo(param_2) # pc = 2
+</span>            <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">param_2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># ...
+</span>        <span class="k">elif</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+            <span class="c1"># 下两条指令是
+</span>            <span class="c1"># do_some_thing(param)
+</span>            <span class="c1"># foo(param_i+1)
+</span>            <span class="n">do_some_thing</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">param_i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># ...
+</span>        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 这个函数执行完了，要返回了，销毁它的栈帧
+</span>            <span class="c1"># 也可以在上面的最后一个分支直接就 pop 了
+</span>            <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="例题二叉搜索树迭代器中序遍历">例题：二叉搜索树迭代器（中序遍历）</h2>
+
+<p>Ok，那我们上一道例题，<a href="https://leetcode-cn.com/problems/binary-search-tree-iterator/">LeetCode 173. 二叉搜索树迭代器（中序遍历）</a>。</p>
+
+<p>首先中序遍历的递归写法</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inorder_traversal</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">root</span><span class="p">.</span><span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">inorder_traversal</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">root</span><span class="p">.</span><span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">inorder_traversal</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>重写成迭代</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inorder_traversal</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">param</span>
+
+        <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>再重写成迭代器，其实就是把上面迭代的过程中的<strong>状态</strong>（这里就只有 stack）放进 Iterator 类里面就行了。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BSTIterator</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">param</span>
+
+            <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">frame</span><span class="p">.</span><span class="n">pc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">StackFrame</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">frame</span><span class="p">.</span><span class="n">param</span><span class="p">.</span><span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">hasNext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<p>就是这样（又水了一篇），如果有不懂的地方欢迎评论提问🥰</p>]]></content><author><name>xxchan</name></author><category term="CS" /><summary type="html"><![CDATA[递归是像呼吸一般自然的事情。 ——罗宸《谈递归（一）：递归的五种定式》]]></summary></entry><entry><title type="html">为啥 Paxos 这么难？</title><link href="https://xxchan.me/cs/2022/02/09/paxos-hard-zh.html" rel="alternate" type="text/html" title="为啥 Paxos 这么难？" /><published>2022-02-09T00:00:00+00:00</published><updated>2022-02-09T00:00:00+00:00</updated><id>https://xxchan.me/cs/2022/02/09/paxos-hard-zh</id><content type="html" xml:base="https://xxchan.me/cs/2022/02/09/paxos-hard-zh.html"><![CDATA[<p><a href="https://xxchan.github.io/cs/2022/02/07/paxos-hard.html">English Version</a></p>
+
+<p>本文中，我将<strong>忽略性能等实际问题</strong>，主要聊点 general 的东西，如基本概念、表达力，或者说“怎么把它变为可能”，而不是“怎么把它搞得快的飞起”。另外，我会尽量写的让不了解分布式系统或共识的读者也能看懂。不过，如果你已经对 Raft 或 Paxos 之类的共识算法有了概念，那当然还是更好。</p>
+
+<h2 id="我学习共识的经历">我学习共识的经历</h2>
+
+<p><a href="https://www.zhihu.com/question/65038346/answer/227674428">这个知乎回答：有没有哪一刻让你感受到了文献作者的恶意？</a>是我第一次听说 Paxos 和共识。当时看了感觉贼逗，同时也就在脑子里留下了 “Paxos 很难” 的初印象。</p>
+
+<p>正好一年前，我在写 MIT 6.824 的 Raft lab。读 Raft 的时候我感觉它挺好懂的，把东西拆成了模块，把每个模块解释得都很清楚。里面还有一章 "What's wrong with Paxos?" ，我读的时候又情不自禁地乐了起来。总之，虽然我在 debug 的时候还是有点小困难的，但学 Raft 的认知过程算是很平滑。</p>
+
+<p>上学期，我有个作业要实现 Paxos。我碰巧收藏过<a href="https://blog.openacid.com/algo/paxos/">这个博客</a>，就拿出来看看。它用很简单的方式解释了 Paxos，我也就按照它讲的实现了（basic）Paxos，没再看论文或者别的文章。作业还要求我们用一个特定的方案实现 multiple decisions，所以我也没看 multi-Paxos 之类的东西。</p>
+
+<p>上学期我还上了 Concurrent Algorithms 和 Distributed Algorithms 两门课。它们都比较理论，都讲了共识，我学的时候感觉共识这东西挺简单的。DA 课上的共识算法很像 Paxos，而且简单到一张 slide 就够了。另外 CA 课上的 Universal Construction 以及 DA 课上的 Total Order Broadcast 算法，这两个东西可以说证明了共识基本上可以用来做任何事情，而且这两个算法也不难理解。然后我就开始想，为什么人们会觉得 Paxos 难理解，这也是我想写这篇博客的原因。</p>
+
+<p>最后，我读了 Paxos 的两篇论文，确认了它们真的都挺好懂的。但 Lamport 的语言太有意思了。<em>The Part-Time Parliament</em> 讲的特别详细又很直白，就是仿佛把名词术语做了一下简单的映射。<em>Paxos Made Simple</em> 则是用平实的语言谈直觉理解，它倒是有点像一篇博客。</p>
+
+<p>话不多说，我们还是进入正题吧。</p>
+
+<h2 id="各种抽象consensus-replicated-log-和-replicated-state-machine">各种抽象：Consensus, Replicated Log 和 Replicated State Machine</h2>
+
+<p>首先，让我们先不管具体的共识算法，先来看看它的抽象（或接口）是怎么回事。</p>
+
+<p>在分布式系统中，我们通常想要 <em>share</em> 东西。那么 shared objects 或叫 shared data structures 就很有用。它就像单机数据结构一样（像 queue, map），但可以被不同的机器（或线程）访问。也可以说是多台机器共同维护一个全局对象，每台机器复制了全局对象的状态。</p>
+
+<p>Replicated state machine 可以说是最强的抽象了，算是所有 shared data structures 的推广。(或者也可以说 shared data structures 都可以用 replicated state machine 来实现）。你可能很容易想到，维护一个 replicated log 就是一种实现 replicated state machine 的自然的方法。完全没错。</p>
+
+<p>顺便一提，replicated log 也可以等价成另一个抽象 total order broadcast：每个机器广播消息，保证所有人以相同的全局顺序收到消息。(很像，不过无所谓，不是很重要。）</p>
+
+<p>那么什么是共识呢？最原始的 consensus 的定义来了。首先，它也就是一个 shared objects。它的 <em>sequential specification</em>（如果它被不同的机器按顺序访问（好比加了锁），怎么工作）是：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>维护一个变量：prop
+初始值: ⊥ (未初始化)
+
+propose(v):
+    if prop == ⊥:
+        prop = v
+    return prop
+</code></pre></div></div>
+
+<p>是不是很简单？有几个注意点：</p>
+<ul>
+  <li>它是一次性的，single decision。它可以被看作是一个 write-once variable。</li>
+  <li>这里用了同步风格的接口，用基于事件的异步接口也行。</li>
+  <li>通常假设每个机器都有东西要 propose，而 propose 是获得最终的 decision 值的唯一途径。我认为这种约定俗成只是为了简单起见。你可以很容易地修改接口，改成不用 propose 也能知道值，就像 Paxos 里分了 proposer, acceptor 和 learner，本质上其实一样，不太重要。</li>
+</ul>
+
+<p>我们也可以等价地通过给出它的性质来描述 consensus：</p>
+<ul>
+  <li>Validity: A decided value is proposed.</li>
+  <li>Agreement: No processes decide differently.</li>
+  <li>Termination: Every process eventually decides.</li>
+</ul>
+
+<h2 id="用-consensus-实现-replicated-state-machine">用 Consensus 实现 Replicated State Machine</h2>
+
+<p>Consensus 是一个如此简单的抽象，但它足够强大，可以实现 replicated state machine，也就是说，它可以用来实现任何 shared object。这个结论有一个响亮的名字: <strong>Universality of Consensus</strong>。</p>
+
+<p>首先我们可以考虑一个 naïve 的方案：consensus 已经算是个单条 replicated log entry 了，那为什么不直接用一个 consensus list 作为 replicate log 呢？当一台机器要 append entry 的时候，它就一直向前 propose，直到它的 proposal 在一个 consensus instance 中被 decide。</p>
+
+<p>这个想法基本上差不多可行了，除了一个关键问题：可能会有人一直 propose 赢不了，也就是会 starve。解决方案也不是很复杂：现在，每个人不仅 propose 自己的请求，而且还<strong>帮助</strong>别人。具体来说，当一个新的想要 append 的 entry 出现时，先把它广播出去（同时每个人一直在收集别人的请求）。然后，每次 propose <strong>所有收集到的 pending entries</strong>（而不是一条 entry）。这就成了!</p>
+
+<p>当然，这不是唯一的方法，而且没啥优化，不过完全 work！</p>
+
+<p>其实在看这个算法之前你可能就觉得这个事儿肯定是能做到的。我就是展示了有一个简单的方法，让我们相信确实可以做到。我觉得从 consensus 到 replicated log 就好像从手动档切换到自动档。</p>
+
+<h2 id="为啥-paxos-这么难">为啥 Paxos 这么难？</h2>
+
+<p>如果你知道 Paxos 的工作原理，你可能已经发现它的核心算法就是实现了共识。许多复杂度来自于把它变成 replicated log。在论文中似乎没有明确说明这个关系（虽然我没细读这部分）。但是，脑子里带着上文的算法和关于 consensus 的知识，并忽略各种实现细节、性能问题（尽管这在工程师的思维中可能很难），你就可以说服自己，它确实 work，而且很简单。All you need is (single-decision) consensus! 换句话说，如果你已经知道了 consensus 这个抽象，然后想找一个实现，你立刻就能搞懂 Paxos 在干嘛。所以，复杂的不是 Paxos 算法本身，而是有很多概念混在一起没搞清楚。</p>
+
+<p>还不了解 Paxos 的读者，可以回去读一读这篇论文，现在可以只关注 single decision 的部分了，不用头疼 multiple decision！不过我还是在这里简单地解释一下 Paxos。</p>
+
+<p><a href="https://blog.openacid.com/algo/paxos/">之前提到的 xp 的博客</a>很清晰易懂，因为它也是主要专注讲了简单的东西，没有讲的太多把读者搞晕。但我认为这篇博客中的想法可以再进一步概括一下。</p>
+
+<p>首先，slide 1-5 相当于是引入我们需要 (single-decision) consensus 这个抽象。然后讨论了许多失败的尝试（但都还挺重要的技术）。</p>
+<ul>
+  <li>slide 6-9: Single writer <em>all-ack</em>. 不允许任何 crash。</li>
+  <li>slide 10-12: Single writer majority-ack（或者叫 <em>majority-write</em>）。为了让这个方法 work，<em>Timestamp</em> 和 <em>majority-read</em> 也同时需要。这个算法不允许 writer crash。</li>
+  <li>slide 14-17: Majority-write 也不能推广到 <strong>multiple writers</strong>.</li>
+  <li>slide 18-19: (majority) Read before (majority) write.</li>
+  <li>slide 20: Request (majority) promise before (majority) write.</li>
+</ul>
+
+<p>没错，我认为 Paxos 的思想可以概括为一句话：<strong>request promise before write</strong>！它就是这么简单，不到 200 行代码就够实现了。</p>
+
+<p>xp 以一种简单的方式告诉你 Paxos 是<em>如何</em>工作的，但你可能仍然想知道<em>为什么</em>我们要这么干，以及这么干是不是真的稳了。现在我应该说，在 Paxos 论文中，Lamport 是（从他想保证的性质中）<strong>推导</strong>出了这个想法。因此，如果你在已经了解了 Paxos 之后再重新阅读这篇论文，你可能就会发现它相当容易理解，而且有很精彩的推理和直觉。但也许恐怕这也是很多人一开始没能理解的原因，因为他们不习惯这种思维方式，在推导为什么 work 之前，就是想先知道它到底是具体怎么 work 的。</p>
+
+<p>顺便一提，xp 的后续博客<a href="https://drmingdrmer.github.io/algo/2020/10/28/paxoskv.html">用200行代码实现基于paxos的kv存储</a>实现了（single-decision）Paxos，然后手动管理 consensus instance。（还有一个更复杂的后续博客在<a href="https://blog.openacid.com/algo/mmp3/">这里</a>。）所以你也可以通过看这个实现来学习（single-decision）Paxos。</p>
+
+<h2 id="raft-更简单吗">Raft 更简单吗？</h2>
+
+<p>让我们回头再看一下Raft。首先，"What's wrong with Paxos?" 部分。</p>
+
+<blockquote>
+  <p>We hypothesize that Paxos' opaqueness derives from its choice of the single-decree subset as its foundation. Single-decree Paxos is dense and subtle: it is divided into two stages that do not have simple intuitive explanations and cannot be understood independently.</p>
+</blockquote>
+
+<p>我现在觉得这个评价有点 <strong>unfair</strong>。Single-decision consensus 是分布式计算理论中一个成熟的抽象。Single-decree Paxos 也有很好的直觉在里面。</p>
+
+<hr />
+
+<p>另一个评价是，Paxos 没有为在 <em>real-world</em> systems 中建立 <em>practical</em> 的实现提供良好的基础，这可能确实。然而，我认为这对 Paxos 来说根本就是个 <strong>non-goal</strong>。它就是在讲解决一个理论问题的一种优雅的算法。它就根本<strong>不太关心</strong>你在现实世界中如何实现它……我认为 Lamport 也是一个比较偏理论的 researcher。(他建立了分布式计算理论的基础。）现实世界的东东对 theory researchers 可能没有那么大的吸引力，如果问题在理论上没啥意思的话……</p>
+
+<hr />
+
+<p>现在让我们来看看 Raft 本身。我也将尝试用几句话来描述它。</p>
+
+<p>首先，它谈了 replicated state machine，并且<strong>明确地告诉你我们正在造 replicated log</strong>。工程师可能对 consensus 不熟悉，但对 log 一定非常了解。</p>
+
+<p>第二，Raft 选择了 <strong>leader-based</strong> 方法：只有 leader 可以与外界交互以及 append entry。Paxos 则完全是 <strong>peer-to-peer</strong>。有一个 leader 通常会使主要流程或 “happy path” 更容易理解。Raft 自然地选择了 majority-write。那么唯一的问题是如何处理 leader crash。Raft 的方法是：限制节点不给 outdated 节点投票。这个技术很简单，但也需要花些功夫去理解它为什么 work，因为其实里面涵盖了很多 edge cases。要维护的性质其实是，新的 leader 必须<em>至少</em>包含所有 majority-written entries，但是否包含更多的 pending entries 则无所谓。</p>
+
+<p>最后，replicated log 里会存在不一致的状态，leader 通过把它覆盖掉来修复。</p>
+
+<p>所以 Raft 简单吗？它的核心思想也不难。它也就是 single-leader majority-write …… 再加上一些额外但也很简单的 trick（以确保 majority-write 能 work）。</p>
+
+<p>简而言之，Raft</p>
+<ul>
+  <li>直接实现 replicated log。</li>
+  <li>谈论<strong>具体的概念</strong>，如 heartbeat, timeout, RPC and crash recovery，而不是像 theory researcher 一样谈论抽象概念。</li>
+  <li>谈论所有路径中的<strong>所有细节</strong>（状态转换），并且算是用一种 manageable way <strong>暴露了复杂度</strong>。(Paxos 不关心这些 <strong>trivil</strong> 的实现复杂度)。</li>
+</ul>
+
+<p>所以读完 Raft 后，你基本上可以直接<strong>翻译成代码</strong>。相对的，Paxos 在理论上很简单，读完后，你可能会思考一阵子，然后大叫一声：<strong>哦，它确实 work! 太简单了！</strong>（就像一个数学家一样。）那也就难怪大多数人，尤其是工程师，会觉得 Raft 读起来更舒服。</p>
+
+<h2 id="更多关于-consensus-的话题">更多关于 Consensus 的话题</h2>
+
+<p>关于 consensus，还有更多有趣的理论问题。除了 universality 之外，最重要的问题可能是共识的 <strong>impossibility</strong>！具体来说，FLP impossibility 说：在一个异步的分布式系统中，如果可能有一个进程 crash，共识是不可能实现的。</p>
+
+<p>啊？那 Paxos 和 Raft 在干嘛？</p>
+
+<p><em>Don't panic.</em> 这里的<strong>异步</strong>系统是指：每个进程可以被 delay <em>任意长</em>的时间，而我们对别人是否活着一无所知。但在实践中，我们其实有一些（关于<strong>时间</strong>的）假设。现实世界更像是一个<strong>最终同步的</strong>（eventually synchronous）系统，这意味着我们可以有一个 eventually perfect failure detector：它可能会误诊把活人当死人，但是如果再多等等，它会自己改正错误的结论。其实 heartbeat 和 timeout 机制基本上就是在实现一个 eventually perfect failure detector。</p>
+
+<p>另一个附带说明是，实际上，我们在上面假设了通过 message-passing 进行通信。如果我们切换到 shared memory，我们仍然会有 FLP impossibility。准确地说，只使用 <strong>shared registers</strong> 是不可能实现共识的。</p>
+
+<p>其实 FLP impossibility 的证明也非常精彩。其核心思想是：首先，任何共识算法的执行都必须有一个<strong>临界时间点</strong>（critical timing）。从上帝视角看，整个系统当前并没有达成 decision，但立刻即将（在任何人执行一小步以后）达成 decision。所有后来的步骤都只是在走流程告知所有人结果罢了。(如果你懂命运石之门的话，这意思就是世界线马上要收束了）。然后我们断言，所有人的下一步都想访问同一个 shared register！</p>
+
+<p>为了方便继续讨论，让我们假设我们有两个进程 <code class="language-plaintext highlighter-rouge">p1</code> 和 <code class="language-plaintext highlighter-rouge">p2</code>。如果他们不访问同一个对象，以下两种 possible histories 是等价的。</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">p1</code> 走一步，然后 <code class="language-plaintext highlighter-rouge">p2</code> 走一步。</li>
+  <li><code class="language-plaintext highlighter-rouge">p2</code> 走一步，然后 <code class="language-plaintext highlighter-rouge">p1</code> 走一步。</li>
+</ol>
+
+<p>这说明这个 timing 不 critical 啊，矛盾！</p>
+
+<p>现在假设他们都要访问 shared register <code class="language-plaintext highlighter-rouge">x</code>。</p>
+<ul>
+  <li>Case 1：如果第一步是要读 <code class="language-plaintext highlighter-rouge">x</code>，我们在它读完以后马上把它干掉。那么另一个进程会认为一切都和原来一样啊，所以它做不出 decision！这意味着在 critical timing 必须对整个系统做出一些 <strong>observable change</strong> 才行。所以</li>
+  <li>
+    <p>Case 2：两个进程的第一步都是写 <code class="language-plaintext highlighter-rouge">x</code>。那么以下两种 possible histories 是等价的：</p>
+
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> 写 <code class="language-plaintext highlighter-rouge">v1</code> 进 <code class="language-plaintext highlighter-rouge">x</code>，然后立刻被干掉。<code class="language-plaintext highlighter-rouge">p2</code> 将 <code class="language-plaintext highlighter-rouge">v2</code> 写入 <code class="language-plaintext highlighter-rouge">x</code>。</li>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> 立刻被干掉。<code class="language-plaintext highlighter-rouge">p2</code> 将 <code class="language-plaintext highlighter-rouge">v2</code> 写入 <code class="language-plaintext highlighter-rouge">x</code>。</li>
+    </ol>
+
+    <p>同样，这与 critical timing 相矛盾！（谁先走不重要啊）</p>
+  </li>
+</ul>
+
+<p>这就证完了！(我证了世界线收敛不了。)是不是也很简单？现在你可能也对为什么 impossiblity 能成立也有了点感觉。因为异步是一个太弱的假设。换句话说，它给了 <em>scheduler</em>（或者我们这些证定理的坏人）太大的权力。</p>
+
+<p>更 exciting 的是，上述证明框架适用于更多情况。实际上，我们在上面证明了<em>2个进程</em>之间的共识只使用 register 是不可能的。我们同样可以证明<em>3个进程</em>之间的共识只用 register 和 queue 或 fetch-and-add 是不可能的！但是我们可以用 compare-and-swap 在任何数量的进程之间实现共识！</p>
+
+<p>这些结论给了我们一种<strong>比较 shared objects 的表达力的方法</strong>：consensus number。Register 的 consensus number 为 1，queue 和 FAA 的为 2，CAS 的为 ∞。关于 consensus number 还有一些未解决的研究问题，但我想我们现在还是适可而止吧！</p>
+
+<p>最后总结一句，分布式计算理论还是挺有趣的，值得学习一点。😄</p>]]></content><author><name>xxchan</name></author><category term="CS" /><category term="consensus" /><category term="system" /><summary type="html"><![CDATA[因为它需要一种不同的思维方式]]></summary></entry><entry><title type="html">Why is Paxos So Hard to Understand?</title><link href="https://xxchan.me/cs/2022/02/07/paxos-hard.html" rel="alternate" type="text/html" title="Why is Paxos So Hard to Understand?" /><published>2022-02-07T00:00:00+00:00</published><updated>2022-02-07T00:00:00+00:00</updated><id>https://xxchan.me/cs/2022/02/07/paxos-hard</id><content type="html" xml:base="https://xxchan.me/cs/2022/02/07/paxos-hard.html"><![CDATA[<p><a href="https://xxchan.github.io/cs/2022/02/09/paxos-hard-zh.html">Chinese Version</a></p>
+
+<p>In this blog, I will <strong>omit practical aspects like performance issues</strong>. I will focus on general ideas like basic notions, expressiveness, or "<strong>how to make it possible</strong>" instead of "how to make it super-fast". Also, I will try to convey my ideas to readers without any knowledge of distributed systems or consensus. Still, it may be better if you already know one or more consensus algorithms, like Raft or Paxos.</p>
+
+<h2 id="my-way-of-learning-consensus">My Way of Learning Consensus</h2>
+
+<p><a href="https://www.zhihu.com/question/65038346/answer/227674428">This zhihu answer: Is there a moment when you feel the malice of the author of a paper?</a> (Chinese) was the first time I knew Paxos and consensus. I thought it was really fun.</p>
+
+<p>Exactly one year ago, I was learning MIT 6.824 and implementing Raft. I thought it organizes things into modules and explains each module clearly. I also giggled when reading the "What's wrong with Paxos?" part. Although I experienced some difficulty debugging Raft, the cognitive process was smooth.</p>
+
+<p>Last semester, I needed to implement Paxos in one of my homework. I happened to have bookmarked <a href="https://blog.openacid.com/algo/paxos/">this blog</a> earlier. I found it explains Paxos in a simple way and I implemented (basic) Paxos correspondingly, without reading papers or other explanation articles. The homework also required us to implement multiple decisions using a given technique, so I didn't read things like multi-Paxos.</p>
+
+<p>I also had Concurrent Algorithms and Distributed Algorithms courses. They are theoretical, and both talked about consensus, and I thought it was not very hard to understand. The consensus algorithm given in the DA course is very like Paxos, and it's simple enough to fit in one slide. Besides, the Universal Construction in the CA course and the Total Order Broadcast algorithm in the DA course, which prove you can use consensus to do almost anything, are also not hard to understand. And then, I began to wonder why people think Paxos is hard to understand, and that's why I wanted to write this blog.</p>
+
+<p>Finally, I read the two Paxos papers and confirmed that they are both understandable. But Lamport's language is so interesting. <em>The Part-Time Parliament</em> is very detailed and straightforward. It kind of looks like it uses a mapping to transform the terms. <em>Paxos Made Simple</em> instead talks about intuitions in plain words. It is kind of like a blog.</p>
+
+<p>Anyway, let's go to the main topic.</p>
+
+<h2 id="abstractions-consensus-replicated-log-and-replicated-state-machine">Abstractions: Consensus, Replicated Log, and Replicated State Machine</h2>
+
+<p>First, let's put aside the consensus algorithms but focus on the abstraction (or the interface).</p>
+
+<p>In distributed systems, we generally want to <em>share</em> something. Then shared objects or shared data structures are super helpful. It is like a usual data structure (e.g., queue, map) in a single machine but can be accessed by different computers (or threads). In other words, the computers work together to maintain a global object and have its state replicated on every machine.</p>
+
+<p>Then replicated state machine is the ultimate abstraction, a generalization of all shared data structures. (Or we can say all shared data structures can be implemented using replicated state machine). You may quickly come up with that maintaining a replicated log is a natural implementation of the replicated state machine. And that's true.</p>
+
+<p>By the way, the replicated log can also be viewed as another abstraction, Total-Order Broadcast: Every process broadcasts messages, but they deliver messages in the same global order. (Very similar, not very important.)</p>
+
+<p>Then what's consensus? Here it is, the most original consensus interface. First, it's just one shared object. Its <em>sequential specification</em> (How it works if it is accessed by different processes <em>sequentially</em>) is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>maintaining a variable: prop
+initial value: ⊥ (uninitialized)
+
+propose(v):
+    if prop == ⊥:
+        prop = v
+    return prop
+</code></pre></div></div>
+
+<p>Fairly simple, right? Some notes here:</p>
+<ul>
+  <li>It is one-shot. A single decision. It can be viewed as a write-once variable.</li>
+  <li>Here synchronous style interface is shown. Using asynchronous event-based interfaces is also totally fine.</li>
+  <li>It is usually assumed that every process has something to propose, and proposing is the only way to get the decided value. I think this convention is just for simplicity. You can easily modify the interface to get notified about the decision without proposing.</li>
+</ul>
+
+<p>Equivalently, we can also describe consensus by giving its properties:</p>
+<ul>
+  <li>Validity: A decided value is proposed.</li>
+  <li>Agreement: No processes decide differently.</li>
+  <li>Termination: Every process eventually decides.</li>
+</ul>
+
+<h2 id="implement-replicated-state-machine-using-consensus">Implement Replicated State Machine Using Consensus</h2>
+
+<p>Consensus is such a simple abstraction, but it is powerful enough to build replicated state machine, i.e., it can be used to implement any shared object. There's a loud name for this conclusion: <strong>Universality of Consensus</strong>.</p>
+
+<p>Before we go further, we can think about a naïve solution: Consensus is already a single replicated log entry, so why not use a list of consensus as the whole replicated log? When a process have a new entry to append to the log, it just keeps moving forward and proposing the entry in the consensus list until its proposal is decided in one consensus instance.</p>
+
+<p>This idea almost works, except for one critical problem: a process may never get its proposal decided. It can starve. The solution is also not very complicated. Now processes not only propose their own value but also <strong>help</strong> others. Specifically, when a new entry comes, the process will first broadcast it, and it keeps collecting others' entries. Then each of its proposals will be <strong>the set of all pending entries</strong> (instead of one entry). That's it!</p>
+
+<p>Of course, this is not the only way and is a rather unoptimized way, but it works perfectly.</p>
+
+<p>Without a concrete algorithm in mind, you may already have thought that it was feasible to go from the consensus to the replicated log. I just showed that there's a simple way to do so to make us confident in the possibility. Going from the consensus to the replicated log is like shifting from manual gear to automatic gear.</p>
+
+<h2 id="why-is-paxos-hard">Why is Paxos hard?</h2>
+
+<p>If you know how Paxos work, you may already find out that its core indeed implements consensus. Many complexities come from turning it into the replicated log. It seems that this relationship is not clearly stated in the paper (although I didn't read this part carefully). But having the replicated log algorithm and other meta-knowledge about consensus above in mind and omitting implementation details and performance issues (although this might be hard in an engineer's mindset), you can convince yourself it works, in a simple way. All you need is (single-decision) consensus! In other words, if you already know the consensus abstraction and are looking for an implementation, you will quickly get what Paxos is doing. So it's not the algorithm itself that is complex, but there are many concepts mixed together.</p>
+
+<p>For those who don't know Paxos yet, you can go back to read the paper and focus on the single decision part first without being bothered by multiple decisions now! But I will still give some simple explanations here.</p>
+
+<p><a href="https://blog.openacid.com/algo/paxos/">The previously mentioned blog by xp</a> (Chinese) is clear and understandable because it also focuses on simple things without going too far to confuse the reader. But I think the ideas in this blog can be further summarized:</p>
+
+<p>First, Single decision consensus interface is introduced (slide 1-5). And then many failed attempts (but still important techniques) are discussed:</p>
+<ul>
+  <li>slide 6-9: Single writer <em>all-ack</em>. It doesn't tolerate any crashes.</li>
+  <li>slide 10-12: Single writer majority-ack (or <em>majority-write</em>). <em>Timestamp</em> + <em>majority-read</em> are also needed for it to work. This algorithm doesn't tolerate the writer's crash.</li>
+  <li>slide 14-17: Majority-write can neither be generalized to <strong>multiple writers</strong>.</li>
+  <li>slide 18-19: (majority) Read before (majority) write.</li>
+  <li>slide 20: Request (majority) promise before (majority) write.</li>
+</ul>
+
+<p>Yes, I think Paxos's idea can be summarized into one sentence: <strong>request promise before write</strong>! It is indeed so simple and can be implemented with fewer than 200 LoC.</p>
+
+<p>xp tells you <em>how</em> Paxos works in a simple way, but you may still wonder <em>why</em> we go this way and whether this really works. Now I should say in his paper, Lamport <strong>derives</strong> this idea (from <em>properties</em> he wants to achieve). So if you re-read the paper after you already know Paxos, you may find it rather understandable and has brilliant reasoning and intuitions. But I'm afraid that maybe this is also why many people failed to understand it at the beginning, because they are not accustomed to this way of thinking and want to know how exactly it works before knowing where the idea can be derived.</p>
+
+<p>Btw, xp's follow-up blog: <a href="https://drmingdrmer.github.io/algo/2020/10/28/paxoskv.html">Implement paxos-based kv storage with 200 line of code</a> implements (single-decision) Paxos, and manages consensus instances by hand. (There's a more complicated follow-up blog <a href="https://blog.openacid.com/algo/mmp3/">here</a>) So you can also learn (single-decision) Paxos by reading the implementation.</p>
+
+<h2 id="is-raft-easier">Is Raft Easier?</h2>
+
+<p>Let's go back and look at Raft again. First, the "What's wrong with Paxos?" part.</p>
+
+<blockquote>
+  <p>We hypothesize that Paxos' opaqueness derives from its choice of the single-decree subset as its foundation. Single-decree Paxos is dense and subtle: it is divided into two stages that do not have simple intuitive explanations and cannot be understood independently.</p>
+</blockquote>
+
+<p>I should now say this evaluation is a little bit <strong>unfair</strong>. Single-decision consensus is a well-established abstraction in distributed computing theory. Single-decree Paxos also has good intuitions.</p>
+
+<hr />
+
+<p>Another evaluation that Paxos does not provide a good foundation for building <em>practical</em> implementations in <em>real-world</em> systems may be true. However, I think this is just a <strong>non-goal</strong> for Paxos. It talks about an elegant way to solve a theoretical problem. It just <strong>doesn't care</strong> much about how you implement it in the real-world… I think Lamport is also a more theoretical researcher. (He established the foundation of the distributed computing theory.) Real-world stuff may not be that attractive to theory researchers, if the problem is not theoretically interesting.</p>
+
+<hr />
+
+<p>Now let's look at Raft itself. I will also try to describe it in a few words.</p>
+
+<p>First, it talks about the replicated state machine and <strong>tells you explicitly we are building the replicated log</strong>. Engineers may be unfamiliar with consensus, but must know logs very well.</p>
+
+<p>Second, Raft chooses the <strong>leader-based</strong> approach: only the leader can interact with the outside world and append entries to the log. Paxos is instead completely <strong>peer-to-peer</strong>. Having a leader will usually make the main process or the "happy path" easier to understand. Raft chooses majority-write naturally. Then the only problem is how to handle the leader's crash, and Raft's approach is to restrict nodes from voting for <em>outdated</em> nodes. The trick is simple, but it also takes some effort to understand why it works because many edge cases are covered. The property to maintain is that the new leader must <em>at least</em> contain all majority-written entries, but whether it contains more pending entries is insignificant.</p>
+
+<p>Finally, inconsistent states exist in the replicate log, and the leader will fix it by overwriting.</p>
+
+<p>So is Raft easy? Its core idea is also not hard. It's just single-leader majority-write, … with some additional but simple tricks (to ensure majority-write work).</p>
+
+<p>To summarize, Raft</p>
+<ul>
+  <li>Implements replicated log directly.</li>
+  <li>Talks <strong>concrete notions</strong> like heartbeat, timeout, RPC and crash recovery, instead of talking about abstractions like a theory researcher.</li>
+  <li>Talks <strong>all details in all paths</strong> (state transformations), and <strong>exposes complexities</strong> in a manageable way. (Paxos doesn't care these <em>trivial</em> implementation complexities.)</li>
+</ul>
+
+<p>So after reading Raft, you can almost directly <strong>translate it into code</strong>. Instead, Paxos is theoretically simple. After reading it, you may think for a while and then exclaim: <strong>Oh, it works! It's so simple!</strong> (Just like a Mathematician.) Then no wonder most people, especially engineers, will feel more comfortable when reading Raft.</p>
+
+<h2 id="more-about-consensus">More about Consensus</h2>
+
+<p>There are more interesting theoretical problems about consensus. Besides universality, the most important one may be the <strong>impossibility</strong> of consensus! To be specific, here's the FLP impossibility: Consensus is impossible in an asynchronous distributed system if one process can crash.</p>
+
+<p>Hey, then what are Paxos and Raft doing???</p>
+
+<p><em>Don't panic.</em> Here <strong>asynchronous</strong> system means: each process can be delayed for <em>arbitrarily long</em>, and we <em>know nothing</em> about whether they are alive. But in practice, we do have some assumptions (about <strong>time</strong>). Real-world is more like an <strong>eventually synchronous</strong> system, which means we can have an <em>eventually perfect failure detector</em>: It can wrongly suspect a slow process as dead, but it will make corrections if time lasts long enough. Basically, the heartbeat and timeout mechanism implements an eventually perfect failure detector.</p>
+
+<p>Another side note is that actually, we assume communication by message-passing above. If we switch to shared memory, we will still have FLP impossibility. To be precise, it is impossible to implement consensus using only <strong>shared registers</strong>.</p>
+
+<p>I should mention that the proof of FLP impossibility is also very brilliant! The core idea is: any consensus algorithm's execution must have a <strong>critical timing</strong>. From God's perspective, currently, the system doesn't reach a decision but will immediately (after a single step of any process) reach a decision. All later steps are just going through a process to get everybody notified. (If you know <em>Steins;Gate</em>, it means the world line will convergent into an attractor field.) Then we argue that all the processes' next steps are accessing the same register at the critical timing!</p>
+
+<p>To continue the discussion, let's assume we have two processes <code class="language-plaintext highlighter-rouge">p1</code> and <code class="language-plaintext highlighter-rouge">p2</code> . If they are not accessing the same object, the following two possible histories are equivalent:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">p1</code> goes one step and then <code class="language-plaintext highlighter-rouge">p2</code> goes one step.</li>
+  <li><code class="language-plaintext highlighter-rouge">p2</code> goes one step and then <code class="language-plaintext highlighter-rouge">p1</code> goes one step.</li>
+</ol>
+
+<p>This contradicts the critical timing assumption!</p>
+
+<p>Now assume they are both about to access register <code class="language-plaintext highlighter-rouge">x</code> .</p>
+<ul>
+  <li>Case 1: If the first step is reading <code class="language-plaintext highlighter-rouge">x</code> , we stop the process forever after this step. Then the other process will think everything is the same as before, so it cannot decide! This means the critical step must <strong>make some observable change</strong> to the whole system. So</li>
+  <li>
+    <p>Case 2: Both processes' first step is writing <code class="language-plaintext highlighter-rouge">x</code> . Then the following two possible histories are equivalent:</p>
+
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> writes <code class="language-plaintext highlighter-rouge">v1</code> to <code class="language-plaintext highlighter-rouge">x</code>, and stops forever. Then <code class="language-plaintext highlighter-rouge">p2</code> writes <code class="language-plaintext highlighter-rouge">v2</code> to <code class="language-plaintext highlighter-rouge">x</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> stops forever immediately. <code class="language-plaintext highlighter-rouge">p2</code> writes <code class="language-plaintext highlighter-rouge">v2</code> to <code class="language-plaintext highlighter-rouge">x</code>.</li>
+    </ol>
+
+    <p>Again, this contradicts the critical timing assumption!</p>
+  </li>
+</ul>
+
+<p>The proof is now finished. (I just showed the world line can never convergent.) Not complicated, right? And now you may also have some idea why the impossibility holds. Asynchrony is a too weak assumption. In other words, it gives too strong power to the <em>scheduler</em> (or us the prover).</p>
+
+<p>More excitingly, the above proof framework applies to more situations. Actually, we proved above consensus <em>among 2 processes</em> is impossible using only registers. We can similarly prove consensus <em>among 3 processes</em> is impossible using only registers and queue/fetch-and-add! But we can implement consensus among any number of processes using compare-and-swap!</p>
+
+<p>These results proposed a way to <strong>compare the expressiveness of shared objects</strong>: consensus number. Register has consensus number 1, queue and FAA have 2, and CAS has ∞. There are still unresolved research problems about consensus numbers, but I think we'd better stop here now.</p>
+
+<p>As a concluding note, I think distributed computing theory is interesting and worth learning a bit. 😄</p>]]></content><author><name>xxchan</name></author><category term="CS" /><category term="consensus" /><category term="system" /><summary type="html"><![CDATA[Because it requires a different mindset]]></summary></entry><entry><title type="html">从接口视角看密码学原语</title><link href="https://xxchan.me/cs/2021/11/13/crypto-interfaces.html" rel="alternate" type="text/html" title="从接口视角看密码学原语" /><published>2021-11-13T00:00:00+00:00</published><updated>2021-11-13T00:00:00+00:00</updated><id>https://xxchan.me/cs/2021/11/13/crypto-interfaces</id><content type="html" xml:base="https://xxchan.me/cs/2021/11/13/crypto-interfaces.html"><![CDATA[<p>现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。</p>
+
+<p><em>Disclaimer: 因此本文在具体数学构造上会比较简化和不严谨，请勿当真。如有概念理解性错误，请多指正！</em></p>
+
+<h2 id="对称加密">对称加密</h2>
+<p><strong>假设</strong>：双方提前通过可靠方式共享了一个 secret key。</p>
+
+<p>Secret key 同时用来加密和解密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐ ciphertext=encrypt(secret_key,message)┌─────┐
+│Alice├──────────────────────────────────────&gt;│ Bob │
+└─────┘                                       └─────┘
+                                message=decrypt(secret_key,message)
+</code></pre></div></div>
+
+<p>这个相信大家都比较熟了，它最简单，性能也好。但是问题在于如何（在两个人之间）安全地共享 secret key，不能泄露。</p>
+
+<h2 id="非对称加密公钥加密">非对称加密/公钥加密</h2>
+<p>假设：发送方提前通过可靠方式获得接收方的 public key。</p>
+
+<p>用 public key 加密，用 private key 解密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐ ciphertext=encrypt(public_key,message)┌─────┐
+│Alice├──────────────────────────────────────&gt;│ Bob │
+└─────┘                                       └─────┘
+                                message=decrypt(private_key,message)
+</code></pre></div></div>
+
+<p>这个大家应该也比较熟了，它的性能比对称加密差很多。它的问题同样是如何安全共享密钥：如何知道 public key 真的属于接收方？攻击者可以拿自己的 public key 给 Alice，谎称自己是 Bob，同时向 Bob 发送伪造的信息，这就是中间人攻击（man-in-the-middle attack）。</p>
+
+<p>但现在我们并不是要保密，我们就是要在整个网上分发自己的 public key，我们需要的是认证（authentication），因此需要可信的第三方来背书，需要建立起一个 Public Key Infrastructure（PKI）。数字证书干的就是这个。</p>
+
+<p>如果我们单纯依赖公钥加密来通信，风险是一旦泄露 private key，过去的所有消息都可以被解密，称为缺乏前向安全（forward security）。</p>
+
+<h2 id="dh-key-exchange">DH Key Exchange</h2>
+
+<p>假设：无！</p>
+
+<p>通信双方各自生成自己的秘密 a 和 b。各自用公开参数 g 和秘密进行计算，得到公开参数 A 和 B 发送给对方，然后双方都能算出同一个共享的秘密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐               A=g^a, g                ┌─────┐
+│Alice│&lt;─────────────────────────────────────&gt;│ Bob │
+└─────┘               B=g^b                   └─────┘
+shared_secret=B^a                        shared_secret=A^b
+             =g^(a+b)                                 =g^(a+b)
+</code></pre></div></div>
+<p>（这里的运算实际上全部在 mod p 下进行）</p>
+
+<p>它的妙处是无需可信第三方，就能共同<strong>商讨</strong>出 shared secret，用来进行对称加密。商讨的过程是明文在网络中传输，但是窃听者无法从中算出 shared secret。我们可以每次会话临时协商一个 key，从而获得前向安全。</p>
+
+<p>具体怎么用 shared secret 加密就是另外的话题，最简单的是 ElGamal，直接把 message 和 secret 乘起来。另外 Bob 在发送 B 的时候可以顺便同时发送使用 shared secret 加密后的消息。</p>
+
+<p>TLS 也有这个密钥交换的环节，但它其实并不直接用协商的 shared secret 加密，而是把它当作一个 pre-master key，用来再生成一个 master key。理由是根据不同的算法和参数交换得到的 shared secret 的长度是变化的，它希望有一个固定长的密钥用来加密后续的通信消息，它能支持不同的加密算法。</p>
+
+<p>另外也可以理解成 a, A 分别是 Alice 的 private key 和 public key，任何人拿到这个 public key 就可以和 Alice 建立加密通信，Alice 收到的消息却又必须要拥有它的 private key 才能解密。虽然它并不同于公钥加密的方案，加密通信并非直接用 public key 进行，而是另算出了一个 shared key 进行对称加密。</p>
+
+<h2 id="threshold-secret-sharing">(Threshold) Secret Sharing</h2>
+
+<p>这里的场景是我想要把一个消息发给一群人，要求他们聚在一起才能知道这个消息是什么。最简单的方法当然是直接拆分消息。但是我们想要安全地 share，要有这样的<strong>性质</strong>：部分消息的<strong>信息量</strong>和没有消息一样。也就是无法窥一斑而知全豹。</p>
+
+<p>要求所有人在场过于严格，一般主要考虑有<strong>足够多</strong>的人在场的情形。其中一种特殊情况就是假设一共 n 个人，<strong>任意</strong> t 个人在场就能解密，这个 t 可被称为 threshold，这种情况叫做 (t,n)-threshold secret sharing。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                  ┌──────┐
+              ┌──&gt;│share1├──┐
+              │   └──────┘  │reconstruct┌──────┐
+              │             ├──────────&gt;│secret│
+┌──────┐split │   ┌──────┐  │           └──────┘
+│secret├──────┼──&gt;│share2├──┘
+└──────┘      │   └──────┘
+              │
+              │   ┌──────┐
+              └──&gt;│share3│
+                  └──────┘
+</code></pre></div></div>
+
+<p>最经典的方案就是 Shamir's secret sharing：从一个 t-1 次多项式上取 n 个点！后面的事情大家可以自行脑补（</p>
+
+<h3 id="homomorphic-secret-sharing">Homomorphic Secret Sharing</h3>
+
+<p>同态（Homomorphism）是从 A 空间到 B 空间的映射 f，使得在 A 空间的操作 \(*_A\) 可以对应到 B 空间的操作 \(*_B\)，即 \(f(x *_A y) = f(x)*_B f(y)\)。加密可以看作明文和密文之间的映射，同态加密就是指在密文上操作使得在原文上生效。</p>
+
+<p>Shamir's secret sharing 就有 homomorphic 的性质：对 share 做加法相当于对原文做加法。根据多项式的性质不难想象。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                   ┌────────┐
+              ┌────┤share1-1│ + ┌──────────┐
+              │    ├────────┼──&gt;│sum-share1│
+              │ ┌─&gt;│share2-1│   └────┬─────┘     ┌───────┐
+┌───────┐split│ │  └────────┘        │reconstruct│secret1│
+│secret1├─────┤ │                    ├──────────&gt;│   +   │
+└───────┘     │ │  ┌────────┐        │           │secret2│
+              ├─┼─&gt;│share1-2│ + ┌────┴─────┐     └───────┘
+              │ │  ├────────┼──&gt;│sum-share2│
+              │ ├─&gt;│share2-2│   └──────────┘
+┌───────┐split│ │  └────────┘
+│secret2├─────┼─┤
+└───────┘     │ │  ┌────────┐
+              └─┼─&gt;│share1-3│ + ┌──────────┐
+                │  ├────────┼──&gt;│sum-share3│
+                └─&gt;│share2-3│   └──────────┘
+                   └────────┘
+</code></pre></div></div>
+
+<p>同态加密可以用来做 Secure multi-party computation：多方联合计算出一个结果，但是每个人对输入数据仍然一无所知。</p>
+
+<p>例如上面这个方法可以用来做匿名投票，secret 是每个人的投票（1或0表示同意或否），最终只能恢复出总的票数，不能恢复每个人投的票。当然这个方法比较粗糙，因为根本没有校验输入的合法性。可以投 10 票或者 -10 票影响结果。</p>
+
+<h2 id="distributed-key-generation--threshold-encryption">Distributed Key Generation &amp; Threshold Encryption</h2>
+
+<p>如果我们有一对公私钥，然后通过 secret sharing 来分发 private key（同时销毁掉完整的 private key），那么岂不是就可以达成这样的效果：用这个公钥加密的消息必须要集体中的人合力才能解密。</p>
+
+<p>这个方案要求有一个可信的分发者。更好的做法当然是每个人自选 private key，然后通过一个协商的过程确定下来（确定出了 public key，但是 private key 仍然是秘密）。</p>
+
+<p>说到用每个人自定的秘密生成一个公共秘密，不禁想到上面的 DH key exchange。假设每个人有自己的 $a_i$，每个人可算出 $A_i=g^{a_i}$ 进行共享，得出集体的 public key 就是 $A=\prod_{i=1}^nA_i$，集体的 private key 是 $a=\sum_{i=1}^na_i$ 仍然未知，需要集体合作才能获得。</p>
+
+<p>当某人需要发送消息给集体时，随机生成一个 private key b，用 $A^b$ 对消息进行加密，同时发送密文和 $A^b$ 即可。</p>
+
+<p>现在我们可以再结合一下 threshold secret sharing 了，每个人把 $a_i$ 再进行 (t,n)-secret sharing，这样任意 t 个人合力就可以恢复出 group 的 private key。这就叫 threshold encryption。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     x
+    xx
+   xxx
+  xx xxxxxxxxxxxxxxxxxxxx
+ xx                     x
+xx   To Be Continued... x
+ xx                     x
+  xx xxxxxxxxxxxxxxxxxxxx
+   xxx
+    xx
+     x
+</code></pre></div></div>]]></content><author><name>xxchan</name></author><category term="CS" /><category term="crypto" /><summary type="html"><![CDATA[现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。]]></summary></entry><entry><title type="html">MIT 6.824 Lab3 KVRaft 笔记</title><link href="https://xxchan.me/cs/2021/02/28/6.824-kvraft.html" rel="alternate" type="text/html" title="MIT 6.824 Lab3 KVRaft 笔记" /><published>2021-02-28T00:00:00+00:00</published><updated>2021-02-28T00:00:00+00:00</updated><id>https://xxchan.me/cs/2021/02/28/6.824-kvraft</id><content type="html" xml:base="https://xxchan.me/cs/2021/02/28/6.824-kvraft.html"><![CDATA[<p>本以为<a href="https://xxchan.github.io/cs/2021/02/24/6.824-raft.html">写完 Raft</a> 以后，在 Raft 上搭一个 app 想必是行云流水。事实证明我错了，又是踩了许多坑。 T_T</p>
+
+<h2 id="实现思路">实现思路</h2>
+
+<h3 id="how-clients-find-the-cluster-leader">How clients find the cluster leader?</h3>
+
+<p>我从这开始的第一步就陷入了纠结。Client 自己要存 leader 是肯定的，但我在考虑当 leader 挂掉以后，怎么快速发现新的 leader，想让 server 直接给 client 返回一个 leader 信息，这样就能让 client 更快地找到 leader，而不需要遍历一遍所有 server。但我的 Raft 实现里并没有存现任 leader。</p>
+
+<p>其实这个问题确实是有意义的，不过我不该一上来就想这个优化，这明显不会是一开始的瓶颈。一开始关注大局，搭起骨架，能跑起来才是最重要的。还是那句老话，<strong>premature optimization is the root of all evil</strong>。</p>
+
+<h3 id="how-do-you-know-when-a-client-operation-has-completed">How do you know when a client operation has completed?</h3>
+
+<p>这个问题涉及到可以说是这个 lab 里最重要的问题之一：怎么处理「重复」请求，或者说怎么实现幂等性。</p>
+
+<p>基本的思路，没有 failure 的时候是容易的：请求开始时，向 Raft 发送一个 entry，然后等待至 Raft apply 这条 entry 就完成了。那怎么「等待」呢？kvserver 的代码结构应该也是有一个 background worker 负责不断接收 Raft apply 的 command，然后更新状态机，而创造这条 command 的 RPC handler 需要被它通知 apply 完成。</p>
+
+<p>简单用一个 channel 肯定是不行的，因为顺序会出问题。我们需要对一个特定 index 进行等待/通知。自然的想法是那就用一个 <code class="language-plaintext highlighter-rouge">map[int]chan</code> 吧。我的直觉又觉得，创建这么多小对象不太优雅，会不会开销很大？嗯…………总之我又是经过一通尝试以后，最后还是回到了这个简单方案。（我去偷看了一眼 etcd，发现好像就是这么做的）</p>
+
+<p>这个只是细节小问题，关键的大问题还是如何处理重复请求：不能重复 APPEND，以及 PUT 旧值不能覆盖新值。</p>
+
+<p>我一开始在想：GET 是不是也有时机问题？重复的 GET 可以直接返回当前的值吗，还是需要缓存第一次成功时候的值？（甚至想做一个 TCP 的滑动窗口那样的机制）后来没做结果缓存，发现根本没问题。现在想来，其实是每个 client 自己是一次发送一个请求的，而别的 client 的请求和它是并发的，就是没有固定的顺序。虽然两次 GET 在 server 端看来读到了不同的值，但其实 client 只收到了一个值，没有问题。</p>
+
+<p>实现上首先容易想到 client 要自带一个 id 和序列号 seq，然后 server 可以记录每个 client 的最大 seq，要是遇到过就是重复请求了。一开始可能会觉得这个检测放在 RPC handler 里就行了，遇到一个请求就更新一下。但这问题重重：首先收到过请求不代表请求成功；更关键的问题是这样 server 之间没法共享 seq 记录，所以必然会失败。</p>
+
+<p>其实 Raft 会重复 apply 是必然的：假设第一次请求超时，第二次请求又来了，此时并不能确定第一次请求的状态。如果直接放弃了有点不太好，如果提交这个 command 那就会重复 apply 了。加上上面说的要在 server 间共享状态，可以想到「去重」这个功能应该放到「状态机」里（而不是单个 server 的局部状态）。状态机中记录每个 client apply「成功」的最大序列号，而不是 server「收到」的最大序列号，就可以完美解决了。</p>
+
+<hr />
+
+<p>故事本来到这里就该结束了，但是我在这里又自作多情，困在了一个自己给自己找的问题上，这可能也是这个 lab 花了我最久时间的问题。上面说了判断请求成功需要 RPC handler 等待对应 index 的 command 被 apply，这里 apply 是有可能会失败的，也就是对应的 index 上并不是这个 RPC 提交的 command，所以 RPC 就给 client 返回了一个「失败」的结果，这没有问题。</p>
+
+<p>但是 client 端要怎么处理这次失败呢？可以直接发起相同的请求重试。但我不满足于此，我觉得，在一般的情况下，client 知道请求失败了，可以选择放弃这一请求，做别的事。关键是 client 明确知道了「失败」，这是一个确定的结果，获得了更多的信息，这在语义上和不确定发生了什么的「超时」是不一样的。因此，虽然这个 lab 要求 client 失败重试，我做了一个小 trick：「失败」后重试时 seq+1。</p>
+
+<p>这一处理给我带来了相当大的麻烦，但是也让我的实现不得不更严谨了，本来有一些细节其实直接重试的话是无所谓的。</p>
+
+<p>最简单的情景：</p>
+<ol>
+  <li>APPEND seq1 成功，但是 reply 丢包了。</li>
+  <li>Client 重试 APPEND seq1 失败，client 收到失败回复，增加 seq 变为2。</li>
+  <li>APPEND seq2 成功。出现了<strong>重复 APPEND</strong>。</li>
+</ol>
+
+<p>这里的问题在于，RPC handler 里并不做去重检测，只有 apply 的时候会去重。这个问题如果 client 不改 seq 无脑重试的话是不存在的，相当于不管之前的请求是否成功 RPC handler 都选择再提交一次 command，反正状态机会做去重。</p>
+
+<p>这个问题修复比较容易，在 RPC handler 的一开始加一个去重检测就可以了，这可能会稍微减少一些重复提交，但是并不能完全避免重复提交。于是问题就又来了：</p>
+
+<ol>
+  <li>APPEND seq1，超时。</li>
+  <li>Client 重试 APPEND seq1，RPC handler 里提交完 command 后第一次提交 apply 成功。</li>
+  <li>第二次提交 apply 失败，返回失败。这里返回了错误的结果，可想而知 client 之后会重新提交 seq2，然后出现重复 APPEND。</li>
+</ol>
+
+<p>这个问题和 lab2 里提过的一个问题很像：发送 RPC 请求前后状态可能已经发生了变化。这里是等待 command 被 apply，道理是一样的。有「等待」就需要考虑等待前后的状态。这个问题的解决也很简单，等待唤醒时再检测一次去重就可以了。</p>
+
+<p>到这里，可能会感觉差不多够意思了，然后噩梦就来了：跑几百次测试，又会出现 missing/duplicate APPEND。慢慢地分析 log，发现情景是这样的：</p>
+
+<ol>
+  <li>[server A] index 574 seq60 超时（真实结果：成功）。</li>
+  <li>[server B] index 569 seq60 超时。</li>
+  <li>[server B] index 570 seq60 失败 -&gt; seq61。</li>
+  <li>[server A] index 575 seq61 成功。重复 APPEND。</li>
+</ol>
+
+<p>可以发现，出现问题的根本原因是：中途更换 leader。对 leader A 的结果仍然不确定（最终成功了）的情况下，换了个假 leader B，然后被它的结果误导了。换 leader 的行为是必须存在的，否则由于假 leader 无法 commit，对它请求会永远超时。</p>
+
+<p>事情发展到这里，我就不想再继续修问题了，决定回归淳朴，不要让 client 增加 seq，放弃对「失败」语义的执着。我觉得有一个根本的问题，就是状态机里只记录了「apply 成功的最大序列号」，状态机并不知道「失败」，也不存在请求和回复的概念。处理 RPC 请求和回复完全是单个 server 的局部逻辑。在这样的情况下，要让请求有复杂的语义（如果是可以做到的）需要非常小心，处理各种边界情况。因此，我觉得这种设计可能本身就是不太合适的，如果有复杂请求处理的需求，那可能需要考虑再增加一个处理请求的状态机了。</p>
+
+<p>（P.S. 上面这个换 leader 的小问题应该还是容易解决的，因为假 leader 不能 commit，之所以会失败肯定是已经收到真 leader commit 的消息，变回了 follower，所以在 RPC 返回的时候再检查一次是否是 leader 应该就可以了）</p>
+
+<h3 id="keyvalue-index">Key/Value index</h3>
+
+<p>其实这本应该是状态机的大头。但是这个 lab 好像并不太关心存储引擎，做一个纯内存的 hash index 就够了。存储引擎这个话题还是等以后看实际系统再慢慢研究吧。</p>
+
+<h3 id="snapshot">Snapshot</h3>
+
+<p>Raft paper 里提到了它们使用了基于 <code class="language-plaintext highlighter-rouge">fork()</code> 的 copy-on-write 来实现高效的 snapshot，不过 lab 里没提这回事儿，暴力锁住 copy 就行了。我也没深究下去。</p>
+
+<p>虽然总体来说实现 snapshot 还是不太困难的，但是要考虑的细节依然不少。诸如更新 commitIndex，是否要删除多余 log 等等情况，一不小心就写错了。这种东西可能还是最好要先想清楚各种情况然后再实现，可以在纸上先画画。</p>
+
+<h2 id="踩坑记录--心得体会">踩坑记录 &amp; 心得体会</h2>
+
+<h3 id="raft-没测出来的问题">Raft 没测出来的问题</h3>
+
+<h4 id="testsnapshotsize3b-非常慢">TestSnapshotSize3B 非常慢</h4>
+
+<p>这个问题在 lab 2 的笔记里已经说过了，原因在于这个测试的 pattern 是每次先请求指令，等完成了再发下一条，所以对 latency 有要求，要在请求来时主动额外多发一次心跳就可以了。</p>
+
+<p>这个问题拖到这么后面才出现，其实还是有点难排查的，稍微有点不合理。</p>
+
+<h4 id="testcount2b-only-2-decided-for-index-6-wanted-3">TestCount2B: only 2 decided for index 6; wanted 3</h4>
+
+<p>lab 3 写着写着也重跑了一下 lab 2 的测试，结果出现这个问题，有点吓人。看日志发现明明达成了一致，却没有 apply 是怎么回事。仔细看是有一个 server 更新 commitIndex 之后没有 apply，是 applier 里的 Cond 没有被唤醒。原因是我写出了这样的代码：</p>
+
+<pre><code class="language-Go">for {
+  mu.Lock()
+  cond.Wait()
+  toApply = copy(...)
+  mu.Unlock()
+
+  for _, cmd := toApply {
+    applyCh &lt;- cmd
+  }
+}
+</code></pre>
+
+<p>又是一个有点小聪明的优化：觉得 apply 开销比较大，甚至可能 block，所以先复制再 apply，apply 的时候不需要锁。其实还是有点道理的，但是这就带来了 Cond 丢失唤醒的问题。解决的话要么就老老实实带锁 apply，要么需要再加一个定时唤醒 Cond 的 worker。其实我在做 kvserver 的时候也有担心过类似的问题，没想到在这里遇到了。总之丢失唤醒是一个使用 Cond 需要考虑的问题。通常的提醒是：不持有锁的时候唤醒可能会丢失。但我这里主动释放了 Cond 醒来后带的锁，所以就算持有锁唤醒，这儿也可能丢。</p>
+
+<p>之所以这个测试会出现问题，是因为这里 <code class="language-plaintext highlighter-rouge">cfg.one()</code> 要求「成功」，而且参数 <code class="language-plaintext highlighter-rouge">retry</code> 是 false。看注释就知道了：</p>
+<blockquote>
+  <p>if retry==true, may submit the command multiple times, in case a leader fails just after Start(). if retry==false, calls Start() only once, in order to simplify the early Lab 2B tests.</p>
+</blockquote>
+
+<p>其他测试要么不要求「成功」，只需要达成「一致」，要么是会重试的。</p>
+
+<h4 id="appendentries">AppendEntries</h4>
+
+<p>一个 3A 早期卡了很久的大问题。现象是出现 missing append。看 log 追踪到如下情况：</p>
+
+<ol>
+  <li>Follower（4，4，4，4，4），括号内为 entry 的 term。</li>
+  <li>Leader （4，4，7，7）</li>
+  <li>Follower 收到 AppendEntries，变为（4，4，7，7，4）</li>
+  <li>下次选举，follower 投票给了 outdate candidate（term &lt; 7）。</li>
+</ol>
+
+<p>问题很明显了。原因是我一开始的 AppendEntries 将 PrevLogIndex 之后的原有 entries 一概删除，后来（上次说了踩坑之后）改成了仅当 PrevLogIndex 有冲突的时候才删除。但这还不够，没有冲突也不能简单覆盖，还需要逐项检查。看 paper 中其实说的很清楚：if an existing entry conflicts，并不仅仅是 prev entry conflicts。</p>
+
+<p>又是一个在 Raft 的测试里没测出来的问题，分布式系统真的处处是坑，真需要咬文嚼字啊。</p>
+
+<h3 id="日志的重要性">日志的重要性</h3>
+
+<p>在分布式系统里不能单步执行，不能依赖 debugger 了（虽然我也不会用），log 对排查问题非常重要。以前，我已经感受到 log 相比无脑 print 的优越性了，在 lab 2 中我也会尽量多打印一些有用的信息。但是在 lab 3，我发现做的还是并不够。</p>
+
+<p>我一度觉得出了问题，看问题周围几十上百行 log 就差不多够意思了。但并发量大的时候，有海量的无关信息。因此，需要日志<strong>可搜索</strong>、<strong>可追踪</strong>。我一开始在 lab 2 里的日志很随意，例如 <code class="language-plaintext highlighter-rouge">DPrintf("%v: var1: %v, var2:%v, do something", rf.me, v1, v2)</code>，这首先有个大问题就是我没法追踪一个固定 server 的日志了，因为只打印了一个数字，没办法搜索。其次，因为没有固定格式，在搜索一些东西的时候可能要写很复杂的正则表达式（凭我蹩脚的正则表达式水平勉强拼出来）。在 lab 3 中，我就更注意了一点，例如会打成 <code class="language-plaintext highlighter-rouge">DPrintf("[kvserver][me: %v] balabala ...", kv.me, ...)</code>。由于我到挺后面才被难看的日志恶心到，所以也没有全面改造（还是不得不改了一些）。更进一步，其实还可以使用结构化日志，更加规范要求；也可以对对象实现自己的 log 方法，固定打印一些常用的变量。总之，不管具体实践如何，日志应该是个从一开始就要考虑，不能草率对待的东西。</p>
+
+<p>另外，在排查问题的时候，尤其是性能问题，我有时候还想统计一下 RPC 调用的次数。我通过打日志的方式实现了一下，但这会让日志膨胀得很厉害。这个问题让我感受到了对监控系统的需求（Prometheus &amp; Grafana？）。</p>
+
+<h3 id="last-是上一个还是最后一个">last 是上一个还是最后一个？</h3>
+
+<p>其实 Raft 里好像没有这个问题，上一个就明确是 prev，last 只表示最后，而且我自己也没写错遇到问题被坑到。只是我自己看代码还是会产生迷惑，想到这个问题。总之，尽量要区分，甚至避免使用容易出现歧义的命名，虽然凭语境可能很容易区分清楚，但是不要给自己带来处理额外信息的心智负担。</p>
+
+<h3 id="goroutine-leak">goroutine leak</h3>
+
+<p>我在测试中遇到了这样的情况：测试超过 10 分钟，强制结束，显示有两百多个 goroutine，很多等待了超过 8 分钟。</p>
+
+<p>有一个卡住的位置是在 Raft 的 applier 里 <code class="language-plaintext highlighter-rouge">applyCh&lt;-</code>。这个会卡住应该是因为 kvserver 被 <code class="language-plaintext highlighter-rouge">Kill()</code> 了，不再消费消息了。我一开始 <code class="language-plaintext highlighter-rouge">Kill</code> 里没有处理逻辑，但是所有 background worker 的循环都加了 <code class="language-plaintext highlighter-rouge">!rf.killed()</code> 的条件，本以为这已经足够了。但虽然循环次数不会无限了，循环内部还有无限等待的操作，可能会卡住。因此 <code class="language-plaintext highlighter-rouge">Kill()</code> 内需要做一些回收操作。除了 applier，还有几个地方类似。</p>
+
+<p>当然，测试卡住并不是因为这个，而是其他地方的逻辑错误，这里是顺手解决一下问题。</p>
+
+<p>真实的一个导致卡死的逻辑错误：kvserver 里，我传消息的方式是每个 index 对应的 channel 大小为 1，因为不会重复 apply 相同的 index。但是在 InstallSnapshot 之后，有可能 lastApplied 会变小，于是就重复 apply 了相同的 index，就有可能在相应的 channel 上卡住了。</p>
+
+<p>解决这个问题，要么可以拒绝 install 太老的 snapshot，要么可以在 install 之后重建一个新的 <code class="language-plaintext highlighter-rouge">map[int]chan</code>。</p>
+
+<h2 id="小结">小结</h2>
+
+<p>看了一下写完 6.824 的 Lab 1-3 做了一个月，一共花了 95 个小时（WakaTime 数据），一开始实现其实也还好，到最后 debug 真的是花了几十小时，有点体力活的感觉。尤其是跑几百次测试可能才出现一次的 bug，看了半天日志，修好了，结果过了几个小时跑了几百次又出了新的 bug，真叫人有点绝望。分布式系统 debug 确实不容易，出现问题难以复现，所以需要各种手段的帮助，比如良好的日志，测试框架支持（如果在网络正常的情况下测试，那得多久才能发现问题？混沌工程真是意义重大）。</p>
+
+<h3 id="收获">收获</h3>
+
+<ul>
+  <li>
+    <p>领域知识：Raft、single-leader replication</p>
+  </li>
+  <li>编程实践练习：
+    <ul>
+      <li>多线程（协程/任务）编程：
+        <ul>
+          <li>等待与通知</li>
+          <li><code class="language-plaintext highlighter-rouge">chan</code> 和 <code class="language-plaintext highlighter-rouge">select</code></li>
+          <li><code class="language-plaintext highlighter-rouge">Mutex</code> 和 <code class="language-plaintext highlighter-rouge">Cond</code></li>
+        </ul>
+      </li>
+      <li>Background worker</li>
+      <li>Bash script</li>
+      <li>计时器</li>
+    </ul>
+  </li>
+  <li>经历了一些常见的问题：
+    <ul>
+      <li>阻塞操作（RPC 调用、channel）前后状态可能不一致</li>
+      <li>改代码要 find all usage 检查多处一致</li>
+    </ul>
+  </li>
+  <li>如果抽掉一切技术细节，剩下的 takeaway 我想可能是：
+    <ul>
+      <li>设计好了再开始实现，要想清楚不同情况下的行为规则。让代码忠实地遵守规则，并通过一些手段来检验和保证。</li>
+      <li>在实现的一开始就要考虑如何为排查问题设置辅助手段（这里是 log），不要轻敌，不要过于自信。</li>
+      <li>Debug 要有耐心，也要动脑子，对问题敏感。</li>
+    </ul>
+  </li>
+</ul>]]></content><author><name>xxchan</name></author><category term="CS" /><category term="system" /><summary type="html"><![CDATA[本以为写完 Raft 以后，在 Raft 上搭一个 app 想必是行云流水。事实证明我错了，又是踩了许多坑。 T_T]]></summary></entry></feed>

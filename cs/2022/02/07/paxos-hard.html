@@ -1,0 +1,698 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Why is Paxos So Hard to Understand? - XX&#39;s Blog</title>
+<meta name="description" content="Because it requires a different mindset">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="Why is Paxos So Hard to Understand?">
+<meta property="og:url" content="https://xxchan.me/cs/2022/02/07/paxos-hard.html">
+
+
+  <meta property="og:description" content="Because it requires a different mindset">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2022-02-07T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2022/02/07/paxos-hard.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Build something fun and useful</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Why is Paxos So Hard to Understand?">
+    <meta itemprop="description" content="Because it requires a different mindset">
+    <meta itemprop="datePublished" content="2022-02-07T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2022/02/07/paxos-hard.html" class="u-url" itemprop="url">Why is Paxos So Hard to Understand?
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Contents</h4></header>
+              <ul class="toc__menu"><li><a href="#my-way-of-learning-consensus">My Way of Learning Consensus</a></li><li><a href="#abstractions-consensus-replicated-log-and-replicated-state-machine">Abstractions: Consensus, Replicated Log, and Replicated State Machine</a></li><li><a href="#implement-replicated-state-machine-using-consensus">Implement Replicated State Machine Using Consensus</a></li><li><a href="#why-is-paxos-hard">Why is Paxos hard?</a></li><li><a href="#is-raft-easier">Is Raft Easier?</a></li><li><a href="#more-about-consensus">More about Consensus</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><a href="https://xxchan.github.io/cs/2022/02/09/paxos-hard-zh.html">Chinese Version</a></p>
+
+<p>In this blog, I will <strong>omit practical aspects like performance issues</strong>. I will focus on general ideas like basic notions, expressiveness, or "<strong>how to make it possible</strong>" instead of "how to make it super-fast". Also, I will try to convey my ideas to readers without any knowledge of distributed systems or consensus. Still, it may be better if you already know one or more consensus algorithms, like Raft or Paxos.</p>
+
+<h2 id="my-way-of-learning-consensus">My Way of Learning Consensus</h2>
+
+<p><a href="https://www.zhihu.com/question/65038346/answer/227674428">This zhihu answer: Is there a moment when you feel the malice of the author of a paper?</a> (Chinese) was the first time I knew Paxos and consensus. I thought it was really fun.</p>
+
+<p>Exactly one year ago, I was learning MIT 6.824 and implementing Raft. I thought it organizes things into modules and explains each module clearly. I also giggled when reading the "What's wrong with Paxos?" part. Although I experienced some difficulty debugging Raft, the cognitive process was smooth.</p>
+
+<p>Last semester, I needed to implement Paxos in one of my homework. I happened to have bookmarked <a href="https://blog.openacid.com/algo/paxos/">this blog</a> earlier. I found it explains Paxos in a simple way and I implemented (basic) Paxos correspondingly, without reading papers or other explanation articles. The homework also required us to implement multiple decisions using a given technique, so I didn't read things like multi-Paxos.</p>
+
+<p>I also had Concurrent Algorithms and Distributed Algorithms courses. They are theoretical, and both talked about consensus, and I thought it was not very hard to understand. The consensus algorithm given in the DA course is very like Paxos, and it's simple enough to fit in one slide. Besides, the Universal Construction in the CA course and the Total Order Broadcast algorithm in the DA course, which prove you can use consensus to do almost anything, are also not hard to understand. And then, I began to wonder why people think Paxos is hard to understand, and that's why I wanted to write this blog.</p>
+
+<p>Finally, I read the two Paxos papers and confirmed that they are both understandable. But Lamport's language is so interesting. <em>The Part-Time Parliament</em> is very detailed and straightforward. It kind of looks like it uses a mapping to transform the terms. <em>Paxos Made Simple</em> instead talks about intuitions in plain words. It is kind of like a blog.</p>
+
+<p>Anyway, let's go to the main topic.</p>
+
+<h2 id="abstractions-consensus-replicated-log-and-replicated-state-machine">Abstractions: Consensus, Replicated Log, and Replicated State Machine</h2>
+
+<p>First, let's put aside the consensus algorithms but focus on the abstraction (or the interface).</p>
+
+<p>In distributed systems, we generally want to <em>share</em> something. Then shared objects or shared data structures are super helpful. It is like a usual data structure (e.g., queue, map) in a single machine but can be accessed by different computers (or threads). In other words, the computers work together to maintain a global object and have its state replicated on every machine.</p>
+
+<p>Then replicated state machine is the ultimate abstraction, a generalization of all shared data structures. (Or we can say all shared data structures can be implemented using replicated state machine). You may quickly come up with that maintaining a replicated log is a natural implementation of the replicated state machine. And that's true.</p>
+
+<p>By the way, the replicated log can also be viewed as another abstraction, Total-Order Broadcast: Every process broadcasts messages, but they deliver messages in the same global order. (Very similar, not very important.)</p>
+
+<p>Then what's consensus? Here it is, the most original consensus interface. First, it's just one shared object. Its <em>sequential specification</em> (How it works if it is accessed by different processes <em>sequentially</em>) is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>maintaining a variable: prop
+initial value: ⊥ (uninitialized)
+
+propose(v):
+    if prop == ⊥:
+        prop = v
+    return prop
+</code></pre></div></div>
+
+<p>Fairly simple, right? Some notes here:</p>
+<ul>
+  <li>It is one-shot. A single decision. It can be viewed as a write-once variable.</li>
+  <li>Here synchronous style interface is shown. Using asynchronous event-based interfaces is also totally fine.</li>
+  <li>It is usually assumed that every process has something to propose, and proposing is the only way to get the decided value. I think this convention is just for simplicity. You can easily modify the interface to get notified about the decision without proposing.</li>
+</ul>
+
+<p>Equivalently, we can also describe consensus by giving its properties:</p>
+<ul>
+  <li>Validity: A decided value is proposed.</li>
+  <li>Agreement: No processes decide differently.</li>
+  <li>Termination: Every process eventually decides.</li>
+</ul>
+
+<h2 id="implement-replicated-state-machine-using-consensus">Implement Replicated State Machine Using Consensus</h2>
+
+<p>Consensus is such a simple abstraction, but it is powerful enough to build replicated state machine, i.e., it can be used to implement any shared object. There's a loud name for this conclusion: <strong>Universality of Consensus</strong>.</p>
+
+<p>Before we go further, we can think about a naïve solution: Consensus is already a single replicated log entry, so why not use a list of consensus as the whole replicated log? When a process have a new entry to append to the log, it just keeps moving forward and proposing the entry in the consensus list until its proposal is decided in one consensus instance.</p>
+
+<p>This idea almost works, except for one critical problem: a process may never get its proposal decided. It can starve. The solution is also not very complicated. Now processes not only propose their own value but also <strong>help</strong> others. Specifically, when a new entry comes, the process will first broadcast it, and it keeps collecting others' entries. Then each of its proposals will be <strong>the set of all pending entries</strong> (instead of one entry). That's it!</p>
+
+<p>Of course, this is not the only way and is a rather unoptimized way, but it works perfectly.</p>
+
+<p>Without a concrete algorithm in mind, you may already have thought that it was feasible to go from the consensus to the replicated log. I just showed that there's a simple way to do so to make us confident in the possibility. Going from the consensus to the replicated log is like shifting from manual gear to automatic gear.</p>
+
+<h2 id="why-is-paxos-hard">Why is Paxos hard?</h2>
+
+<p>If you know how Paxos work, you may already find out that its core indeed implements consensus. Many complexities come from turning it into the replicated log. It seems that this relationship is not clearly stated in the paper (although I didn't read this part carefully). But having the replicated log algorithm and other meta-knowledge about consensus above in mind and omitting implementation details and performance issues (although this might be hard in an engineer's mindset), you can convince yourself it works, in a simple way. All you need is (single-decision) consensus! In other words, if you already know the consensus abstraction and are looking for an implementation, you will quickly get what Paxos is doing. So it's not the algorithm itself that is complex, but there are many concepts mixed together.</p>
+
+<p>For those who don't know Paxos yet, you can go back to read the paper and focus on the single decision part first without being bothered by multiple decisions now! But I will still give some simple explanations here.</p>
+
+<p><a href="https://blog.openacid.com/algo/paxos/">The previously mentioned blog by xp</a> (Chinese) is clear and understandable because it also focuses on simple things without going too far to confuse the reader. But I think the ideas in this blog can be further summarized:</p>
+
+<p>First, Single decision consensus interface is introduced (slide 1-5). And then many failed attempts (but still important techniques) are discussed:</p>
+<ul>
+  <li>slide 6-9: Single writer <em>all-ack</em>. It doesn't tolerate any crashes.</li>
+  <li>slide 10-12: Single writer majority-ack (or <em>majority-write</em>). <em>Timestamp</em> + <em>majority-read</em> are also needed for it to work. This algorithm doesn't tolerate the writer's crash.</li>
+  <li>slide 14-17: Majority-write can neither be generalized to <strong>multiple writers</strong>.</li>
+  <li>slide 18-19: (majority) Read before (majority) write.</li>
+  <li>slide 20: Request (majority) promise before (majority) write.</li>
+</ul>
+
+<p>Yes, I think Paxos's idea can be summarized into one sentence: <strong>request promise before write</strong>! It is indeed so simple and can be implemented with fewer than 200 LoC.</p>
+
+<p>xp tells you <em>how</em> Paxos works in a simple way, but you may still wonder <em>why</em> we go this way and whether this really works. Now I should say in his paper, Lamport <strong>derives</strong> this idea (from <em>properties</em> he wants to achieve). So if you re-read the paper after you already know Paxos, you may find it rather understandable and has brilliant reasoning and intuitions. But I'm afraid that maybe this is also why many people failed to understand it at the beginning, because they are not accustomed to this way of thinking and want to know how exactly it works before knowing where the idea can be derived.</p>
+
+<p>Btw, xp's follow-up blog: <a href="https://drmingdrmer.github.io/algo/2020/10/28/paxoskv.html">Implement paxos-based kv storage with 200 line of code</a> implements (single-decision) Paxos, and manages consensus instances by hand. (There's a more complicated follow-up blog <a href="https://blog.openacid.com/algo/mmp3/">here</a>) So you can also learn (single-decision) Paxos by reading the implementation.</p>
+
+<h2 id="is-raft-easier">Is Raft Easier?</h2>
+
+<p>Let's go back and look at Raft again. First, the "What's wrong with Paxos?" part.</p>
+
+<blockquote>
+  <p>We hypothesize that Paxos' opaqueness derives from its choice of the single-decree subset as its foundation. Single-decree Paxos is dense and subtle: it is divided into two stages that do not have simple intuitive explanations and cannot be understood independently.</p>
+</blockquote>
+
+<p>I should now say this evaluation is a little bit <strong>unfair</strong>. Single-decision consensus is a well-established abstraction in distributed computing theory. Single-decree Paxos also has good intuitions.</p>
+
+<hr />
+
+<p>Another evaluation that Paxos does not provide a good foundation for building <em>practical</em> implementations in <em>real-world</em> systems may be true. However, I think this is just a <strong>non-goal</strong> for Paxos. It talks about an elegant way to solve a theoretical problem. It just <strong>doesn't care</strong> much about how you implement it in the real-world… I think Lamport is also a more theoretical researcher. (He established the foundation of the distributed computing theory.) Real-world stuff may not be that attractive to theory researchers, if the problem is not theoretically interesting.</p>
+
+<hr />
+
+<p>Now let's look at Raft itself. I will also try to describe it in a few words.</p>
+
+<p>First, it talks about the replicated state machine and <strong>tells you explicitly we are building the replicated log</strong>. Engineers may be unfamiliar with consensus, but must know logs very well.</p>
+
+<p>Second, Raft chooses the <strong>leader-based</strong> approach: only the leader can interact with the outside world and append entries to the log. Paxos is instead completely <strong>peer-to-peer</strong>. Having a leader will usually make the main process or the "happy path" easier to understand. Raft chooses majority-write naturally. Then the only problem is how to handle the leader's crash, and Raft's approach is to restrict nodes from voting for <em>outdated</em> nodes. The trick is simple, but it also takes some effort to understand why it works because many edge cases are covered. The property to maintain is that the new leader must <em>at least</em> contain all majority-written entries, but whether it contains more pending entries is insignificant.</p>
+
+<p>Finally, inconsistent states exist in the replicate log, and the leader will fix it by overwriting.</p>
+
+<p>So is Raft easy? Its core idea is also not hard. It's just single-leader majority-write, … with some additional but simple tricks (to ensure majority-write work).</p>
+
+<p>To summarize, Raft</p>
+<ul>
+  <li>Implements replicated log directly.</li>
+  <li>Talks <strong>concrete notions</strong> like heartbeat, timeout, RPC and crash recovery, instead of talking about abstractions like a theory researcher.</li>
+  <li>Talks <strong>all details in all paths</strong> (state transformations), and <strong>exposes complexities</strong> in a manageable way. (Paxos doesn't care these <em>trivial</em> implementation complexities.)</li>
+</ul>
+
+<p>So after reading Raft, you can almost directly <strong>translate it into code</strong>. Instead, Paxos is theoretically simple. After reading it, you may think for a while and then exclaim: <strong>Oh, it works! It's so simple!</strong> (Just like a Mathematician.) Then no wonder most people, especially engineers, will feel more comfortable when reading Raft.</p>
+
+<h2 id="more-about-consensus">More about Consensus</h2>
+
+<p>There are more interesting theoretical problems about consensus. Besides universality, the most important one may be the <strong>impossibility</strong> of consensus! To be specific, here's the FLP impossibility: Consensus is impossible in an asynchronous distributed system if one process can crash.</p>
+
+<p>Hey, then what are Paxos and Raft doing???</p>
+
+<p><em>Don't panic.</em> Here <strong>asynchronous</strong> system means: each process can be delayed for <em>arbitrarily long</em>, and we <em>know nothing</em> about whether they are alive. But in practice, we do have some assumptions (about <strong>time</strong>). Real-world is more like an <strong>eventually synchronous</strong> system, which means we can have an <em>eventually perfect failure detector</em>: It can wrongly suspect a slow process as dead, but it will make corrections if time lasts long enough. Basically, the heartbeat and timeout mechanism implements an eventually perfect failure detector.</p>
+
+<p>Another side note is that actually, we assume communication by message-passing above. If we switch to shared memory, we will still have FLP impossibility. To be precise, it is impossible to implement consensus using only <strong>shared registers</strong>.</p>
+
+<p>I should mention that the proof of FLP impossibility is also very brilliant! The core idea is: any consensus algorithm's execution must have a <strong>critical timing</strong>. From God's perspective, currently, the system doesn't reach a decision but will immediately (after a single step of any process) reach a decision. All later steps are just going through a process to get everybody notified. (If you know <em>Steins;Gate</em>, it means the world line will convergent into an attractor field.) Then we argue that all the processes' next steps are accessing the same register at the critical timing!</p>
+
+<p>To continue the discussion, let's assume we have two processes <code class="language-plaintext highlighter-rouge">p1</code> and <code class="language-plaintext highlighter-rouge">p2</code> . If they are not accessing the same object, the following two possible histories are equivalent:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">p1</code> goes one step and then <code class="language-plaintext highlighter-rouge">p2</code> goes one step.</li>
+  <li><code class="language-plaintext highlighter-rouge">p2</code> goes one step and then <code class="language-plaintext highlighter-rouge">p1</code> goes one step.</li>
+</ol>
+
+<p>This contradicts the critical timing assumption!</p>
+
+<p>Now assume they are both about to access register <code class="language-plaintext highlighter-rouge">x</code> .</p>
+<ul>
+  <li>Case 1: If the first step is reading <code class="language-plaintext highlighter-rouge">x</code> , we stop the process forever after this step. Then the other process will think everything is the same as before, so it cannot decide! This means the critical step must <strong>make some observable change</strong> to the whole system. So</li>
+  <li>
+    <p>Case 2: Both processes' first step is writing <code class="language-plaintext highlighter-rouge">x</code> . Then the following two possible histories are equivalent:</p>
+
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> writes <code class="language-plaintext highlighter-rouge">v1</code> to <code class="language-plaintext highlighter-rouge">x</code>, and stops forever. Then <code class="language-plaintext highlighter-rouge">p2</code> writes <code class="language-plaintext highlighter-rouge">v2</code> to <code class="language-plaintext highlighter-rouge">x</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">p1</code> stops forever immediately. <code class="language-plaintext highlighter-rouge">p2</code> writes <code class="language-plaintext highlighter-rouge">v2</code> to <code class="language-plaintext highlighter-rouge">x</code>.</li>
+    </ol>
+
+    <p>Again, this contradicts the critical timing assumption!</p>
+  </li>
+</ul>
+
+<p>The proof is now finished. (I just showed the world line can never convergent.) Not complicated, right? And now you may also have some idea why the impossibility holds. Asynchrony is a too weak assumption. In other words, it gives too strong power to the <em>scheduler</em> (or us the prover).</p>
+
+<p>More excitingly, the above proof framework applies to more situations. Actually, we proved above consensus <em>among 2 processes</em> is impossible using only registers. We can similarly prove consensus <em>among 3 processes</em> is impossible using only registers and queue/fetch-and-add! But we can implement consensus among any number of processes using compare-and-swap!</p>
+
+<p>These results proposed a way to <strong>compare the expressiveness of shared objects</strong>: consensus number. Register has consensus number 1, queue and FAA have 2, and CAS has ∞. There are still unresolved research problems about consensus numbers, but I think we'd better stop here now.</p>
+
+<p>As a concluding note, I think distributed computing theory is interesting and worth learning a bit. 😄</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#consensus" class="page__taxonomy-item p-category" rel="tag">consensus</a><span class="sep">, </span>
+    
+      <a href="/tags/#system" class="page__taxonomy-item p-category" rel="tag">system</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2022-02-07T00:00:00+00:00">February 7, 2022</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Why+is+Paxos+So+Hard+to+Understand%3F%20https%3A%2F%2Fxxchan.me%2Fcs%2F2022%2F02%2F07%2Fpaxos-hard.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2022%2F02%2F07%2Fpaxos-hard.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2022%2F02%2F07%2Fpaxos-hard.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2021/11/13/crypto-interfaces.html" class="pagination--pager" title="从接口视角看密码学原语
+">Previous</a>
+    
+    
+      <a href="/cs/2022/02/09/paxos-hard-zh.html" class="pagination--pager" title="为啥 Paxos 这么难？
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/2024/06/12/quotation-mark.html" rel="permalink">Why English Quote (') looks bad in my blog?
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" rel="permalink">Stupidly effective ways to optimize Rust compile time
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">How I reduced 10 minutes of CI time without much effort
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/11/optimize-rust-comptime.html" rel="permalink">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">Stupidly effective ways to optimize Rust compile time
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<!-- <script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script> -->
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

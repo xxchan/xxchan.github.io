@@ -1,0 +1,587 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>.bash_profile 和 .bashrc - XX&#39;s Blog</title>
+<meta name="description" content="虚惊一场">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content=".bash_profile 和 .bashrc">
+<meta property="og:url" content="https://xxchan.me/cs/2020/08/07/bash_profile-and-bashrc.html">
+
+
+  <meta property="og:description" content="虚惊一场">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-08-07T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2020/08/07/bash_profile-and-bashrc.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Build something fun and useful</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content=".bash_profile 和 .bashrc">
+    <meta itemprop="description" content="虚惊一场">
+    <meta itemprop="datePublished" content="2020-08-07T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2020/08/07/bash_profile-and-bashrc.html" class="u-url" itemprop="url">.bash_profile 和 .bashrc
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+        <h2 id="虚惊一场">虚惊一场</h2>
+
+<p>昨天经历了一件十分吓人的事情，差点以为我的 bash 配置文件丢了！好在最后发现是虚惊一场😅。</p>
+
+<p>事情的经过是这样的：由于更新 Rust 下载太慢，我找到了清华镜像站 TUNA 的 Rustup 镜像。以前其实也用过，但是是一次性启用的，这次就想不如直接长期启用了。于是按照指引，输入了下面这条指令：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup'</span> <span class="o">&gt;&gt;</span> ~/.bash_profile
+</code></pre></div></div>
+
+<p>默默关闭了 terminal 窗口，又新开了一个。第一眼看着就有点不对劲，也没细想。但当我敲下指令之后，可怕的事情发生了！</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>rustup 
+rustup: <span class="nb">command </span>not found
+<span class="nv">$ </span><span class="nb">cat</span> ~/.bash_profile
+<span class="nb">export </span><span class="nv">RUSTUP_DIST_SERVER</span><span class="o">=</span>https://mirrors.tuna.tsinghua.edu.cn/rustup
+</code></pre></div></div>
+
+<p>…………WTF！当时我就慌了，不会吧不会吧，不会我的 <code class="language-plaintext highlighter-rouge">.bash_profile</code> 被覆盖了吧？？！这时才回头看指令内容 <code class="language-plaintext highlighter-rouge">echo '...' &gt;&gt; ~/.bash_profile</code>，第一反应是：我竟然真的覆盖了 <code class="language-plaintext highlighter-rouge">.bash_profile</code>，TUNA 也太坑了吧我要发朋友圈骂一下他……</p>
+
+<p>大脑宕机了一两分钟，然后稍微冷静下来一点以后搜索起了如何恢复被覆盖的文件（没戏）。过了一会儿突然觉得哪里不对，搜了一下发现 <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> 是 append 啊，不会覆盖啊！！（我本当 bash 苦手）</p>
+
+<p>那么配置没了到底是什么问题呢？5 分钟之后，本盲人终于在 <code class="language-plaintext highlighter-rouge">ls</code> 的输出中惊讶（惊喜？）地发现了 <code class="language-plaintext highlighter-rouge">.bashrc</code> ……</p>
+
+<h2 id="事情的真相">事情的真相</h2>
+
+<p>原来我一直用的 <code class="language-plaintext highlighter-rouge">.bashrc</code>，没有 <code class="language-plaintext highlighter-rouge">.bash_profile</code> 。我猜测 <code class="language-plaintext highlighter-rouge">.bash_profile</code> 的优先级比 <code class="language-plaintext highlighter-rouge">.bashrc</code> 高，所以上面这个搞笑的事情就发生了。</p>
+
+<p>那么自然就引出了这个问题：<code class="language-plaintext highlighter-rouge">.bash_profile</code> 和 <code class="language-plaintext highlighter-rouge">bashrc</code> 有什么区别？</p>
+
+<p>原来事情是这样的：有登录式和非登录式两种 shell。比如 ssh 连接，或者只有命令行的 OS 登录进入的时候，使用的就是登录式 shell。而比如在用 GUI 的 Terminal（xterm）打开的好几个 shell 窗口，使用的就是非登录式 shell。登录式 shell 使用 <code class="language-plaintext highlighter-rouge">profile</code> ，用来登录后设置环境变量、启动一些服务；而非登录式 shell 使用 <code class="language-plaintext highlighter-rouge">rc</code>（run command），进行设置别名等功能。我是在 Windows 使用 WSL（Ubuntu），猜测每次打开一个窗口都是单独的登录式 shell。</p>
+
+<p>通常来说，默认有一个 <code class="language-plaintext highlighter-rouge">.bash_profile</code> ，里面会显式调用 <code class="language-plaintext highlighter-rouge">.bashrc</code> ，不知道我的 WSL 为啥没有。那为啥我没有 <code class="language-plaintext highlighter-rouge">.bash_profile</code> 时能成功加载 <code class="language-plaintext highlighter-rouge">.bashrc</code> ，有了一个空的 <code class="language-plaintext highlighter-rouge">.bash_profile</code> 以后 <code class="language-plaintext highlighter-rouge">.bashrc</code> 也没用了呢？我一开始猜测是前者没有就直接调后者了，但后来发现并不是这样，而是另有一个 <code class="language-plaintext highlighter-rouge">~/.profile</code> ……它里面显式调用了 <code class="language-plaintext highlighter-rouge">.bashrc</code> 。</p>
+
+<p>其实除了用户级的 <code class="language-plaintext highlighter-rouge">~/.bash_profile</code> ，<code class="language-plaintext highlighter-rouge">~/.bashrc</code> ，还有系统级的 <code class="language-plaintext highlighter-rouge">/etc/profile</code>，和 <code class="language-plaintext highlighter-rouge">/etc/bash.bashrc</code>。</p>
+
+<p>真正的登录过程其实是这样的：</p>
+
+<ol>
+  <li>
+    <p>读取 <code class="language-plaintext highlighter-rouge">/etc/profile</code> （里面读取了<code class="language-plaintext highlighter-rouge">/etc/bash.bashrc</code>）</p>
+  </li>
+  <li>
+    <p>读取 <code class="language-plaintext highlighter-rouge">~/.bash_profile</code></p>
+  </li>
+</ol>
+
+<ul>
+  <li>若不存在，读取 <code class="language-plaintext highlighter-rouge">~/.bash_login</code></li>
+  <li>若还不存在，读取 <code class="language-plaintext highlighter-rouge">~/.profile</code>（里面读取了<code class="language-plaintext highlighter-rouge">~/.bashrc</code>）</li>
+</ul>
+
+<h2 id="这次事件的教训">这次事件的教训</h2>
+
+<ul>
+  <li>不要不看指令就直接执行……</li>
+  <li>dotfiles 有必要备份……</li>
+</ul>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+  <li><a href="https://askubuntu.com/questions/121413/understanding-bashrc-and-bash-profile">Understanding .bashrc and .bash_profile</a></li>
+  <li><a href="https://blog.csdn.net/sch0120/article/details/70256318">关于“.bash_profile”和“.bashrc”区别的总结</a></li>
+  <li><a href="https://apple.stackexchange.com/questions/26028/how-do-i-restore-my-bash-profile">How do I restore my .bash_profile?</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#random" class="page__taxonomy-item p-category" rel="tag">Random</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2020-08-07T00:00:00+00:00">August 7, 2020</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=.bash_profile+%E5%92%8C+.bashrc%20https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F07%2Fbash_profile-and-bashrc.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F07%2Fbash_profile-and-bashrc.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F07%2Fbash_profile-and-bashrc.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="/cs/2020/08/17/polymorphism.html" class="pagination--pager" title="Typeclass vs Trait vs Interface/聊聊多态
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/2024/06/12/quotation-mark.html" rel="permalink">Why English Quote (') looks bad in my blog?
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" rel="permalink">Stupidly effective ways to optimize Rust compile time
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">How I reduced 10 minutes of CI time without much effort
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/11/optimize-rust-comptime.html" rel="permalink">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">Stupidly effective ways to optimize Rust compile time
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<!-- <script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script> -->
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

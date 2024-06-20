@@ -1,0 +1,660 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>从接口视角看密码学原语 - XX&#39;s Blog</title>
+<meta name="description" content="现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="从接口视角看密码学原语">
+<meta property="og:url" content="https://xxchan.me/cs/2021/11/13/crypto-interfaces.html">
+
+
+  <meta property="og:description" content="现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-11-13T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2021/11/13/crypto-interfaces.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Build something fun and useful</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="从接口视角看密码学原语">
+    <meta itemprop="description" content="现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。">
+    <meta itemprop="datePublished" content="2021-11-13T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2021/11/13/crypto-interfaces.html" class="u-url" itemprop="url">从接口视角看密码学原语
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 目录</h4></header>
+              <ul class="toc__menu"><li><a href="#对称加密">对称加密</a></li><li><a href="#非对称加密公钥加密">非对称加密/公钥加密</a></li><li><a href="#dh-key-exchange">DH Key Exchange</a></li><li><a href="#threshold-secret-sharing">(Threshold) Secret Sharing</a><ul><li><a href="#homomorphic-secret-sharing">Homomorphic Secret Sharing</a></li></ul></li><li><a href="#distributed-key-generation--threshold-encryption">Distributed Key Generation &amp; Threshold Encryption</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p>现代密码学主要是建立在问题的困难性上的：解密相当于求解一个困难的数学问题。这些精妙的构造是人类智慧的精华，要想完全理解他们，需要不少的数学基础。但其实密码学也是模块化的，它提供了各种基础的原语，作为对密码学没那么感兴趣的普通人，尤其是开发者，我们可以先不用完全搞懂里面的数学问题，而是看它提供了什么样的接口，保证了什么性质，这种常识性的理解其实更实用也更重要。</p>
+
+<p><em>Disclaimer: 因此本文在具体数学构造上会比较简化和不严谨，请勿当真。如有概念理解性错误，请多指正！</em></p>
+
+<h2 id="对称加密">对称加密</h2>
+<p><strong>假设</strong>：双方提前通过可靠方式共享了一个 secret key。</p>
+
+<p>Secret key 同时用来加密和解密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐ ciphertext=encrypt(secret_key,message)┌─────┐
+│Alice├──────────────────────────────────────&gt;│ Bob │
+└─────┘                                       └─────┘
+                                message=decrypt(secret_key,message)
+</code></pre></div></div>
+
+<p>这个相信大家都比较熟了，它最简单，性能也好。但是问题在于如何（在两个人之间）安全地共享 secret key，不能泄露。</p>
+
+<h2 id="非对称加密公钥加密">非对称加密/公钥加密</h2>
+<p>假设：发送方提前通过可靠方式获得接收方的 public key。</p>
+
+<p>用 public key 加密，用 private key 解密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐ ciphertext=encrypt(public_key,message)┌─────┐
+│Alice├──────────────────────────────────────&gt;│ Bob │
+└─────┘                                       └─────┘
+                                message=decrypt(private_key,message)
+</code></pre></div></div>
+
+<p>这个大家应该也比较熟了，它的性能比对称加密差很多。它的问题同样是如何安全共享密钥：如何知道 public key 真的属于接收方？攻击者可以拿自己的 public key 给 Alice，谎称自己是 Bob，同时向 Bob 发送伪造的信息，这就是中间人攻击（man-in-the-middle attack）。</p>
+
+<p>但现在我们并不是要保密，我们就是要在整个网上分发自己的 public key，我们需要的是认证（authentication），因此需要可信的第三方来背书，需要建立起一个 Public Key Infrastructure（PKI）。数字证书干的就是这个。</p>
+
+<p>如果我们单纯依赖公钥加密来通信，风险是一旦泄露 private key，过去的所有消息都可以被解密，称为缺乏前向安全（forward security）。</p>
+
+<h2 id="dh-key-exchange">DH Key Exchange</h2>
+
+<p>假设：无！</p>
+
+<p>通信双方各自生成自己的秘密 a 和 b。各自用公开参数 g 和秘密进行计算，得到公开参数 A 和 B 发送给对方，然后双方都能算出同一个共享的秘密。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────┐               A=g^a, g                ┌─────┐
+│Alice│&lt;─────────────────────────────────────&gt;│ Bob │
+└─────┘               B=g^b                   └─────┘
+shared_secret=B^a                        shared_secret=A^b
+             =g^(a+b)                                 =g^(a+b)
+</code></pre></div></div>
+<p>（这里的运算实际上全部在 mod p 下进行）</p>
+
+<p>它的妙处是无需可信第三方，就能共同<strong>商讨</strong>出 shared secret，用来进行对称加密。商讨的过程是明文在网络中传输，但是窃听者无法从中算出 shared secret。我们可以每次会话临时协商一个 key，从而获得前向安全。</p>
+
+<p>具体怎么用 shared secret 加密就是另外的话题，最简单的是 ElGamal，直接把 message 和 secret 乘起来。另外 Bob 在发送 B 的时候可以顺便同时发送使用 shared secret 加密后的消息。</p>
+
+<p>TLS 也有这个密钥交换的环节，但它其实并不直接用协商的 shared secret 加密，而是把它当作一个 pre-master key，用来再生成一个 master key。理由是根据不同的算法和参数交换得到的 shared secret 的长度是变化的，它希望有一个固定长的密钥用来加密后续的通信消息，它能支持不同的加密算法。</p>
+
+<p>另外也可以理解成 a, A 分别是 Alice 的 private key 和 public key，任何人拿到这个 public key 就可以和 Alice 建立加密通信，Alice 收到的消息却又必须要拥有它的 private key 才能解密。虽然它并不同于公钥加密的方案，加密通信并非直接用 public key 进行，而是另算出了一个 shared key 进行对称加密。</p>
+
+<h2 id="threshold-secret-sharing">(Threshold) Secret Sharing</h2>
+
+<p>这里的场景是我想要把一个消息发给一群人，要求他们聚在一起才能知道这个消息是什么。最简单的方法当然是直接拆分消息。但是我们想要安全地 share，要有这样的<strong>性质</strong>：部分消息的<strong>信息量</strong>和没有消息一样。也就是无法窥一斑而知全豹。</p>
+
+<p>要求所有人在场过于严格，一般主要考虑有<strong>足够多</strong>的人在场的情形。其中一种特殊情况就是假设一共 n 个人，<strong>任意</strong> t 个人在场就能解密，这个 t 可被称为 threshold，这种情况叫做 (t,n)-threshold secret sharing。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                  ┌──────┐
+              ┌──&gt;│share1├──┐
+              │   └──────┘  │reconstruct┌──────┐
+              │             ├──────────&gt;│secret│
+┌──────┐split │   ┌──────┐  │           └──────┘
+│secret├──────┼──&gt;│share2├──┘
+└──────┘      │   └──────┘
+              │
+              │   ┌──────┐
+              └──&gt;│share3│
+                  └──────┘
+</code></pre></div></div>
+
+<p>最经典的方案就是 Shamir's secret sharing：从一个 t-1 次多项式上取 n 个点！后面的事情大家可以自行脑补（</p>
+
+<h3 id="homomorphic-secret-sharing">Homomorphic Secret Sharing</h3>
+
+<p>同态（Homomorphism）是从 A 空间到 B 空间的映射 f，使得在 A 空间的操作 \(*_A\) 可以对应到 B 空间的操作 \(*_B\)，即 \(f(x *_A y) = f(x)*_B f(y)\)。加密可以看作明文和密文之间的映射，同态加密就是指在密文上操作使得在原文上生效。</p>
+
+<p>Shamir's secret sharing 就有 homomorphic 的性质：对 share 做加法相当于对原文做加法。根据多项式的性质不难想象。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                   ┌────────┐
+              ┌────┤share1-1│ + ┌──────────┐
+              │    ├────────┼──&gt;│sum-share1│
+              │ ┌─&gt;│share2-1│   └────┬─────┘     ┌───────┐
+┌───────┐split│ │  └────────┘        │reconstruct│secret1│
+│secret1├─────┤ │                    ├──────────&gt;│   +   │
+└───────┘     │ │  ┌────────┐        │           │secret2│
+              ├─┼─&gt;│share1-2│ + ┌────┴─────┐     └───────┘
+              │ │  ├────────┼──&gt;│sum-share2│
+              │ ├─&gt;│share2-2│   └──────────┘
+┌───────┐split│ │  └────────┘
+│secret2├─────┼─┤
+└───────┘     │ │  ┌────────┐
+              └─┼─&gt;│share1-3│ + ┌──────────┐
+                │  ├────────┼──&gt;│sum-share3│
+                └─&gt;│share2-3│   └──────────┘
+                   └────────┘
+</code></pre></div></div>
+
+<p>同态加密可以用来做 Secure multi-party computation：多方联合计算出一个结果，但是每个人对输入数据仍然一无所知。</p>
+
+<p>例如上面这个方法可以用来做匿名投票，secret 是每个人的投票（1或0表示同意或否），最终只能恢复出总的票数，不能恢复每个人投的票。当然这个方法比较粗糙，因为根本没有校验输入的合法性。可以投 10 票或者 -10 票影响结果。</p>
+
+<h2 id="distributed-key-generation--threshold-encryption">Distributed Key Generation &amp; Threshold Encryption</h2>
+
+<p>如果我们有一对公私钥，然后通过 secret sharing 来分发 private key（同时销毁掉完整的 private key），那么岂不是就可以达成这样的效果：用这个公钥加密的消息必须要集体中的人合力才能解密。</p>
+
+<p>这个方案要求有一个可信的分发者。更好的做法当然是每个人自选 private key，然后通过一个协商的过程确定下来（确定出了 public key，但是 private key 仍然是秘密）。</p>
+
+<p>说到用每个人自定的秘密生成一个公共秘密，不禁想到上面的 DH key exchange。假设每个人有自己的 $a_i$，每个人可算出 $A_i=g^{a_i}$ 进行共享，得出集体的 public key 就是 $A=\prod_{i=1}^nA_i$，集体的 private key 是 $a=\sum_{i=1}^na_i$ 仍然未知，需要集体合作才能获得。</p>
+
+<p>当某人需要发送消息给集体时，随机生成一个 private key b，用 $A^b$ 对消息进行加密，同时发送密文和 $A^b$ 即可。</p>
+
+<p>现在我们可以再结合一下 threshold secret sharing 了，每个人把 $a_i$ 再进行 (t,n)-secret sharing，这样任意 t 个人合力就可以恢复出 group 的 private key。这就叫 threshold encryption。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     x
+    xx
+   xxx
+  xx xxxxxxxxxxxxxxxxxxxx
+ xx                     x
+xx   To Be Continued... x
+ xx                     x
+  xx xxxxxxxxxxxxxxxxxxxx
+   xxx
+    xx
+     x
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#crypto" class="page__taxonomy-item p-category" rel="tag">crypto</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2021-11-13T00:00:00+00:00">November 13, 2021</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E4%BB%8E%E6%8E%A5%E5%8F%A3%E8%A7%86%E8%A7%92%E7%9C%8B%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E8%AF%AD%20https%3A%2F%2Fxxchan.me%2Fcs%2F2021%2F11%2F13%2Fcrypto-interfaces.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2021%2F11%2F13%2Fcrypto-interfaces.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2021%2F11%2F13%2Fcrypto-interfaces.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2021/02/28/6.824-kvraft.html" class="pagination--pager" title="MIT 6.824 Lab3 KVRaft 笔记
+">Previous</a>
+    
+    
+      <a href="/cs/2022/02/07/paxos-hard.html" class="pagination--pager" title="Why is Paxos So Hard to Understand?
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/2024/06/12/quotation-mark.html" rel="permalink">Why English Quote (') looks bad in my blog?
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" rel="permalink">Stupidly effective ways to optimize Rust compile time
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">How I reduced 10 minutes of CI time without much effort
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/11/optimize-rust-comptime.html" rel="permalink">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">Stupidly effective ways to optimize Rust compile time
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<!-- <script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script> -->
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

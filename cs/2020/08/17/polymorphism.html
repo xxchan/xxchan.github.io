@@ -1,0 +1,774 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Typeclass vs Trait vs Interface/聊聊多态 - XX&#39;s Blog</title>
+<meta name="description" content="Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="Typeclass vs Trait vs Interface/聊聊多态">
+<meta property="og:url" content="https://xxchan.me/cs/2020/08/17/polymorphism.html">
+
+
+  <meta property="og:description" content="Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-08-17T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2020/08/17/polymorphism.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Build something fun and useful</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Typeclass vs Trait vs Interface/聊聊多态">
+    <meta itemprop="description" content="Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。">
+    <meta itemprop="datePublished" content="2020-08-17T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2020/08/17/polymorphism.html" class="u-url" itemprop="url">Typeclass vs Trait vs Interface/聊聊多态
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 目录</h4></header>
+              <ul class="toc__menu"><li><a href="#分别介绍">分别介绍</a><ul><li><a href="#haskell-typeclass">Haskell: Typeclass</a></li><li><a href="#rust-trait">Rust: Trait</a></li><li><a href="#cjavaabstract-classinterface">C++/Java：abstract class/interface</a></li></ul></li><li><a href="#多态">多态</a><ul><li><a href="#ad-hoc-polymorphism">Ad hoc polymorphism</a></li><li><a href="#bounded-polymorphism">Bounded polymorphism</a></li><li><a href="#row-polymorphismduck-typing">Row polymorphism/duck typing</a></li><li><a href="#静态动态多态">静态/动态多态</a></li><li><a href="#总结一下">总结一下</a></li></ul></li><li><a href="#总结">总结</a></li><li><a href="#参考">参考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><em>Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。</em></p>
+
+<p>我的 PL 学习路径是 Python → C++（C with class）→ Coq → Haskell  → Rust → Java。学 Haskell 的时候学到了 Typeclass，觉得太妙了，第一次看见有这么好的东西可以用来减少重复代码。不过随即觉得其实和 C++ 的抽象类挺像。Coq 里也有 Typeclass，但我没怎么用过。学 Rust 发现了 Trait，当时就隐隐觉得和 Typeclass 很像，不过表达力貌似要比 Typeclass 弱一些。稍微研究了一下也没完全搞清楚区别，甚至还发现了 Java 里的 Interface。</p>
+
+<p>那么自然就引出了这个问题：Interface、Trait、Typeclass……这些概念之前都有什么联系和区别？</p>
+
+<h2 id="分别介绍">分别介绍</h2>
+
+<p>首先我们先简单介绍/复习一下每个语言中的概念的功能。</p>
+
+<h3 id="haskell-typeclass">Haskell: Typeclass</h3>
+
+<p>From <a href="https://www.seas.upenn.edu/~cis194/spring13/lectures/09-functors.html">https://www.seas.upenn.edu/~cis194/spring13/lectures/09-functors.html</a></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">class</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">==</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">/=</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="n">x</span> <span class="o">/=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">not</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span>   <span class="c1">-- default implementation</span>
+
+<span class="c1">-- Let’s look at the type of (==)</span>
+<span class="p">(</span><span class="o">==</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+
+<span class="kr">data</span> <span class="kt">Foo</span> <span class="o">=</span> <span class="kt">F</span> <span class="kt">Int</span> <span class="o">|</span> <span class="kt">G</span> <span class="kt">Char</span>
+
+<span class="kr">instance</span> <span class="kt">Eq</span> <span class="kt">Foo</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="kt">F</span> <span class="n">i1</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="kt">F</span> <span class="n">i2</span><span class="p">)</span> <span class="o">=</span> <span class="n">i1</span> <span class="o">==</span> <span class="n">i2</span>
+  <span class="p">(</span><span class="kt">G</span> <span class="n">c1</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="kt">G</span> <span class="n">c2</span><span class="p">)</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span>
+  <span class="kr">_</span> <span class="o">==</span> <span class="kr">_</span> <span class="o">=</span> <span class="kt">False</span>
+
+<span class="kr">data</span> <span class="kt">Foo'</span> <span class="o">=</span> <span class="kt">F'</span> <span class="kt">Int</span> <span class="o">|</span> <span class="kt">G'</span> <span class="kt">Char</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Ord</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="c1">-- Functor class abstracts over types of kind * -&gt; *.</span>
+<span class="kr">class</span> <span class="kt">Functor</span> <span class="n">f</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+
+<span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">Maybe</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="kr">_</span> <span class="kt">Nothing</span>  <span class="o">=</span> <span class="kt">Nothing</span>
+  <span class="n">fmap</span> <span class="n">h</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Just</span> <span class="p">(</span><span class="n">h</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">[]</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="kr">_</span> <span class="kt">[]</span>     <span class="o">=</span> <span class="kt">[]</span>
+  <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span> <span class="o">:</span> <span class="n">fmap</span> <span class="n">f</span> <span class="n">xs</span>
+</code></pre></div></div>
+
+<h3 id="rust-trait">Rust: Trait</h3>
+
+<p>From <a href="https://doc.rust-lang.org/rust-by-example/trait.html">https://doc.rust-lang.org/rust-by-example/trait.html</a></p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Sheep</span> <span class="p">{</span> <span class="n">naked</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span> <span class="p">}</span>
+
+<span class="k">trait</span> <span class="n">Animal</span> <span class="p">{</span>
+    <span class="c1">// Static method signature; `Self` refers to the implementor type.</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span><span class="p">;</span>
+
+    <span class="c1">// Instance method signatures; these will return a string.</span>
+    <span class="k">fn</span> <span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span><span class="p">;</span>
+    <span class="k">fn</span> <span class="nf">noise</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span><span class="p">;</span>
+
+    <span class="c1">// Traits can provide default method definitions.</span>
+    <span class="k">fn</span> <span class="nf">talk</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"{} says {}"</span><span class="p">,</span> <span class="k">self</span><span class="nf">.name</span><span class="p">(),</span> <span class="k">self</span><span class="nf">.noise</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Sheep</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">is_naked</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.naked</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">shear</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">self</span><span class="nf">.is_naked</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c1">// Implementor methods can use the implementor's trait methods.</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"{} is already naked..."</span><span class="p">,</span> <span class="k">self</span><span class="nf">.name</span><span class="p">());</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"{} gets a haircut!"</span><span class="p">,</span> <span class="k">self</span><span class="py">.name</span><span class="p">);</span>
+
+            <span class="k">self</span><span class="py">.naked</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Implement the `Animal` trait for `Sheep`.</span>
+<span class="k">impl</span> <span class="n">Animal</span> <span class="k">for</span> <span class="n">Sheep</span> <span class="p">{</span>
+    <span class="c1">// `Self` is the implementor type: `Sheep`.</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Sheep</span> <span class="p">{</span>
+        <span class="n">Sheep</span> <span class="p">{</span> <span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">naked</span><span class="p">:</span> <span class="k">false</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.name</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">noise</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="k">'static</span> <span class="nb">str</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">self</span><span class="nf">.is_naked</span><span class="p">()</span> <span class="p">{</span>
+            <span class="s">"baaaaah?"</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="s">"baaaaah!"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Default trait methods can be overridden.</span>
+    <span class="k">fn</span> <span class="nf">talk</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// For example, we can add some quiet contemplation.</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"{} pauses briefly... {}"</span><span class="p">,</span> <span class="k">self</span><span class="py">.name</span><span class="p">,</span> <span class="k">self</span><span class="nf">.noise</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>在 Rust 中，<code class="language-plaintext highlighter-rouge">Option&lt;T&gt;</code>, <code class="language-plaintext highlighter-rouge">Vec&lt;T&gt;</code>, <code class="language-plaintext highlighter-rouge">Result&lt;T&gt;</code> 都有自己的 <code class="language-plaintext highlighter-rouge">map</code>，但却不能更进一步，写出一个更一般的 <code class="language-plaintext highlighter-rouge">map</code>，因为 Rust 没有 higher kinded <code class="language-plaintext highlighter-rouge">*-&gt;*</code> , 写不出 <code class="language-plaintext highlighter-rouge">Functor</code>。</p>
+
+<p>不过 Rust 明明可以 <code class="language-plaintext highlighter-rouge">impl&lt;T&gt; Trait for Vec&lt;T&gt;</code> ，为什么说写不出 <code class="language-plaintext highlighter-rouge">Functor</code> 呢？这是因为 <code class="language-plaintext highlighter-rouge">fmap :: (a -&gt; b) -&gt; f a -&gt; f b</code> 这里面的 <code class="language-plaintext highlighter-rouge">f a</code> , <code class="language-plaintext highlighter-rouge">f b</code> 这个类型写不出来！当然，可以用山寨的方法，强行多加一个辅助参数来实现效果，比如 <code class="language-plaintext highlighter-rouge">impl&lt;A,B&gt; Functor&lt;A,B,Vec&lt;B&gt;&gt; for Vec&lt;A&gt;</code> 。我觉得这样做的问题在于，没法保证多加的辅助参数被正确使用，可能会写出奇奇怪怪的东西。</p>
+
+<p>From <a href="https://www.reddit.com/r/rust/comments/2av5tv/why_does_rust_not_have_a_functor_trait/">https://www.reddit.com/r/rust/comments/2av5tv/why_does_rust_not_have_a_functor_trait/</a></p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 正宗的 Functor, 这个写不出来。Self 只是 Vec&lt;T&gt;，而不是高阶类型 Vec</span>
+<span class="k">trait</span> <span class="n">Functor</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">fmap</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="k">fn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 山寨 Functor，多加了辅助参数 C</span>
+<span class="k">trait</span> <span class="n">Functor</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="o">&gt;</span><span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">fmap</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">f</span> <span class="p">:</span> <span class="k">fn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">C</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// nonsense</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span> <span class="n">Functor</span><span class="o">&lt;</span><span class="nb">i32</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">B</span><span class="o">&gt;</span> <span class="k">for</span> <span class="nb">i32</span> <span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">fmap</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span><span class="n">f</span> <span class="p">:</span> <span class="k">fn</span><span class="p">(</span><span class="o">&amp;</span><span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="nf">f</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 正确使用的山寨 Functor</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="o">&gt;</span> <span class="n">Functor</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">fmap</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">f</span> <span class="p">:</span> <span class="k">fn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">A</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">v</span> <span class="o">=</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="k">in</span> <span class="k">self</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">v</span><span class="nf">.push</span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="n">e</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="n">v</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="k">let</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="nf">.fmap</span><span class="p">(|</span><span class="n">x</span><span class="p">|</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="k">let</span> <span class="n">v</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span><span class="nf">.fmap</span><span class="p">(|</span><span class="n">x</span><span class="p">|</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="nd">println!</span><span class="p">(</span><span class="s">"{}"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="c1">// 20</span>
+  <span class="nd">println!</span><span class="p">(</span><span class="s">"{:?}"</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span> <span class="c1">// [10, 20, 30, 40]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="cjavaabstract-classinterface">C++/Java：abstract class/interface</h3>
+
+<p>略~</p>
+
+<h2 id="多态">多态</h2>
+
+<p>现在我们可以暂时放下各个具体语言中的具体特性，从一个一般的角度来看问题。其实这些语言特性都可以回归到一个很大的话题：多态。</p>
+
+<p>首先多态是什么？按照字面理解，就是多种形态。什么东西有多种形态？我的理解是：一个名字/记号（专业的说法可以叫 term）有多种形态/行为。In the context of type systems, polymorphism allows <em>a single term</em> to have <em>several types</em>.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">维基百科中的 polymorphism 词条</a>中说有三种最被熟知的多态：</p>
+
+<ul>
+  <li>特设（ad hoc）多态</li>
+  <li>参数化多态</li>
+  <li>子类型多态</li>
+</ul>
+
+<h3 id="ad-hoc-polymorphism">Ad hoc polymorphism</h3>
+
+<p>参数化（C++模板/Java 泛型）和子类型（C++虚函数/Java 默认）我们都比较熟悉，那么这个 ad hoc 是什么鬼？看看词典的解释：</p>
+
+<blockquote>
+  <p>An <em>ad hoc</em> activity or organization is done or formed only because a situation has made it <em>necessary</em> and is <em>not planned</em> in advance.</p>
+</blockquote>
+
+<p>好像有点懂，但是这怎么和多态联系起来？Wiki 中的定义：</p>
+
+<blockquote>
+  <p><em>Ad hoc polymorphism</em>: defines a common interface for <em>an arbitrary set of individually specified types</em>.</p>
+</blockquote>
+
+<p>？？？完全不懂在说啥。点进词条再看看更详细的解释吧：</p>
+
+<blockquote>
+  <p>In programming languages, <em>ad hoc polymorphism</em> is a kind of polymorphism in which polymorphic functions can be <strong>applied to arguments of different types</strong>, because a polymorphic function can <strong>denote a number of distinct and potentially heterogeneous implementations depending on the type</strong> of argument(s) to which it is applied.</p>
+
+  <p>The term ad hoc in this context is not intended to be pejorative; it refers simply to the fact that this type of polymorphism is not a fundamental feature of the type system. This is in contrast to parametric polymorphism, in which polymorphic functions are written without mention of any specific type, and can thus apply a single abstract implementation to any number of types in a transparent way.</p>
+</blockquote>
+
+<p>好家伙，原来就是重载。parametric 是不同的类型不做区分统一对待，而 ad-hoc 就是不同类型表现出不同的行为。一个函数名字不是给某个类型专门留的，而是类型匹配上了哪个就用哪个，这个意义上的 ad-hoc。具体可以想到这两个例子：</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">foo(int)</code> , <code class="language-plaintext highlighter-rouge">foo(double, int)</code>，函数重载，不同的函数签名（类型）调了不同的实现可以算 ad-hoc</li>
+  <li>两个类型 A 和 B 都实现了 Interface Ord，<code class="language-plaintext highlighter-rouge">x.cmp(y)</code> ，根据 x 的类型调 A 或 B 的 <code class="language-plaintext highlighter-rouge">cmp</code> ，也算 ad-hoc</li>
+</ul>
+
+<p>可以这么理解：先定义一个 <code class="language-plaintext highlighter-rouge">foo: Int → Int</code> ，再定义一个 <code class="language-plaintext highlighter-rouge">foo: String → Double</code> ，于是 <code class="language-plaintext highlighter-rouge">foo</code> 这个名字就变成了一个 Union type <code class="language-plaintext highlighter-rouge">foo: (Int → Int)∪(String→Double)</code> 。在这个意义上，直接新定义函数重载和实现接口确实没什么区别。</p>
+
+<h3 id="bounded-polymorphism">Bounded polymorphism</h3>
+
+<p>但我们都知道，Interface（以及类似物）除了让你多出来一个函数可以用以外，更强大的用法是在函数签名里限制参数必须实现这个接口。<code class="language-plaintext highlighter-rouge">foo&lt;T&gt;(arg: T) where T: Ord</code> ，这类似于 parametric，不限定于 any specific type，但是对类型又有约束；又类似于 subtyping，使用了一个公共类型 specify 类型需要满足的行为。这就是我们熟悉的设限多态（bounded polymorphism），它可以认为是 an interaction of parametric polymorphism with subtyping。它与 subtyping 的不同之处我觉得就是只关注类的公共行为，面向协议/面向接口，不关注（也不存在）子类型继承关系。众所周知滥用继承（尤其是多重继承）很容易使得类的关系过分复杂，如果我们只定义协议/接口，使用设限多态，那么类的关系就会简化许多，当然相应的也失去了类之间的层级关系，从而可能失去一些重用代码的可能。</p>
+
+<h3 id="row-polymorphismduck-typing">Row polymorphism/duck typing</h3>
+
+<p>鸭子类型是我们不用给参数加上任何类型标注，不规定类型的要求，而只看给的类型<strong>实际</strong>满不满足要求（拥有 methods、properties）。Row polymorphism 是静态类型的类似鸭子类型的东西，我不太了解，就不多谈了。</p>
+
+<h3 id="静态动态多态">静态/动态多态</h3>
+
+<p>除了上面说的这些分类，还有另外一种分类方式：静态/动态多态。</p>
+
+<p>这种分类方式属于实现的细节，并不是功能的区别。但是通常 ad hoc 和 parametric 是静态的，例如函数重载选实现、C++模板特化、Java 类型擦除都是编译期做的；subtyping 通常是动态的，例如运行时查虚函数表。但这并非绝对。</p>
+
+<h3 id="总结一下">总结一下</h3>
+
+<p>我们说了 ad hoc、parametric、subtyping、bounded、duck typing 这几种多态，那回过头看看，现在能区分 trait、typeclass、interface 了吗？其实我觉得这三类都是 ad hoc + bounded polymorphism……所以还是不能区分。</p>
+
+<p>我们再抛开多态的分类，更一般地想想，减少重复代码有哪些需求：</p>
+
+<ol>
+  <li>默认实现</li>
+  <li>参数化/泛型</li>
+  <li>给泛型加约束</li>
+  <li>给既有类型增加功能</li>
+  <li>高阶类型/类型构造器</li>
+</ol>
+
+<p>Haskell 的 Typeclass 这些都有，Rust 的 Trait 少了 5，Java 的 Interface 少了 5 和 4。</p>
+
+<p>第 5 条高阶类型是比较高级的类型系统的要求了，大部分语言没有也难免。</p>
+
+<p>而 4 给既有类型增加功能通常是 FP 的特性。FP 的类型定义后就固定了，但可以容易地给类型加函数、加入 typeclass，而 OOP 则是类型比较容易扩展（继承），但是想给已有类型加新的功能比较困难。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>说了半天，其实还是没有把这些东西完全分的很清楚。真要研究/实践的话，还是得具体语言具体分析，深入功能的细节乃至实现才能很好的区分。正如很多人所说，脱离具体语言谈这些毫无意义。但我并不完全赞同这种话，我觉得能对有哪些多态的类别、有哪些功能需求有 general 的了解、区分，对了解 PL 的共性与区别、写出更优雅的代码还是很有帮助的。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">https://en.wikipedia.org/wiki/Polymorphism_(computer_science)</a></li>
+  <li><a href="https://www.zhihu.com/question/314434687">Protocol，Interface，Trait，Concept，TypeClass之间的关系和区别？</a></li>
+  <li><a href="https://stackoverflow.com/questions/8122109/difference-between-oop-interfaces-and-fp-type-classes">Difference between OOP interfaces and FP type classes</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#pl" class="page__taxonomy-item p-category" rel="tag">PL</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2020-08-17T00:00:00+00:00">August 17, 2020</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Typeclass+vs+Trait+vs+Interface%2F%E8%81%8A%E8%81%8A%E5%A4%9A%E6%80%81%20https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F17%2Fpolymorphism.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F17%2Fpolymorphism.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2020%2F08%2F17%2Fpolymorphism.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2020/08/07/bash_profile-and-bashrc.html" class="pagination--pager" title=".bash_profile 和 .bashrc
+">Previous</a>
+    
+    
+      <a href="/cs/2020/09/02/intern-at-meituan.html" class="pagination--pager" title="我在美团实习的经历与感想
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/2024/06/12/quotation-mark.html" rel="permalink">Why English Quote (') looks bad in my blog?
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/17/optimize-rust-comptime-en.html" rel="permalink">Stupidly effective ways to optimize Rust compile time
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">How I reduced 10 minutes of CI time without much effort
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/11/optimize-rust-comptime.html" rel="permalink">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">Stupidly effective ways to optimize Rust compile time
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<!-- <script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script> -->
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>

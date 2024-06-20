@@ -1,0 +1,725 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Stupidly effective ways to optimize Rust compile time - XX&#39;s Blog</title>
+<meta name="description" content="How I reduced 10 minutes of CI time without much effort">
+
+
+  <meta name="author" content="xxchan">
+  
+  <meta property="article:author" content="xxchan">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="XX's Blog">
+<meta property="og:title" content="Stupidly effective ways to optimize Rust compile time">
+<meta property="og:url" content="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html">
+
+
+  <meta property="og:description" content="How I reduced 10 minutes of CI time without much effort">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-02-17T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://xxchan.me/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="XX's Blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          XX's Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/categories/">Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://xxchan.me/">
+        <img src="https://avatars.githubusercontent.com/u/37948597?v=4" alt="xxchan" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://xxchan.me/" itemprop="url">xxchan</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>Build something fun and useful</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/yayale_umi" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/xxchan" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/xxchan" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Stupidly effective ways to optimize Rust compile time">
+    <meta itemprop="description" content="How I reduced 10 minutes of CI time without much effort">
+    <meta itemprop="datePublished" content="2023-02-17T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://xxchan.me/cs/2023/02/17/optimize-rust-comptime-en.html" class="u-url" itemprop="url">Stupidly effective ways to optimize Rust compile time
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#valuable-data-and-charts-to-find-the-bottlenecks">Valuable data and charts to find the bottlenecks</a><ul><li><a href="#ci-waterfall--dag-graph">CI Waterfall &amp; DAG Graph</a></li><li><a href="#cargo-build---timings">cargo build --timings</a></li></ul></li><li><a href="#step-1-compilation-cache">Step 1: Compilation cache</a></li><li><a href="#step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</a></li><li><a href="#step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</a></li><li><a href="#step-4-single-binary-integration-test">Step 4: Single binary integration test</a></li><li><a href="#some-previous-efforts">Some previous efforts</a></li><li><a href="#conclusion">Conclusion</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><a href="/cs/2023/02/11/optimize-rust-comptime.html">本文的中文版</a></p>
+
+<p>Although there are often complaints saying Rust's compilation speed is notorious slow, our project <a href="https://github.com/risingwavelabs/risingwave">RisingWave</a> is not very slow to compile, especially since previously contributors like (<a href="https://github.com/skyzh">skyzh</a>, <a href="https://github.com/bugenzhao">BugenZhao</a>) have put in a lot of effort. After using an M1 MacBook Pro, compiling is not a problem at all. A full debug compilation only takes 2-3 minutes.</p>
+
+<p>However, over time, more and more things have been added to our CI, making it increasingly bloated. The main workflow now takes about 40 minutes, while the PR workflow takes about 25 minutes 30 seconds. Although it is still not intolerably slow, it is already noticeably slower than before.</p>
+
+<p>So a few days ago, I decided to spend some time researching whether I could optimize the compilation speed a bit more.</p>
+
+<p>What shocked me was that there were some very simple methods that, with just a little effort, produced astonishing results. I feel like I can describe them as low-hanging fruits, silver bullets, or even free lunch 🤯.</p>
+
+<hr />
+
+<p>P.S. I highly recommend <a href="https://github.com/matklad">matklad</a>'s blog (He is the original author of IntelliJ Rust and rust-analyzer):</p>
+<ul>
+  <li><a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">Fast Rust Builds</a></li>
+  <li><a href="https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html">Delete Cargo Integration Tests</a></li>
+</ul>
+
+<p>Most of the methods I used are discussed there, and he explains them clearly. If not otherwise indicated, all quotes in this article come from there.</p>
+
+<p>Although there are quite some articles talking about how to optimize Rust compilation speed (e.g., <a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a>), I still want to write another one to share my step-by-step process. Each optimization point comes with a corresponding PR, and you can combine the <a href="https://github.com/risingwavelabs/risingwave/commits/main?after=d8198fa138003e1f1431053f4f5f09e4a5fa8fd8+69&amp;branch=main&amp;qualified_name=refs%2Fheads%2Fmain">commit history</a> to see the effect of each optimization point by comparing the CI pages before and after its PR.</p>
+
+<hr />
+
+<p>P.P.S. Results after optimization: main workflow is now 27 minutes at the fastest, and PR workflow is now 16 minutes at the fastest, with most taking around 17-19 minutes.</p>
+
+<h2 id="valuable-data-and-charts-to-find-the-bottlenecks">Valuable data and charts to find the bottlenecks</h2>
+
+<blockquote>
+  <p>Build times are a fairly easy optimization problem: it’s trivial to get direct feedback (just time the build), there are a bunch of tools for profiling, and you don’t even need to come up with a representative benchmark.</p>
+</blockquote>
+
+<p>When trying to optimize anything, it would be good to have some profiling data and charts to find out the bottlenecks. Luckily, we do have some nice ones for optimizing CI time.</p>
+
+<h3 id="ci-waterfall--dag-graph">CI Waterfall &amp; DAG Graph</h3>
+
+<p>We use Buildkite for our CI, and the normal view of a page (such as <a href="https://buildkite.com/risingwavelabs/pull-request/builds/17099">Build #17099</a>) looks like this:</p>
+
+<p><img src="/assets/img/comptime/buildkite-1.png" alt="buildkite-1.png" /></p>
+
+<p>Buildkite has two very useful hidden pages, located at <code class="language-plaintext highlighter-rouge">/waterfall</code> and <code class="language-plaintext highlighter-rouge">/dag</code>, respectively, which show:</p>
+
+<p><img src="/assets/img/comptime/buildkite-waterfall.png" alt="buildkite-waterfall.png" /></p>
+
+<p><img src="/assets/img/comptime/buildkite-dag.png" alt="buildkite-dag.png" /></p>
+
+<p>From the waferfall graph, we can see recovery test finishes last. Two large steps finish before it: build (deterministic simulation) and check. The DAG graph shows that recovery test depends only on simulation build, so we can forget about the check step for now, and conclude the biggest bottleneck is in the path of simulation build -&gt; recovery test.</p>
+
+<h3 id="cargo-build---timings"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></h3>
+
+<p>Cargo comes with built-in support for profiling build times (it was stabilized last year), which can be enabled by running <a href="https://doc.rust-lang.org/cargo/reference/timings.html"><code class="language-plaintext highlighter-rouge">cargo build --timings</code></a>. It produces output like this:</p>
+
+<p><img src="/assets/img/comptime/timings.png" alt="timings.png" /></p>
+
+<p>We can see that the compilation times for some dependencies such as <code class="language-plaintext highlighter-rouge">zstd-sys</code> and <code class="language-plaintext highlighter-rouge">protobuf-src</code> are very long, so we should try to optimize them.</p>
+
+<h2 id="step-1-compilation-cache">Step 1: Compilation cache</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7799">ci: try sccache #7799</a></p>
+
+<blockquote>
+  <p>If you think about it, it’s pretty obvious how a good caching strategy for CI should work.</p>
+
+  <p>Unfortunately, almost nobody does this.</p>
+</blockquote>
+
+<p><a href="https://xuanwo.io/en-us/reports/2023-04/">Why should you give Sccache a try?</a> With xuanwo's strong recommendation, I was very tempted to try sccache, which was also a major trigger for my optimization efforts this time.</p>
+
+<p>It's so easy to use. Just add two environment variables to start it up:</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> RUSTC_WRAPPER=sccache</span>
+<span class="k">ENV</span><span class="s"> SCCACHE_BUCKET=ci-sccache-bucket</span>
+</code></pre></div></div>
+<p>(Well, behind the scenes, you actually need to study Buildkite and AWS configurations - which are also very simple. Buildkite can obtain permissions through IAM roles, so I just need to a policy for the role to access an S3 bucket, without the need to configure things like secret keys. I had been thinking about whether I could echo the key out in CI before, but it seems there's no need to worry about that. 😄)</p>
+
+<p>The effect was immediately apparent, reducing the simulation build time by 2.5 minutes and the non-bottleneck debug build time by 4 minutes. Although it didn't bring about a qualitative change, why not make use of the (almost free) quantitative change?</p>
+
+<h2 id="step-2-remove-unused-dependencies">Step 2: Remove unused dependencies</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7816">build: remove unused deps #7816</a></p>
+
+<p>All dependencies declared in <code class="language-plaintext highlighter-rouge">Cargo.toml</code> will be compiled regardless of whether they are actually used or not. Moreover, they may introduce unnecessary synchronization points, affecting the parallelism of compilation.</p>
+
+<p>An old tool <a href="https://github.com/est31/cargo-udeps">cargo-udeps</a> is used to remove unused dependencies. But firstly, it does not support automatic fixing, and it is also very slow. Also, I had an impression that it cannot be used together with <code class="language-plaintext highlighter-rouge">workspace-hack</code>. This has led to RisingWave not cleaning up unused dependencies for a long time – a typical broken window effect 🥲!</p>
+
+<p>In an issue of <code class="language-plaintext highlighter-rouge">cargo-udeps</code> about automatic fix, someone mentioned <a href="https://github.com/bnjbvr/cargo-machete"><code class="language-plaintext highlighter-rouge">cargo-machete</code></a>. Without many investigation I just gave it a shot, hoping it works. It turned out to be very fast and there were not many false positives! Although there were a few small problems (see the commit history of the above PR), they were easily fixed.</p>
+
+<p>The author of <code class="language-plaintext highlighter-rouge">cargo-machete</code> has a <a href="https://blog.benj.me/2022/04/27/cargo-machete/">blog</a> introducing the harm of unused dependencies and the solution of <code class="language-plaintext highlighter-rouge">cargo-machete</code>. Specifically, <code class="language-plaintext highlighter-rouge">cargo-udeps</code> first compiles the project via <code class="language-plaintext highlighter-rouge">cargo check</code> and then analyzes it, while <code class="language-plaintext highlighter-rouge">cargo-machete</code> uses a simple and stupid approach: just <code class="language-plaintext highlighter-rouge">ripgrep</code> it.</p>
+
+<p>This PR immediately removed dozens of unused dependencies, which surprised me again 🤯. Unfortunately, the CI time did not decrease further, which seems to indicate that sccache works very well… I roughly tested it locally, and it was faster by about ten to twenty seconds. It seems not a thing, but anyway it's free :)</p>
+
+<hr />
+
+<p>P.S. In fact, <code class="language-plaintext highlighter-rouge">cargo-udeps</code> can also be used with <code class="language-plaintext highlighter-rouge">workspace-hack</code> by configuring it: <a href="https://github.com/risingwavelabs/risingwave/pull/7836">feat(risedev): add <code class="language-plaintext highlighter-rouge">check-udeps</code> #7836</a></p>
+
+<h2 id="step-3-disable-incremental-compilation">Step 3: Disable incremental compilation</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7838">build: disable incremental build in CI #7838</a></p>
+
+<p>After finishing the previous two steps, I almost wanted to finish my work, but I still felt a bit itchy and thought that the simulation build was still a little slow. So I decided to do some profiling. Then I saw the monsters in the <code class="language-plaintext highlighter-rouge">--timings</code> graph that I posted above. I felt that it didn't make sense.</p>
+
+<p>I tried to search the possible reasons why the build artifacts can be non-cacheable for sccache, and found that incremental compilation is a big caveat. I tried to disable it immediately and was shocked again. The effect was stupidly good:</p>
+
+<p><img src="/assets/img/comptime/timings-2.png" alt="timings-2" /></p>
+
+<p>This instantly reduced the time for simulation build by 4 minutes…</p>
+
+<p>Actually, we turned off incremental compilation for our debug build a long time ago:</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[profile.ci-dev]</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>But when we added a new build profile <code class="language-plaintext highlighter-rouge">ci-sim</code> later, we didn't consider this issue. If you think about it, you can find although incremental compilation is good, it doesn't make sense in CI!</p>
+
+<blockquote>
+  <p>CI builds often are closer to from-scratch builds, as changes are typically much bigger than from a local edit-compile cycle. For from-scratch builds, incremental adds an extra dependency-tracking overhead. It also significantly increases the amount of IO and the size of <code class="language-plaintext highlighter-rouge">./target</code>, which make caching less effective.</p>
+</blockquote>
+
+<p>So I simply added a global env var in CI to turn it off once and for all.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> CARGO_INCREMENTAL=0</span>
+</code></pre></div></div>
+
+<h2 id="step-4-single-binary-integration-test">Step 4: Single binary integration test</h2>
+
+<p><a href="https://github.com/risingwavelabs/risingwave/pull/7842">build: single-binary integration test #7842</a></p>
+
+<p>It's another <em>stupidly effective</em> optimization. tl;dr:</p>
+
+<p>Don’t do this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  foo.rs
+  bar.rs
+</code></pre></div></div>
+
+<p>Do this instead:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tests/
+  integration/
+    main.rs
+    foo.rs
+    bar.rs
+</code></pre></div></div>
+
+<p>It's because every file under <code class="language-plaintext highlighter-rouge">tests/</code> will be compiled into a separate binary (meaning every one will link dependencies). Apart from slow compilation, this can even slow down test runnings (a flaw in <code class="language-plaintext highlighter-rouge">cargo test</code>).</p>
+
+<p>This optimization didn't reduce our test time (probably due to the superiority of <code class="language-plaintext highlighter-rouge">cargo nextest</code>), but it immediately reduced the compilation time by another 2 minutes… It's also a bit funny that it also reduced the time for uploading/downloading, compressing/decompressing artifacts by 2 minutes…(although the latter did not affect the bottleneck).</p>
+
+<h2 id="some-previous-efforts">Some previous efforts</h2>
+
+<p>The above is the main process of my optimization this time, and now I can finally be satisfied with the work. Finally, I would like to summarize some of our previous efforts for reference.</p>
+
+<ul>
+  <li>Use <a href="https://github.com/nextest-rs/nextest"><code class="language-plaintext highlighter-rouge">cargo nextest</code></a> instead of <code class="language-plaintext highlighter-rouge">cargo test</code>.</li>
+  <li>Use the <code class="language-plaintext highlighter-rouge">workspace-hack</code> technique: see <a href="https://docs.rs/cargo-hakari/latest/cargo_hakari/about/index.html"><code class="language-plaintext highlighter-rouge">cargo hakari</code></a>.</li>
+  <li>Add cache to the cargo registry, or use the recently stabilized <a href="https://blog.rust-lang.org/inside-rust/2023/01/30/cargo-sparse-protocol.html">sparse index</a>.</li>
+  <li>Split a huge crate into multiple smaller crates.</li>
+  <li>Try to reduce linking time: linking takes a lot of time and is single-threaded, so it may probably become a bottleneck.
+    <ul>
+      <li>Use a faster linker: <code class="language-plaintext highlighter-rouge">mold</code> for Linux, <code class="language-plaintext highlighter-rouge">zld</code> for macOS. <code class="language-plaintext highlighter-rouge">lld</code> is the most mature option for production use.</li>
+      <li>Turn off Link Time Optimization (LTO) on debug builds.</li>
+    </ul>
+  </li>
+  <li>Trade-off between compile time and performance: The total time of CI is compile time + test time, so whether to turn on compile optimization (including LTO mentioned above), and how much to turn on, is actually a trade-off between the two. You can test and adjust that in order to achieve an overall optimal choice. For example, here's our build profile tuned by <a href="https://github.com/bugenzhao">BugenZhao</a>:</li>
+</ul>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># The profile used for CI in pull requests.</span>
+<span class="c"># External dependencies are built with optimization enabled, while crates in this workspace are built</span>
+<span class="c"># with `dev` profile and full debug info. This is a trade-off between build time and e2e test time.</span>
+<span class="nn">[profile.ci-dev]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="nn">[profile.ci-dev.package."*"]</span> <span class="c"># external dependencies</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="nn">[profile.ci-dev.package."tokio"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."async_stack_trace"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."indextree"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="nn">[profile.ci-dev.package."task_stats_alloc"]</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">3</span>
+
+<span class="c"># The profile used for deterministic simulation tests in CI.</span>
+<span class="c"># The simulator can only run single-threaded, so optimization is required to make the running time</span>
+<span class="c"># reasonable. The optimization level is customized to speed up the build.</span>
+<span class="nn">[profile.ci-sim]</span>
+<span class="py">inherits</span> <span class="p">=</span> <span class="s">"dev"</span>
+<span class="py">opt-level</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="py">incremental</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>For more optimization techniques, you may refer to other posts like <a href="https://endler.dev/2020/rust-compile-times/">Tips for Faster Rust Compile Times</a>.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Things like CI and DX are easy to become messy if they are not taken care of regularly. My story shows that if you do some maintenance from time to time, you may get unexpected gains. A little effort can bring huge improvements.</p>
+
+<p>Finally I'd like to quote matklad's <a href="https://matklad.github.io/2021/09/04/fast-rust-builds.html">blog</a> again as a conclusion:</p>
+
+<blockquote>
+  <p>Compilation time is a <em>multiplier</em> for basically everything. Whether you want to ship more features, to make code faster, to adapt to a change of requirements, or to attract new contributors, build time is a factor in that.</p>
+
+  <p>It also is a non-linear factor. Just waiting for the compiler is the smaller problem. The big one is losing the state of the flow or (worse) mental context switch to do something else while the code is compiling. One minute of work for the compiler wastes more than one minute of work for the human.</p>
+</blockquote>
+
+<p>Let's take some time to prevent "<em>broken windows</em>". The effort would pay off!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#cs" class="page__taxonomy-item p-category" rel="tag">CS</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2023-02-17T00:00:00+00:00">February 17, 2023</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Stupidly+effective+ways+to+optimize+Rust+compile+time%20https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F17%2Foptimize-rust-comptime-en.html" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F17%2Foptimize-rust-comptime-en.html" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fxxchan.me%2Fcs%2F2023%2F02%2F17%2Foptimize-rust-comptime-en.html" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/cs/2023/02/11/optimize-rust-comptime.html" class="pagination--pager" title="我如何动动小手就让 CI 时间减少了 10 分钟
+">Previous</a>
+    
+    
+      <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" class="pagination--pager" title="New site for This Week in RisingWave
+">Next</a>
+    
+  </nav>
+
+    </div>
+    
+    <div class="page__comments">
+    <script src="https://giscus.app/client.js"
+        data-repo="xxchan/xxchan.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOEE_4384CAfZi"
+        data-mapping="title"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script> 
+    </div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">You May Also Enjoy</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/2024/06/12/quotation-mark.html" rel="permalink">Why English Quote (') looks bad in my blog?
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/this-week-in-risingwave/2023/04/02/twirw-migration.html" rel="permalink">New site for This Week in RisingWave
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">This Week in RisingWave is now migrated to a new dedicated site: this-week-in-risingwave.vercel.app.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/11/optimize-rust-comptime.html" rel="permalink">我如何动动小手就让 CI 时间减少了 10 分钟
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">Stupidly effective ways to optimize Rust compile time
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/cs/2023/02/08/profiling-101.html" rel="permalink">Profiling 101
+</a>
+      
+    </h2>
+    <p class="archive__item-excerpt" itemprop="description">A beginner's guide to profiling
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 XX's Blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+  <!-- start custom analytics snippet -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MN995FKFK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MN995FKFK');
+</script>
+<!-- plausible -->
+<!-- <script defer data-domain="xxchan.github.io" src="https://plausible.io/js/script.js"></script> -->
+<!-- tinybird -->
+<script defer src="https://unpkg.com/@tinybirdco/flock.js" data-host="https://api.tinybird.co" data-token="p.eyJ1IjogIjg5YmViNjUxLTMyMDAtNDJiZS04YjhhLWNjODJlYzY1YTg1NyIsICJpZCI6ICI4NjZiMmQ1YS1iYmM4LTRiNTQtYjA2Ni01ZTA4ODdiNTY0NzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.dAvDGeYfY9f7pE8ezo6Ehlp-45agnU559VzuKqZMMDs"></script>
+<!-- end custom analytics snippet -->
+
+
+
+
+
+
+
+
+  </body>
+</html>
