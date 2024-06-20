@@ -278,6 +278,7 @@ DEPENDENCIES
   github-pages
   jekyll-feed (~> 0.12)
   jekyll-include-cache
+  jekyll-redirect-from
   minima (~> 2.5)
   minimal-mistakes-jekyll
   tzinfo (~> 1.2)
