@@ -5,7 +5,8 @@
       "WebFetch(domain:docs.github.com)",
       "Bash(bundle install)",
       "Bash(bundle exec:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
