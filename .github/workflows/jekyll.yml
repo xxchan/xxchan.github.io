@@ -31,3 +31,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} # It's your Personal Access Token(PAT)
           pre_build_commands: pacman -S --noconfirm nodejs npm
           cname: 'xxchan.me'
+          ruby_ver: '3.3.4'
