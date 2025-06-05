@@ -1,4 +1,11 @@
-# Claude Code（或任意 BYOK AI app）内部工作原理窥探
+---
+layout: post
+title: "Claude Code（或任意 BYOK AI app）内部工作原理窥探"
+categories:
+- AI
+toc: true
+toc_sticky: true
+---
 
 [这篇帖子](https://www.superlinear.academy/c/share-your-work/cursor-8514ec) 讲了关于如何偷看 cursor prompt。
 它采用的方法是用 ollama 本地跑大模型以及看到 log。文中还提及了使用 ngrok 来把本地的端口暴露到公网，从而能够在 cursor 中访问。
