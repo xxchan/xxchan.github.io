@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Claude Code（或任意 BYOK AI app）内部工作原理窥探"
+title: "Claude Code 内部工作原理窥探"
 categories:
 - AI
 toc: true
