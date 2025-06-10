@@ -21,7 +21,7 @@ Broadly speaking, I'm a firm believer in the future of "agentic coding." To be m
 
 For context, my day job involves writing code for [RisingWave](https://github.com/risingwavelabs/risingwave), an open-source streaming database. It's a fairly complex Rust project with over 600,000 lines of code. While I've grown accustomed to letting AI handle small, well-defined tasks, I'll be honest: I haven't yet seriously used AI coding for the truly difficult development work on a large scale. I also haven't deeply pondered the ultimate capability boundaries of future models or the specific technical hurdles in building agents. So, this article is mostly based on my intuition—a qualitative analysis of various tools, not a "how-to" guide or a product comparison.
 
-But to make an excuse for myself, I think there's a reason for my hesitation, and it mostly boils down to a **"scarcity mindset"**: Agents are still too expensive! A single task can easily burn through $5 to $10. This might be a case of the Jevons paradox: if they became cheaper, I'd use them more and end up spending even more money... Another issue is the sheer number of tools. To truly appreciate the differences, you'd need to spend a week or more with each one, but the cost of subscriptions and the friction of switching are daunting.
+But to make an excuse for myself, I think there's a reason for my hesitation, and it mostly boils down to a **"scarcity mindset"**: Agents are still too expensive! A single task can easily burn through \$5 to \$10. This might be a case of the Jevons paradox: if they became cheaper, I'd use them more and end up spending even more money... Another issue is the sheer number of tools. To truly appreciate the differences, you'd need to spend a week or more with each one, but the cost of subscriptions and the friction of switching are daunting.
 
 With that out of the way, let's dive in. We'll analyze the tools one by one, and then discuss some broader topics.
 
@@ -35,7 +35,7 @@ With that out of the way, let's dive in. We'll analyze the tools one by one, and
 
 A major trigger for writing this was reading [Cursor's 0.50 changelog](https://www.cursor.com/changelog/0-50) (though by the time I'm finishing this, they've already released [1.0](https://www.cursor.com/changelog/1-0)...). It revealed some fascinating hints about their future direction:
 
-- **Simpler, unified pricing:** Cursor's old pricing model was a bit notorious, introducing a vaguely defined "fast request" with different quotas for different models. The new version unifies this into "Requests" (though it's not a huge change). More importantly, while many find $20/month expensive, I think it's priced too low; they're likely losing money. Per-request billing is inherently problematic, especially in the agent era where a single request can run for a long time and consume a massive number of tokens. Of course, this could be a **"gym membership model,"** where low-usage or short-conversation users subsidize the high-usage ones. But another issue is that it incentivizes them to optimize for token cost (e.g., by compressing context), whereas users want maximum performance.
+- **Simpler, unified pricing:** Cursor's old pricing model was a bit notorious, introducing a vaguely defined "fast request" with different quotas for different models. The new version unifies this into "Requests" (though it's not a huge change). More importantly, while many find \$20/month expensive, I think it's priced too low; they're likely losing money. Per-request billing is inherently problematic, especially in the agent era where a single request can run for a long time and consume a massive number of tokens. Of course, this could be a **"gym membership model,"** where low-usage or short-conversation users subsidize the high-usage ones. But another issue is that it incentivizes them to optimize for token cost (e.g., by compressing context), whereas users want maximum performance.
 
 - **Max mode:** According to the official description, "It's ideal for your hardest problems." In my opinion, that's a bit of an overstatement. My understanding is that Max mode simply stops micromanaging context and introduces token-based billing. In the past, when models had weaker long-context capabilities, fine-tuning the context might have saved money and improved results (as models could be misled by irrelevant information). But now, with models improving so rapidly, this control has become a negative optimization. It's interesting that open-source BYOK solutions like Roo Code have always advertised "Include full context for max performance." So, Cursor's move feels like a step backward, or perhaps an early optimization that has now become technical debt. Their line, "If you've used any CLI-based coding tool, Max mode will feel like that - but right in Cursor," feels even more subtle. If I can use a CLI-based agent, why would I use a version in Cursor that charges an extra 20% margin?
 
@@ -50,13 +50,13 @@ A major trigger for writing this was reading [Cursor's 0.50 changelog](https://w
   - Richer Chat responses: Support for Mermaid diagrams and Markdown table rendering. This shows there's still room to compete on the chat experience (to boost user stickiness).
   - Overall, though, 1.0 feels more like a marketing-driven release without any qualitative leaps (compared to 0.50, which was more shocking to me).
 
-Corresponding to Cursor's aggressive moves is the news that [Anysphere, which makes Cursor, has reportedly raised $900M at a $9B valuation](https://techcrunch.com/2025/05/04/cursor-is-reportedly-raising-funds-at-9-billion-valuation-from-thrive-a16z-and-accel/). Paired with OpenAI's rumored acquisition of Windsurf, it's clear Cursor has ambitions to dominate the market. With so much funding, I suspect their next move might be to train their own models. They could also very well acquire other players in the market and become an consolidator.
+Corresponding to Cursor's aggressive moves is the news that [Anysphere, which makes Cursor, has reportedly raised \$900M at a \$9B valuation](https://techcrunch.com/2025/05/04/cursor-is-reportedly-raising-funds-at-9-billion-valuation-from-thrive-a16z-and-accel/). Paired with OpenAI's rumored acquisition of Windsurf, it's clear Cursor has ambitions to dominate the market. With so much funding, I suspect their next move might be to train their own models. They could also very well acquire other players in the market and become an consolidator.
 
 #### So, what makes Cursor so good anyway?
 
 Looking back, the reason I started using Cursor (around May 2024) was for its stunning **TAB feature**. In the early days, I barely used AI chat and was willing to tolerate many annoying editor bugs just for this. Compared to GitHub Copilot's "append-only" completions, where you have to delete and retry to make a change, Cursor's generative "Edit" is clearly the more "correct" approach, and its accuracy is quite impressive. Its completions can also jump ahead and modify multiple places after fixing one, which is incredibly useful for refactoring. For example, when changing a type signature, an IDE's refactoring might not be smart enough, requiring many manual edits. Cursor solves this pain point.
 
-For this TAB feature alone, I willingly paid my $20.
+For this TAB feature alone, I willingly paid my \$20.
 
 ![image.png](/assets/img/ai-coding/image.png)
 
@@ -114,9 +114,9 @@ Over the past month, Anthropic has made more moves that suggest a strong push fo
 
 -   Announced Claude Code 1.0 and a new 4.0 model at the "Code with Claude" conference.
 -   Cut off supply to Windsurf.
--   Made Claude Code available to Claude Pro subscribers ($20/month), significantly lowering the barrier to entry.
+-   Made Claude Code available to Claude Pro subscribers (\$20/month), significantly lowering the barrier to entry.
 
-That last point convinced me to subscribe to the Pro plan. I tried it out. Before hitting my usage limit (which refreshed a few hours later), I had Claude Code run a fairly complex refactoring task that lasted about 30-40 minutes. If billed by API tokens, that usage would have cost at least $10. This might be **a key advantage for an LLM provider building its own agent**: the machines are already there, so they can fully utilize idle resources. Application companies, on the other hand, can't afford to lease dedicated machines.
+That last point convinced me to subscribe to the Pro plan. I tried it out. Before hitting my usage limit (which refreshed a few hours later), I had Claude Code run a fairly complex refactoring task that lasted about 30-40 minutes. If billed by API tokens, that usage would have cost at least \$10. This might be **a key advantage for an LLM provider building its own agent**: the machines are already there, so they can fully utilize idle resources. Application companies, on the other hand, can't afford to lease dedicated machines.
 
 #### What is Anthropic's real intention with Claude Code?
 
@@ -150,7 +150,7 @@ My overall impression of Amp is that they have a great "product sense" and "real
 Their [“**Frequently Ignored Feedback**”](https://ampcode.com/fif) page is also fascinating (User: I want X; Amp: No, you don't), showcasing their deep understanding of agents:
 
 > - Requiring edit-by-edit approval traps you in a **local maximum** by impeding the agentic feedback loop. You’re not giving the agent a chance to iterate on its first draft through review, diagnostics, compiler output, and test execution. If you find that the agent rarely produces good enough code on its own, **instead of trying to “micro-manage” it,** we recommend writing **more detailed prompts** and improving your **`AGENT.md` files**.
-> - Making the costs salient will make devs use it less than they should. Customers tell us they don’t want their devs worrying about 10 cents here and there. We all know the dev who buys $5 coffee daily but won’t pay for a tool that improves their productivity.
+> - Making the costs salient will make devs use it less than they should. Customers tell us they don’t want their devs worrying about 10 cents here and there. We all know the dev who buys \$5 coffee daily but won’t pay for a tool that improves their productivity.
 
 Very opinionated, with a certain **"Apple-esque flavor."**
 
@@ -172,15 +172,15 @@ On a side note, the overall experience of ChatGPT is far superior to other offic
 
 ### Devin
 
-Back when AI coding wasn't so widespread, they branded themselves as the "First AI Software Engineer," aiming for fully automated, end-to-end development. Their initial price of $500/month was prohibitive. And those who tried it said it was clumsy.
+Back when AI coding wasn't so widespread, they branded themselves as the "First AI Software Engineer," aiming for fully automated, end-to-end development. Their initial price of \$500/month was prohibitive. And those who tried it said it was clumsy.
 
-Now that it starts at $20 with a pay-as-you-go model, I immediately gave it a try.
+Now that it starts at \$20 with a pay-as-you-go model, I immediately gave it a try.
 
 My overall impression is that the model's intelligence is so-so. But the product as a whole feels like it "basically works." I have a strong feeling that with proper prompt engineering, it could work very well. Their current messaging is also very realistic: "**Treat Devin like a junior engineer**." (In fact, this is probably the state of any agent product right now.)
 
-This was my first real taste of how expensive agents can be. I gave it an issue to handle, and it was able to autonomously figure out a framework (costing 2 ACUs, at $2.25 each). But when I asked it to fix a bug, it struggled, started thrashing, and quickly shot up to 4 ACUs. My $20 evaporated in no time. Perhaps the best way to use it now is to have it generate a first draft, and then manually refine it or use Cursor. (Of course, now that Cursor has a background agent, the lines are blurring.)
+This was my first real taste of how expensive agents can be. I gave it an issue to handle, and it was able to autonomously figure out a framework (costing 2 ACUs, at \$2.25 each). But when I asked it to fix a bug, it struggled, started thrashing, and quickly shot up to 4 ACUs. My \$20 evaporated in no time. Perhaps the best way to use it now is to have it generate a first draft, and then manually refine it or use Cursor. (Of course, now that Cursor has a background agent, the lines are blurring.)
 
-For Devin (and now Cursor's remote agent), there's also the cost of vCPUs. For example, an m5.4xlarge (16C64G) on-demand is $0.768/h. Compared to token costs, that's actually not that expensive...
+For Devin (and now Cursor's remote agent), there's also the cost of vCPUs. For example, an m5.4xlarge (16C64G) on-demand is \$0.768/h. Compared to token costs, that's actually not that expensive...
 
 With agents becoming a hot topic, **Devin** is now being squeezed from all sides by Cursor, Claude Code, Codex, and others.
 
@@ -305,7 +305,7 @@ While many of the things I analyzed above might see Lovable moving towards YouWa
 
 YouWare's goal isn't to maximize utility, but to **unleash the creativity of ordinary people**. Of course, the utility has to be at least good enough.
 
-A harsh question is: as more and more people learn to use Cursor, will it eat up the market for these "dummy" tools? Perhaps it will be like how professional photographers with cameras and ordinary people with phone cameras coexist; programmers and vibe coders will coexist. Another thought I've been having recently is that current AI is exacerbating the Matthew effect (perhaps starting with the $200 subscriptions). The gap between those who know how to use AI well and can afford it (I've seen people burn hundreds of dollars a day on Cursor) and the average person will widen. Will those less inclined to think critically, who can't articulate their needs clearly, be "left behind"? That future is too cruel for me to imagine, and I'd rather join the resistance against that trend. From this perspective, I find attempts like YouWare, dedicated to serving the broad public, very valuable.
+A harsh question is: as more and more people learn to use Cursor, will it eat up the market for these "dummy" tools? Perhaps it will be like how professional photographers with cameras and ordinary people with phone cameras coexist; programmers and vibe coders will coexist. Another thought I've been having recently is that current AI is exacerbating the Matthew effect (perhaps starting with the \$200 subscriptions). The gap between those who know how to use AI well and can afford it (I've seen people burn hundreds of dollars a day on Cursor) and the average person will widen. Will those less inclined to think critically, who can't articulate their needs clearly, be "left behind"? That future is too cruel for me to imagine, and I'd rather join the resistance against that trend. From this perspective, I find attempts like YouWare, dedicated to serving the broad public, very valuable.
 
 Of course, while YouWare is full of ideas, whether that vision can be successfully translated into a viable product and achieve commercial success remains uncertain.
 
