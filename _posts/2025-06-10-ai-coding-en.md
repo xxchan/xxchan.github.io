@@ -60,7 +60,7 @@ Looking back, the reason I started using Cursor (around May 2024) was for its st
 
 For this TAB feature alone, I willingly paid my \\$20.
 
-![image.png](/assets/img/ai-coding/image.png)
+<!-- ![image.png](/assets/img/ai-coding/image.png) -->
 
 Later, almost without me realizing it, "Agent mode" caught fire among non-coders. It was only then that I belatedly discovered the power of agents. (And Cursor never raised its price! Which is why they are now gradually acclimating users to token-based billing.) I'm not sure if this explosion in popularity was accidental. In my view, other AI IDEs or end-to-end coding platforms can do similar things, and Cursor is now even a bit behind on the agent front. But perhaps because they were early, they seized a window of opportunity and successfully established their brand in the public consciousness. The switching cost for AI coding platforms is a bit of a mystery. On one hand, it's not hard to switch if you really want to; there's no qualitative chasm in experience, no real moat. On the other hand, once you get comfortable with a tool for your daily work, you're reluctant to change.
 
@@ -347,9 +347,9 @@ From the explorations of various products, we can glimpse the capabilities a goo
     -   I'm a bit skeptical about the effectiveness of this. Now that we're in the Agent era, the agent can just `grep` the code to find context. This is very similar to my own development process. It's still heavily reliant on string searching, which isn't a very smart method. But `grep` is only useful when you know what to change. Vague questions like "how does xxx work?" are a different story.
     -   But testing long context capability is very difficult; you need to use it very deeply to know its true level. I haven't gotten a feel for it yet.
 -   **Task Management Capability:**
-    I used to think an external to-do list was essential, but now it seems Claude is starting to internalize this capability (though my gut feeling is that an external one is still better?).
+    I used to think an external to-do list was essential, but now it seems Claude is starting to internalize this capability -- the model may output things like "Let me solve the problems one by one: 1. ... 2. ... 3. ..." (though my gut feeling is that an external one is still better?).
 
-    ![image5.png](/assets/img/ai-coding/image5.png)
+    <!-- ![image5.png](/assets/img/ai-coding/image5.png) -->
 
 -   **Proactive Communication & Interaction:** A good Agent shouldn't just do what you say. It should be like a good contractor: it should ask clarifying questions, confirm intent, and assess risks (like Devin's "confidence rating"). For example, if you say "I need to make a PowerPoint," it should ask if you have existing materials or textbook resources to provide. Deep research products are also doing a good job with this.
 
