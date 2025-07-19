@@ -24,7 +24,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Just some random thoughts of mine.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: https://xxchan.me
-twitter_username: yayale_umi
+twitter_username: xiaoxxchan
 github_username: xxchan
 repository: xxchan/xxchan.github.io
 
@@ -93,7 +93,7 @@ author:
   links:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/yayale_umi"
+      url: "https://twitter.com/xiaoxxchan"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/xxchan"
