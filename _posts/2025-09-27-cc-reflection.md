@@ -31,25 +31,27 @@ toc_sticky: true
 
 但这里如果换个人做，特别是没那么爱用/会用命令行的人，可能会一开始就想做桌面 GUI。但那就会不够快。
 
-> Architecture: choose the simplest option
+> Architecture: **choose the simplest option**
 >
 > The Claude Code team tries to write as little business logic as possible.
 >
 > “This might sound weird, but the way we build this is we want people to feel the model as raw as possible. We have this belief the model can do much more than products today enable it to do. 
+>
 > ... Every time there’s a new model release, we delete a bunch of code.“ 
 >
 > “With every design decision, we almost always pick the simplest possible option. What are the simplest answers to the questions: “where do you run batch commands?” and “where do you read from the filesystem?” It’s to do it locally.
 
 大道至简最有含金量的一集。
 
-一方面现在都说 "less structure, more intelligence" 了，但我相信对模型公司以外的产品公司应该很难忍住雕花的冲动。
+一方面现在都说 "less structure, more intelligence" 了，但我相信对模型公司以外的产品公司应该很难忍住雕花的冲动。以及这里可以明显看出他们会持续关注模型和 prompt 的适配性。
 
 大道至简在 CC 的例子上，更关键的是节省了钻研各种复杂功能以及复杂 UI 的精力，于是可以只琢磨 agent 最核心的事情（雕 system prompt 和 build 适合 agent 使用的 tool），并且迭代速度足够快——这可能是 CC 成功最本质的原因。
 
 Dogfooding 是好文明，也是加速迭代的重要因素。但是可能没那么独特。比如我相信 Cursor 的所有人也都是用 Cursor 开发的。但是开发 IDE 要做的事太多了，谁来思考迭代 agent 呢。
 
-> ~60-100 internal releases/day.（真假？） Any time an engineer makes a change to Claude Code, they release a new npm package internally. Everyone at Anthropic uses the internal version and the dev team gets rapid feedback.
-> 1 external release/day. Almost every day, a new version of the package is released as part of a deployment.
+> **~60-100 internal releases/day.**（真假？） Any time an engineer makes a change to Claude Code, they release a new npm package internally. Everyone at Anthropic uses the internal version and the dev team gets rapid feedback.
+>
+> **1 external release/day.** Almost every day, a new version of the package is released as part of a deployment.
 
 CC 可以一天发版好多次，加个功能就发了，但 Cursor 不太可能。而且在 IDE 里做 agent，一上来就要想 UI 怎么搞。又还因为 Cursor 必须适配很多模型，所以可能要用更”通用“的方法，达成更稳定的工具调用。而 CC 只需适配一个最好的模型。
 
