@@ -7,7 +7,7 @@ toc: true
 toc_sticky: true
 ---
 
-[上一篇博客锐评 Coding Agent](/ai/2025/06/08/ai-coding.html)时就觉得 CC 性能遥遥领先，并且有种“第一性原理”的美。现在今非昔比，大家的认知都跟上了，甚至 Codex 已成新神。
+[上一篇博客锐评 Coding Agent](/ai/2025/06/08/ai-coding.html)时就觉得 CC 性能遥遥领先，并且有种"第一性原理"的美。现在今非昔比，大家的认知都跟上了，甚至 Codex 已成新神。
 
 但今天读了 [How Claude Code is built](https://newsletter.pragmaticengineer.com/p/how-claude-code-is-built)，还是小有感触。让人不禁想回顾过去反思一下：为什么是 CC 第一个做出了如此超前的产品？
 
@@ -35,11 +35,11 @@ toc_sticky: true
 >
 > The Claude Code team tries to write as little business logic as possible.
 >
-> “This might sound weird, but the way we build this is we want people to feel the model as raw as possible. We have this belief the model can do much more than products today enable it to do. 
+> "This might sound weird, but the way we build this is we want people to feel the model as raw as possible. We have this belief the model can do much more than products today enable it to do. 
 >
-> ... Every time there’s a new model release, we delete a bunch of code.“ 
+> ... Every time there’s a new model release, we delete a bunch of code." 
 >
-> “With every design decision, we almost always pick the simplest possible option. What are the simplest answers to the questions: “where do you run batch commands?” and “where do you read from the filesystem?” It’s to do it locally.
+> "With every design decision, we almost always pick the simplest possible option. What are the simplest answers to the questions: "where do you run batch commands?" and "where do you read from the filesystem?" It’s to do it locally.
 
 大道至简最有含金量的一集。
 
@@ -53,7 +53,7 @@ Dogfooding 是好文明，也是加速迭代的重要因素。但是可能没那
 >
 > **1 external release/day.** Almost every day, a new version of the package is released as part of a deployment.
 
-CC 可以一天发版好多次，加个功能就发了，但 Cursor 不太可能。而且在 IDE 里做 agent，一上来就要想 UI 怎么搞。又还因为 Cursor 必须适配很多模型，所以可能要用更”通用“的方法，达成更稳定的工具调用。而 CC 只需适配一个最好的模型。
+CC 可以一天发版好多次，加个功能就发了，但 Cursor 不太可能。而且在 IDE 里做 agent，一上来就要想 UI 怎么搞。又还因为 Cursor 必须适配很多模型，所以可能要用更"通用"的方法，达成更稳定的工具调用。而 CC 只需适配一个最好的模型。
 
 包括小团队开发也很本质，对迭代速度有巨大加成。CC 在很长的时间里应该都是独裁项目，没有任何包袱。Cursor 的迭代应该需要很多合作。你改个东西可能把别人的搞坏了。
 
@@ -74,7 +74,7 @@ RAG 是 chat 时代的产物，是因为没有 agent 所以搞来的轮椅。并
 
 ---
 
-> "We actually weren't even sure if we wanted to launch Claude Code publicly because we were thinking it could be a competitive advantage for us, like our “secret sauce”: if it gives us an advantage, why launch it?"
+> "We actually weren't even sure if we wanted to launch Claude Code publicly because we were thinking it could be a competitive advantage for us, like our "secret sauce": if it gives us an advantage, why launch it?"
 
 这段笑死。但也说明他们确实知道自己认知领先了，CC 做的是对的事情。
 
@@ -82,7 +82,7 @@ RAG 是 chat 时代的产物，是因为没有 agent 所以搞来的轮椅。并
 
 最后再回顾一些时间点：
 
-Cursor agent mode 在 24 年 11 月发布，之前是 Composer （跨 codebase 的 ”chat edit“）。怀疑在那个时候其实是没有工具调用这个事情的，是只有一些 parse 代码块，因为他们有 "apply edit model" 这种实践。2025-02-19 成为默认模式。
+Cursor agent mode 在 24 年 11 月发布，之前是 Composer （跨 codebase 的 "chat edit"）。怀疑在那个时候其实是没有工具调用这个事情的，是只有一些 parse 代码块，因为他们有 "apply edit model" 这种实践。2025-02-19 成为默认模式。
 
 [Claude 3.5 Sonnet](https://www.anthropic.com/news/claude-3-5-sonnet) - 24-06-21 发布。
 - 很多 AI 应用创业者（例如 Manus）说在 24 年年底看到了 Sonnet 的 agentic 能力到了够用的临界点。现在回看当时的发布，里面已然在提 agentic coding 了。
