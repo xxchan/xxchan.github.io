@@ -27,6 +27,7 @@ toc_sticky: true
 > Suddenly, this agent was really interesting
 
 所有玩 local agent 的人都是从 AppleScript 开始吗（
+
 从这里可以看出 CC 的诞生像是一个 aha moment——给了模型 read/write/bash 它就能干活了。这样的感悟很珍贵，但是应该不至于别人想不到。
 
 但这里如果换个人做，特别是没那么爱用/会用命令行的人，可能会一开始就想做桌面 GUI。但那就会不够快。
