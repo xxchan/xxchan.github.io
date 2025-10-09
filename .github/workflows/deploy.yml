@@ -35,6 +35,9 @@ jobs:
       - name: Build Astro site
         run: npm run build
 
+      - name: Check external links
+        run: npm run check:links
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:

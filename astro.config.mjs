@@ -12,7 +12,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 
 export default defineConfig({
-  site: 'https://xxchan.github.io',
+  site: 'https://xxchan.me',
   base: '/',
   trailingSlash: 'ignore',
   output: 'static',
@@ -48,7 +48,7 @@ function buildLegacyRedirects() {
     const primaryCategory = categories.find((value) => typeof value === 'string' && value.trim().length > 0);
     const categorySegment = slugifyCategory(primaryCategory);
     const legacyPath = `/${categorySegment}/${year}/${month}/${day}/${legacySlug}.html`;
-    const destination = `/blog/${entry.name}/`;
+    const destination = `/blog/${sanitizeEntrySlug(entry.name)}/`;
     redirects[legacyPath] = { destination, status: 308 };
   }
 
@@ -70,6 +70,10 @@ function slugifyCategory(input) {
     .replace(/^-+|-+$/g, '');
 
   return slug.length > 0 ? slug : 'blog';
+}
+
+function sanitizeEntrySlug(slug) {
+  return slug.replace(/\./g, '');
 }
 
 export { buildLegacyRedirects };

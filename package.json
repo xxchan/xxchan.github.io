@@ -9,6 +9,7 @@
     "astro": "astro",
     "migrate": "tsx scripts/migrate-posts.ts",
     "check": "astro check",
+    "check:links": "tsx scripts/check-links.ts",
     "test": "vitest run"
   },
   "dependencies": {

@@ -35,6 +35,7 @@
 - [x] Wire up feeds/JSON endpoints and copy static assets.
 - [x] Note TODO for reactions and finish GitHub Pages build setup.
 - [x] Verify astro build (`npm run build`).
+- [x] Add external link reachability check script and run it in the deploy workflow.
 
 ## Future TODOs
 - [ ] Reactions system (Neon + Vercel) once interactive features are desired.

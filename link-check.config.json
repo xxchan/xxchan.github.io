@@ -1,0 +1,23 @@
+{
+  "internalHosts": [
+    "xxchan.github.io"
+  ],
+  "ignorePatterns": [
+    "^https://(?:www\\.)?zhihu\\.com/.*",
+    "^https://zhuanlan\\.zhihu\\.com/.*"
+  ],
+  "allowedStatuses": [
+    {
+      "pattern": "^https://ossinsight\\.io/analyze/.*",
+      "statuses": [
+        404
+      ]
+    },
+    {
+      "pattern": "^https://space\\.bilibili\\.com/.*",
+      "statuses": [
+        412
+      ]
+    }
+  ]
+}

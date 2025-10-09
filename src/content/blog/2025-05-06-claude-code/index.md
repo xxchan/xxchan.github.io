@@ -71,12 +71,12 @@ openai platform 原生有 request log（第一次进这个页面需要手动enab
 
 这个具体 setup 就不讲了，跟着上面的文档在 Cloudflare 上点两下就行了。
 
-在成功开启以后，会获得一个 API endpoint， https://gateway.ai.cloudflare.com/v1/0123yichuanid/yourgatename/ 针对不同的供应商有一些变种
+在成功开启以后，会获得一个 API endpoint， `https://gateway.ai.cloudflare.com/v1/<account-id>/<gateway-name>/` 针对不同的供应商有一些变种
 
 ```
-https://gateway.ai.cloudflare.com/v1/0123yichuanid/yourgatename/openai
-https://gateway.ai.cloudflare.com/v1/0123yichuanid/yourgatename/anthropic
-https://gateway.ai.cloudflare.com/v1/0123yichuanid/yourgatename/openrouter
+https://gateway.ai.cloudflare.com/v1/<account-id>/<gateway-name>/openai
+https://gateway.ai.cloudflare.com/v1/<account-id>/<gateway-name>/anthropic
+https://gateway.ai.cloudflare.com/v1/<account-id>/<gateway-name>/openrouter
 ```
 
 然后只需要在 AI app 如 cursor 里设置 custom endpoint 为上面的 gateway 就可以一键替换成功了。
