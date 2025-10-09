@@ -1,0 +1,23 @@
+---
+interface Props {
+  readonly href: string;
+  readonly label: string;
+}
+const { href, label } = Astro.props;
+const isActive = Astro.url.pathname === href;
+---
+
+<a class:list={{ 'nav-link': true, 'nav-link--active': isActive }} href={href}>{label}</a>
+
+<style>
+  .nav-link {
+    margin-right: 1rem;
+    font-weight: 500;
+    color: #3d4f91;
+  }
+
+  .nav-link--active {
+    color: #1b2a5b;
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,15 @@
+---
+interface Props {
+  readonly date: Date | string;
+}
+
+const { date } = Astro.props;
+const parsed = typeof date === 'string' ? new Date(date) : date;
+const formatted = parsed.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<time datetime={parsed.toISOString()}>{formatted}</time>

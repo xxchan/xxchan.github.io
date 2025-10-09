@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import TagList from '../components/TagList.astro';
+
+interface Props {
+  readonly post: CollectionEntry<'blog'>;
+  readonly headings: readonly import('astro').MarkdownHeading[];
+}
+
+const { post, headings } = Astro.props;
+const { title, description, pubDate, updatedDate, categories, tags, toc, tocLabel, tocSticky, alternateSlug, lang } = post.data;
+const tocTitle = tocLabel ?? 'Table of Contents';
+const showToc = Boolean(toc) && headings.length > 0;
+---
+
+<BaseLayout title={`${post.data.title} · xxchan's blog`} description={description ?? post.data.excerpt}>
+  <div class:list={{ 'post-layout': true, 'post-layout--with-toc': showToc }}>
+    <article class="post-layout__content">
+      <header>
+        <h1>{title}</h1>
+        <p class="article-meta">
+          <FormattedDate date={pubDate} />
+          {updatedDate && (
+            <span>
+              {' · Updated '}<FormattedDate date={updatedDate} />
+            </span>
+          )}
+          {categories.length > 0 && <span>{' · '}{categories.join(', ')}</span>}
+          {lang && <span>{' · '}{lang.toUpperCase()}</span>}
+        </p>
+        {alternateSlug && (
+          <p class="article-meta">
+            Read this post in <a href={`/blog/${alternateSlug}/`}>another language</a>.
+          </p>
+        )}
+      </header>
+
+      <slot />
+
+      {tags.length > 0 && (
+        <section style={{ marginTop: '2rem' }}>
+          <TagList tags={tags} />
+        </section>
+      )}
+        <!-- TODO: Reactions widget (Neon + Vercel) to be implemented in a future iteration. -->
+    </article>
+
+    {showToc && (
+      <aside class:list={{ 'post-layout__toc': true, 'toc--sticky': tocSticky }}>
+        <nav class="toc" aria-label={tocTitle}>
+          <p class="toc__title">{tocTitle}</p>
+          <ul>
+            {headings.map((heading) => (
+              <li style={`margin-left: ${(heading.depth - 2) * 0.75}rem`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .toc--sticky {
+    position: static;
+  }
+
+  @media (min-width: 1024px) {
+    .toc--sticky {
+      position: sticky;
+      top: 1rem;
+    }
+  }
+</style>

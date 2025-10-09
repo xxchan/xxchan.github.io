@@ -1,0 +1,47 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { NAV_LINKS, SITE_TITLE } from '../consts';
+---
+
+<header class="site-header">
+  <a href="/" class="site-title">{SITE_TITLE}</a>
+  <nav class="site-nav">
+    {NAV_LINKS.map((link) => (
+      <HeaderLink href={link.href} label={link.label} />
+    ))}
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .site-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #111827;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  @media (min-width: 720px) {
+    .site-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-title {
+      margin-bottom: 0;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  readonly title: string;
+  readonly description?: string;
+  readonly image?: string;
+}
+
+const { title, description, image } = Astro.props;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" />
+{canonicalURL && <link rel="canonical" href={canonicalURL} />}
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+{canonicalURL && <meta property="og:url" content={canonicalURL} />}
+<meta property="og:type" content="website" />
+{image && <meta property="og:image" content={image} />}
+<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+{image && <meta name="twitter:image" content={image} />}

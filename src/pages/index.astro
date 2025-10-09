@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const latestPosts = posts.slice(0, 6);
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <section>
+    <h1>Hi, I’m xxchan 👋</h1>
+    <p>
+      I write about distributed systems, programming languages, AI tools, and anything else that excites me.
+      This blog collects notes, deep dives, and occasional reflections.
+    </p>
+    <p>
+      You can also find me on <a href="https://twitter.com/xiaoxxchan" target="_blank" rel="noopener">Twitter</a> and
+      <a href="https://github.com/xxchan" target="_blank" rel="noopener">GitHub</a>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Latest posts</h2>
+    <PostList posts={latestPosts} showExcerpt />
+    <p>
+      <a href="/blog/">Browse all posts →</a>
+    </p>
+  </section>
+</BaseLayout>

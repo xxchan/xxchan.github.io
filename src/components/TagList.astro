@@ -1,0 +1,18 @@
+---
+import { slugify } from '../utils/slug';
+
+interface Props {
+  readonly tags: readonly string[];
+}
+
+const { tags } = Astro.props;
+const tagList = tags ?? [];
+---
+
+{tagList.length > 0 && (
+  <div>
+    {tagList.map((tag) => (
+      <a class="tag" href={`/tags/${slugify(tag)}/`}>#{tag}</a>
+    ))}
+  </div>
+)}

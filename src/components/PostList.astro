@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  readonly posts: readonly CollectionEntry<'blog'>[];
+  readonly showExcerpt?: boolean;
+}
+
+const { posts, showExcerpt = false } = Astro.props;
+---
+
+<ul class="post-list">
+  {posts.map((post) => (
+    <li class="post-list__item">
+      <h2 class="post-list__title">
+        <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+      </h2>
+      <p class="post-list__meta">
+        <FormattedDate date={post.data.pubDate} />
+        {post.data.categories.length > 0 && (
+          <span> · {post.data.categories.join(', ')}</span>
+        )}
+      </p>
+      {showExcerpt && post.data.excerpt && <p>{post.data.excerpt}</p>}
+    </li>
+  ))}
+</ul>

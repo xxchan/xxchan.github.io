@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { slugify } from '../../utils/slug';
+
+type CategoryGroup = {
+  category: string;
+  posts: CollectionEntry<'blog'>[];
+};
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categoryMap = new Map<string, CategoryGroup>();
+
+  for (const post of posts) {
+    for (const category of post.data.categories ?? []) {
+      const slug = slugify(category);
+      if (!categoryMap.has(slug)) {
+        categoryMap.set(slug, { category, posts: [] });
+      }
+      categoryMap.get(slug)?.posts.push(post);
+    }
+  }
+
+  return Array.from(categoryMap.entries()).map(([slug, entry]) => ({
+    params: { category: slug },
+    props: entry,
+  }));
+}
+
+const { category, posts } = Astro.props as CategoryGroup;
+const sortedPosts = [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout title={`Posts in ${category}`}>
+  <section>
+    <h1>{category}</h1>
+    <PostList posts={sortedPosts} showExcerpt />
+  </section>
+</BaseLayout>

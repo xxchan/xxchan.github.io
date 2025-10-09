@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '../../utils/slug';
+
+const posts = await getCollection('blog');
+const tagCounts = new Map<string, number>();
+const categoryCounts = new Map<string, number>();
+
+for (const post of posts) {
+  for (const tag of post.data.tags ?? []) {
+    const key = tag.trim();
+    if (!key) continue;
+    tagCounts.set(key, (tagCounts.get(key) ?? 0) + 1);
+  }
+
+  for (const category of post.data.categories ?? []) {
+    const key = category.trim();
+    if (!key) continue;
+    categoryCounts.set(key, (categoryCounts.get(key) ?? 0) + 1);
+  }
+}
+
+const tags = Array.from(tagCounts.entries()).sort(([a], [b]) => a.localeCompare(b));
+const categories = Array.from(categoryCounts.entries()).sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title="Topics">
+  <section>
+    <h1>Topics</h1>
+    <p class="topics-intro">
+      Browse posts by high-level category or dive into specific tags.
+    </p>
+
+    {categories.length > 0 && (
+      <div class="topics-section">
+        <h2 id="categories">Categories</h2>
+        <ul>
+          {categories.map(([category, count]) => (
+            <li>
+              <a href={`/categories/${slugify(category)}/`}>{category}</a>
+              {' '}
+              <span aria-hidden="true">({count})</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {tags.length > 0 && (
+      <div class="topics-section">
+        <h2 id="tags">Tags</h2>
+        <ul>
+          {tags.map(([tag, count]) => (
+            <li>
+              <a href={`/tags/${slugify(tag)}/`}>{tag}</a>
+              {' '}
+              <span aria-hidden="true">({count})</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </section>
+</BaseLayout>

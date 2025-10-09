@@ -1,0 +1,37 @@
+{
+  "name": "astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "migrate": "tsx scripts/migrate-posts.ts",
+    "check": "astro check",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/react": "^4.4.0",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.14.1",
+    "gray-matter": "^4.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-slug": "^6.0.0",
+    "remark-math": "^6.0.0",
+    "remark-toc": "^9.0.0",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
