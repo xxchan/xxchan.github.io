@@ -5,24 +5,25 @@ Astro-powered rebuild of xxchan's blog, migrated from the previous Jekyll/minima
 ## Tech highlights
 - **Astro 5** with static output for GitHub Pages, MDX/React integrations, and typed content collections.
 - **Remark/Rehype pipeline** for math, automatic heading IDs, and inline table of contents when enabled via frontmatter.
-- **Typed migration** script (`npm run migrate`) that rehydrates legacy Jekyll posts into Astro collection folders.
+- **Typed migration** script (`pnpm run migrate`) that rehydrates legacy Jekyll posts into Astro collection folders.
 - **Feeds & endpoints**: `/rss.xml`, `/index.xml`, and `/posts.json` expose the content for automation or future integrations.
 - **Global styling** inspired by the prior site but simplified to plain CSS.
 
 ## Commands
 
 ```bash
-npm install       # install dependencies
-npm run dev       # start local dev server (http://localhost:4321)
-npm run build     # generate static site into dist/
-npm run preview   # preview the production build locally
-npm run check     # run astro check (type & content validation)
-npm run migrate   # regen content collection from legacy _posts markdown
+pnpm install      # install dependencies
+pnpm dev          # start local dev server (http://localhost:4321)
+pnpm build        # generate static site into dist/
+pnpm preview      # preview the production build locally
+pnpm check        # run astro check (type & content validation)
+pnpm run migrate  # regen content collection from legacy _posts markdown
+pnpm test         # execute the Vitest suite
 ```
 
 ## Content migration notes
 - Legacy `_posts/*.md` files were migrated to `src/content/blog/<slug>/index.md` with zod-validated frontmatter.
-- The original `_posts` directory has been removed from the repo; `npm run migrate` now no-ops unless you restore those legacy markdown files alongside the project root.
+- The original `_posts` directory has been removed from the repo; `pnpm run migrate` now no-ops unless you restore those legacy markdown files alongside the project root.
 - Categories, tags, TOC flags, and bilingual cross-links survive via `alternateSlug`.
 - Any `{% post_url %}` liquid links were converted to `/blog/<slug>/` paths.
 - Code fences labelled `Go` should eventually be lowercased to satisfy Shiki (see `Plan.md`).

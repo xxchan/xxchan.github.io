@@ -2,6 +2,7 @@
   "name": "astro",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -11,6 +12,16 @@
     "check": "astro check",
     "check:links": "tsx scripts/check-links.ts",
     "test": "vitest run"
+  },
+  "pnpm": {
+    "allowedBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ],
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",

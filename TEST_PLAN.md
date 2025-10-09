@@ -2,18 +2,18 @@
 
 ## Scope & Principles
 - Treat the legacy production site (`https://xxchan.me/`) as the ground truth for content coverage, routes, metadata, and features that must exist in the Astro rewrite.
-- Exercise the Astro dev server (`npm run dev -- --host 0.0.0.0 --port 4321 > /tmp/astro-dev.log 2>&1 & echo $!`) via Chrome MCP/curl to confirm parity. Testing is read-only for both environments; never edit content/config while verifying.
+- Exercise the Astro dev server (`pnpm dev -- --host 0.0.0.0 --port 4321 > /tmp/astro-dev.log 2>&1 & echo $!`) via Chrome MCP/curl to confirm parity. Testing is read-only for both environments; never edit content/config while verifying.
 - When differences appear, classify them: log only items where the Astro implementation is missing functionality, content, or polish that the baseline provides (or where the new site introduces a regression). Document intentional improvements separately if needed.
 - Capture affirmative results too: whenever a parity check passes, jot down the URL/feature and note that behaviour matches the legacy site so future reviewers know it was validated.
 - Capture each migration gap in the *Findings Log* with URL, observed vs. expected behaviour, reproduction steps, status, and proposed fix.
 
 ## Preparation Checklist
 - Confirm you can reach `https://xxchan.me/` and `https://xxchan.github.io/` over HTTPS.
-- Ensure local repo is clean; run `npm install` once to have scripts available for reference (`npm run dev`, `npm run test`).
+- Ensure local repo is clean; run `pnpm install` once to have scripts available for reference (`pnpm dev`, `pnpm test`).
 
 ## Test Execution Steps
 1. **Start Local Server (read-only)**  
-   - Run `npm run dev -- --host 0.0.0.0 --port 4321` in the background (already configured) and confirm logs show Astro ready.  
+   - Run `pnpm dev -- --host 0.0.0.0 --port 4321` in the background (already configured) and confirm logs show Astro ready.  
    - Open `http://localhost:4321/` in Chrome MCP to ensure the Astro UI is reachable.
 2. **Baseline Capture (legacy site)**  
    - Load `https://xxchan.me/` and inventory global elements (navigation links, search box, footer links), home hero content, featured articles, and taxonomy listings (`/categories/`, tag listings).  
@@ -29,7 +29,7 @@
    - Local: `curl -I http://localhost:4321/rss.xml`, `http://localhost:4321/index.xml`, `http://localhost:4321/posts.json`; inspect HTML head for canonical & OG meta.
 6. **Redirects & Legacy URLs**  
    - From baseline, note existing behaviour (mostly 200s).  
-   - Using local `npm run test` and manual `curl -I http://localhost:4321/...`, verify redirect targets (`/ai/...` → `/blog/...`, `/categories/` → `/tags/`, etc.).
+   - Using local `pnpm test` and manual `curl -I http://localhost:4321/...`, verify redirect targets (`/ai/...` → `/blog/...`, `/categories/` → `/tags/`, etc.).
 7. **Responsive & Accessibility**  
    - Employ Chrome MCP responsive modes to check mobile/desktop layouts on localhost.  
    - Run Lighthouse (local) and note scores; compare to baseline when possible.
@@ -37,7 +37,7 @@
    - Capture DevTools Performance trace locally; compare TTFB/assets between baseline (via WebPageTest or DevTools) and Astro build.  
    - Inspect cache headers (`curl -I`) for localhost (Astro dev uses no-cache) vs. baseline (Cloudflare) to plan production expectations.
 9. **Regression Safety Net**  
-   - Run `npm run test` locally (ensures redirect suite passes).  
+   - Run `pnpm test` locally (ensures redirect suite passes).  
    - Leave environments untouched after tests; stop dev server when finished.
 
 ## Production Baseline Feature Inventory
@@ -142,7 +142,7 @@
   [2025-10-09] Legacy redirects working  
   Observed: Requests to `/categories/` and dated `/cs/...` slugs return 308s to the new `/tags/` and `/blog/.../` routes; Vitest redirect suite passes.  
   Expected: Preserve legacy URL coverage.  
-  Steps: `curl -I http://localhost:4321/categories/`, `curl -I http://localhost:4321/cs/2022/02/07/paxos-hard.html`, `npm run test`.  
+  Steps: `curl -I http://localhost:4321/categories/`, `curl -I http://localhost:4321/cs/2022/02/07/paxos-hard.html`, `pnpm test`.  
   Status: Resolved.  
   Action: None.
 
