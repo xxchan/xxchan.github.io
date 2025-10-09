@@ -3,6 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagList from '../components/TagList.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import type { ArticleMeta } from '../components/BaseHead.astro';
 
 interface Props {
   readonly post: CollectionEntry<'blog'>;
@@ -13,9 +15,23 @@ const { post, headings } = Astro.props;
 const { title, description, pubDate, updatedDate, categories, tags, toc, tocLabel, tocSticky, alternateSlug, lang } = post.data;
 const tocTitle = tocLabel ?? 'Table of Contents';
 const showToc = Boolean(toc) && headings.length > 0;
+const seoDescription = description ?? post.data.excerpt;
+const primaryCategory = categories[0];
+const articleMeta = {
+  ...(seoDescription ? { description: seoDescription } : {}),
+  publishedTime: pubDate.toISOString(),
+  ...(updatedDate ? { modifiedTime: updatedDate.toISOString() } : {}),
+  ...(tags.length > 0 ? { tags } : {}),
+  ...(primaryCategory ? { section: primaryCategory } : {}),
+} satisfies ArticleMeta;
 ---
 
-<BaseLayout title={`${post.data.title} · xxchan's blog`} description={description ?? post.data.excerpt}>
+<BaseLayout
+  title={`${post.data.title} · xxchan's blog`}
+  description={seoDescription}
+  ogType="article"
+  articleMeta={articleMeta}
+>
   <div class:list={{ 'post-layout': true, 'post-layout--with-toc': showToc }}>
     <article class="post-layout__content">
       <header>
@@ -44,6 +60,9 @@ const showToc = Boolean(toc) && headings.length > 0;
           <TagList tags={tags} />
         </section>
       )}
+      <section class="post-layout__author">
+        <AuthorCard />
+      </section>
         <!-- TODO: Reactions widget (Neon + Vercel) to be implemented in a future iteration. -->
     </article>
 
@@ -67,6 +86,10 @@ const showToc = Boolean(toc) && headings.length > 0;
 <style>
   .toc--sticky {
     position: static;
+  }
+
+  .post-layout__author {
+    margin: 3rem 0 0;
   }
 
   @media (min-width: 1024px) {

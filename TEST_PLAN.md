@@ -68,8 +68,10 @@
 ### Syndication & Integrations
 - **Priority: High** Atom feed at `/feed.xml` continues to build and expose recent posts metadata.
 - **Priority: Medium** Social share buttons (Twitter, Facebook, LinkedIn) on posts open share dialogs with accurate permalinks and titles.
+- **Priority: Medium** Sitemap build outputs `sitemap-index.xml`/`sitemap-0.xml` with `https://xxchan.me` URLs (`pnpm build`, then inspect `dist/sitemap-index.xml` and `dist/sitemap-0.xml`).
 - **Priority: Low** Feed endpoint preserves HTTP headers observed today (`Content-Type: application/xml`, `Access-Control-Allow-Origin: *`, `Cache-Control: max-age=600`) so downstream consumers keep working once migrated.
 - **Priority: Low** Google Fonts (`Noto Serif SC`) and Font Awesome assets load without blocking layout; confirm Astro build maintains preload/async hints.
+- **Priority: Medium** `/robots.txt` serves the same allow/block policy text as production (`https://xxchan.me/robots.txt`) instead of the Astro 404 page.
 
 ### Legacy Edge Cases Observed (2025-10-09)
 - **Priority: Low** Short-form articles (e.g., `/this-week-in-risingwave/2023/04/02/twirw-migration.html`) render an empty “On this page” shell; decide whether to mirror this empty aside or hide it to avoid blank chrome while preserving sticky layout spacing.
@@ -81,91 +83,87 @@
 ```
 - [DATE] URL/Feature: Observed..., Expected..., Steps..., Status: Open | In Progress | Resolved.
 ```
-- **Priority: High**  
-  [2025-10-09] Canonical and social metadata point to old domain  
-  Observed: Astro dev build outputs `<link rel="canonical" href="https://xxchan.github.io/...">` and matching OG/Twitter tags.  
-  Expected: All canonical and social URLs should use the new production domain `https://xxchan.me`.  
-  Steps: `curl -s http://localhost:4321/ | rg "canonical"`.  
-  Status: Resolved.  
-  Action: Update domain configuration in `astro.config.mjs`, `src/consts.ts`, and any other constants before rebuilding.
+- **Priority: High · Status: ✅ Resolved**  
+  [2025-10-09] Canonical and social metadata use production domain  
+  Observed: Canonical + OG/Twitter tags now point at `https://xxchan.me` across the site.  
+  Expected: Keep canonical and social URLs aligned with the production domain.  
+  Steps: `curl -s http://localhost:4323/ | rg "canonical"` (replace port if dev picks a different one).  
+  Action: None.
 
-- **Priority: High**  
+- **Priority: High · Status: 🚫 Cancelled**  
   [2025-10-09] Internal cross-links hard-coded to legacy domain  
   Observed: Markdown content still links to `https://xxchan.github.io/...` (e.g., bilingual post cross-links, historical references).  
   Expected: Internal links should target the new `https://xxchan.me` structure (prefer relative URLs to survive future domain changes).  
   Steps: `rg "https://xxchan.github.io" src/content`.  
-  Status: Cancelled.  
   Action: Replace hard-coded legacy domain URLs with correct Astro routes or relative paths, adjusting slugs if necessary.
   comment: 我觉得用 absolute URL 挺好的，没必要切
 
-- **Priority: High**  
-  [2025-10-09] Footer analytics scripts and Atom feed absent  
-  Observed: Astro footer renders only plain copyright text and omits GA `G-2MN995FKFK`, Tinybird flock, and the `/feed.xml` link; `/feed.xml` itself returns 404 on the dev server.  
-  Expected: Footer should mirror production with analytics beacons and expose a working Atom feed endpoint.  
-  Steps: `curl -s http://localhost:4321/ | rg "Tinybird"`, `curl -I http://localhost:4321/feed.xml`.  
-  Status: Open.  
-  Action: Restore footer scripts/link markup and ensure feed generation in the Astro build.
+- **Priority: High · Status: 🔴 Open**  
+  [2025-10-09] Footer analytics scripts absent  
+  Observed: Footer still renders only copyright text + RSS link; GA `G-2MN995FKFK` and Tinybird flock scripts are missing, though `/feed.xml` now returns 200.  
+  Expected: Mirror legacy footer beacons while keeping the RSS link working.  
+  Steps: `curl -s http://localhost:4323/ | rg "Tinybird"` (replace port as needed), `curl -I http://localhost:4323/feed.xml`.  
+  Action: Embed analytics scripts in the footer (feed already configured).
 
-- **Priority: High**  
-  [2025-10-09] Author card and follow interaction missing on homepage  
-  Observed: Local home page shows only a short intro paragraph; the legacy author sidebar (avatar, bio, social icons with toggle) is absent.  
-  Expected: Recreate the author profile component with Follow button behaviour for parity.  
-  Steps: Compare `/tmp/astro-home.html` vs `/tmp/legacy-home.html`.  
-  Status: Open.  
-  Action: Implement an author sidebar component and integrate it into home/post layouts.
+- **Priority: High · Status: ✅ Resolved**  
+  [2025-10-09] Author card and follow interaction restored  
+  Observed: Home and post layouts now show the author sidebar (avatar, bio, social icons) with the expected Follow interaction.  
+  Expected: Maintain author profile parity with the legacy site.  
+  Steps: Compare the local home page against the legacy page in the browser.  
+  Action: None.
 
-- **Priority: Medium**  
+- **Priority: Medium · Status: 🔴 Open**  
   [2025-10-09] Post footer enhancements and giscus widget not implemented  
   Observed: Astro posts stop after tag list; giscus comments, related-posts grid, and previous/next pagination are missing.  
   Expected: Match legacy `/cs/2022/02/07/paxos-hard.html` footer features to preserve engagement patterns.  
-  Steps: `rg "giscus" /tmp/astro-paxos.html`, compare against legacy HTML.  
-  Status: Open.  
+  Steps: `curl -s http://localhost:4323/blog/2022-02-07-paxos-hard/ | rg "giscus"` (replace port as needed), compare against legacy HTML.  
   Action: Reintroduce giscus embed and related/pager sections in `BlogPost.astro`.
 
-- **Priority: Medium**  
-  [2025-10-09] Social metadata lacks article-specific context  
-  Observed: `og:type` is always `website`, and pages without explicit descriptions fall back to the generic site tagline.  
-  Expected: Article pages should emit `og:type=article` and reuse frontmatter excerpts/descriptions.  
-  Steps: `curl -s http://localhost:4321/blog/2025-09-28-tool-eval/ | rg "og:type"`.  
-  Status: Open.  
-  Action: Enhance `BaseHead.astro` to detect post layouts and feed richer metadata.
-
-- **Priority: High**  
-  [2025-10-09] Latest posts ordering matches production  
-  Observed: Home page lists the same six most recent entries as the legacy site with identical order and bilingual titles.  
-  Expected: Maintain parity with production ordering.  
-  Steps: `curl -s http://localhost:4321/`, `curl -s https://xxchan.me/`.  
-  Status: Resolved.  
-  Action: None; parity confirmed.
-
-- **Priority: Medium**  
-  [2025-10-09] Legacy redirects working  
-  Observed: Requests to `/categories/` and dated `/cs/...` slugs return 308s to the new `/tags/` and `/blog/.../` routes; Vitest redirect suite passes.  
-  Expected: Preserve legacy URL coverage.  
-  Steps: `curl -I http://localhost:4321/categories/`, `curl -I http://localhost:4321/cs/2022/02/07/paxos-hard.html`, `pnpm test`.  
-  Status: Resolved.  
+- **Priority: Medium · Status: ✅ Resolved**  
+  [2025-10-09] Social metadata carries article context  
+  Observed: Post pages emit `og:type=article`, publish timestamps, sections/tags, and per-post descriptions.  
+  Expected: Continue exposing article-specific Open Graph fields.  
+  Steps: `curl -s http://localhost:4323/blog/2025-09-28-tool-eval/ | rg "og:type"` (replace port as needed), `curl -s http://localhost:4323/blog/2023-02-08-profiling-101/ | rg "og:description"`.  
   Action: None.
 
-- **Priority: Medium**  
+- **Priority: High · Status: ✅ Resolved**  
+  [2025-10-09] Latest posts ordering matches production  
+  Observed: Home page shows the same six most recent entries as the legacy site with identical ordering and bilingual titles.  
+  Expected: Keep home listing in sync with production.  
+  Steps: `curl -s http://localhost:4323/` (replace port as needed), `curl -s https://xxchan.me/`.  
+  Action: None.
+
+- **Priority: Medium · Status: ✅ Resolved**  
+  [2025-10-09] Legacy redirects working  
+  Observed: `/categories/` and dated `/cs/...` URLs return 308s to `/tags/` and `/blog/.../`; Vitest redirect suite passes.  
+  Expected: Preserve legacy URL coverage.  
+  Steps: `curl -I http://localhost:4323/categories/`, `curl -I http://localhost:4323/cs/2022/02/07/paxos-hard.html` (replace port as needed), `pnpm test`.  
+  Action: None.
+
+- **Priority: Medium · Status: ✅ Resolved**  
   [2025-10-09] TOC, KaTeX, and syntax highlighting render correctly  
   Observed: Paxos posts show sticky TOC, math, and Shiki-highlighted code blocks consistent with the baseline.  
   Expected: Maintain these rendering features across migrated posts.  
-  Steps: `curl -s http://localhost:4321/blog/2022-02-07-paxos-hard/` manual inspection.  
-  Status: Resolved.  
+  Steps: `curl -s http://localhost:4323/blog/2022-02-07-paxos-hard/` (replace port as needed; manual inspection).  
   Action: None.
 
-- **Priority: Medium**  
+- **Priority: Medium · Status: 🔴 Open**  
   [2025-10-09] Skip links missing from global shell  
   Observed: Local home page lacks “Skip to …” anchors before the navigation bar, while the legacy site renders dedicated skip links for primary nav, content, and footer.  
   Expected: Provide the same skip-link affordances to preserve keyboard accessibility.  
-  Steps: Inspect `http://localhost:4321/` and `https://xxchan.me/` with Chrome MCP; search for `a[href="#site-nav"]`.  
-  Status: Open.  
+  Steps: Inspect `http://localhost:4323/` (replace port as needed) and `https://xxchan.me/` with Chrome MCP; search for `a[href="#site-nav"]`.  
   Action: Reintroduce skip-link markup in the layout header and ensure focus styles match production.
 
-- **Priority: Medium**  
+- **Priority: Medium · Status: 🔴 Open**  
   [2025-10-09] Category index omits post counts  
   Observed: `/tags` shows a plain list of category names with no article counts, whereas `https://xxchan.me/categories/` displays “CS 12”, “AI 5”, etc. to communicate volume at a glance.  
   Expected: Surface per-category post counts (and equivalent tag statistics) on the Astro listing.  
-  Steps: Compare `http://localhost:4321/tags` to `https://xxchan.me/categories/`.  
-  Status: Open.  
+  Steps: Compare `http://localhost:4323/tags` (replace port as needed) to `https://xxchan.me/categories/`.  
   Action: Extend the Topics page data to compute counts and render them alongside each category/tag entry.
+
+- **Priority: Medium · Status: 🔴 Open**  
+  [2025-10-09] `robots.txt` missing locally  
+  Observed: `http://localhost:4323/robots.txt` returns the Astro 404 page, while the legacy site serves a policy document.  
+  Expected: Serve the same `robots.txt` content as production to preserve crawl directives.  
+  Steps: `curl -s http://localhost:4323/robots.txt` (replace port as needed), `curl -s https://xxchan.me/robots.txt`.  
+  Action: Add `robots.txt` to `public/` or configure a route that emits the existing policy text.

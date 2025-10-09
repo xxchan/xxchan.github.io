@@ -3,18 +3,30 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import type { ArticleMeta } from '../components/BaseHead.astro';
 
 interface Props {
   readonly title?: string;
   readonly description?: string;
+  readonly ogType?: 'website' | 'article';
+  readonly articleMeta?: ArticleMeta;
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const props = Astro.props as Props;
+const isArticle = props.ogType === 'article';
+const title = props.title ?? SITE_TITLE;
+const description =
+  props.description ?? props.articleMeta?.description ?? (isArticle ? undefined : SITE_DESCRIPTION);
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      ogType={props.ogType}
+      articleMeta={props.articleMeta}
+    />
   </head>
   <body>
     <Header />

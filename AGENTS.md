@@ -12,5 +12,14 @@ Follow the existing 2-space indentation and prefer single quotes in TypeScript. 
 ## Testing Guidelines
 Vitest powers the test harness; store new cases beside related features in `tests/` using the `*.test.ts` suffix. Mirror the `redirects.test.ts` pattern: group assertions with `describe`, prefer precise expectations, and mock network boundaries where needed. Run `pnpm test` locally before pushing. While no hard coverage gate exists, extend existing suites whenever routes, collections, or script outputs change.
 
-## Commit & Pull Request Guidelines
-History favors concise imperative commits such as `add tool-cmp` or `improve format`; keep messages under 60 characters and focus on the observable change. For pull requests, include a short summary, testing notes (`pnpm check`, `pnpm test`), and links to related issues. Screenshots or before/after snippets are expected when you touch layout, styling, or generated content. Request review once CI passes and migrations (if any) have been documented.
+### Verifying Changes
+
+After making changes, it's CRITICAL to verify that the changes are working as expected. Reading code alone is usually not enough.
+Whenever possible, you should prefer real verification first, and code analysis second.
+
+So you can start the app locally with `pnpm dev`, and either use `curl`,
+chrome devtools MCP, or other kind of scripts to test the changes.
+
+IMPORTANT guidelines:
+
+- you should start the app in the background, and check its logs: `pnpm dev > /tmp/astro-dev.log 2>&1 & echo $!`

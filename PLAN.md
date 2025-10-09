@@ -40,5 +40,7 @@
 ## Future TODOs
 - [ ] Reactions system (Neon + Vercel) once interactive features are desired.
 - [ ] Additional polish (themes, pagination, search).
+- [ ] Build richer multilingual support across site content and UI.
 - [x] Address feedback: move TOC to sidebar for sticky mode and add redirects for legacy blog URLs.
 - [x] Merge Categories page into Tags overview (single taxonomy landing page).
+- [ ] Draft and maintain `llm.txt` with LLM-specific notes.
