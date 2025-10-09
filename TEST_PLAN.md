@@ -6,6 +6,7 @@
 - When differences appear, classify them: log only items where the Astro implementation is missing functionality, content, or polish that the baseline provides (or where the new site introduces a regression). Document intentional improvements separately if needed.
 - Capture affirmative results too: whenever a parity check passes, jot down the URL/feature and note that behaviour matches the legacy site so future reviewers know it was validated.
 - Capture each migration gap in the *Findings Log* with URL, observed vs. expected behaviour, reproduction steps, status, and proposed fix.
+- Keep the Production Baseline inventory in sync with the Findings Log: mark verified items with `✅ Parity confirmed <date>` and tag any open gaps with `🔴 Pending (see Findings)` so the table and the actionable list mirror one another.
 
 ## Preparation Checklist
 - Confirm you can reach `https://xxchan.me/` and `https://xxchan.github.io/` over HTTPS.
@@ -13,65 +14,84 @@
 
 ## Test Execution Steps
 1. **Start Local Server (read-only)**  
-   - Run `pnpm dev -- --host 0.0.0.0 --port 4321` in the background (already configured) and confirm logs show Astro ready.  
-   - Open `http://localhost:4321/` in Chrome MCP to ensure the Astro UI is reachable.
+   - Run `pnpm dev -- --host 0.0.0.0 --port 4321 > /tmp/astro-dev.log 2>&1 & echo $!` and wait for the “Astro ready” message.  
+   - If port 4321 is occupied, Astro will auto-select another port—read the log (`tail -n5 /tmp/astro-dev.log`) and note the reported `http://localhost:####` for subsequent curls.
+
 2. **Baseline Capture (legacy site)**  
-   - Load `https://xxchan.me/` and inventory global elements (navigation links, search box, footer links), home hero content, featured articles, and taxonomy listings (`/categories/`, tag listings).  
-   - Sample legacy post types (`/ai/...`, `/cs/...`, bilingual entries) to note embedded media, KaTeX, code fences, footnotes, pagination, and related-post widgets. Collect evidence (screenshots/notes) for parity checks.
-3. **Comparative Smoke Test (Astro)**  
-   - On `http://localhost:4321/`, verify matching navigation, hero copy “Hi, I’m xxchan 👋”, post listings, footer, and any global utilities (search, language toggles, feed links).  
-   - Compare behaviour against baseline notes. Only log discrepancies where Astro is missing baseline coverage or introduces regressions; acknowledge intentional improvements inline for context.
-4. **Content Parity & Rendering**  
-   - For posts (`/blog/2022-02-07-paxos-hard/`, `/blog/2025-09-28-tool-eval/`, `/blog/2022-02-09-paxos-hard-zh/`), confirm TOC, KaTeX, code highlighting, alternate language links locally.  
-   - Cross-check categories/tags counts between baseline (legacy categories pages) and local Astro `/tags/` and `/tags/<slug>/`.
+   - Load `https://xxchan.me/` and inventory global elements (navigation links, skip links, footer analytics, hero content, taxonomy listings).  
+   - Sample representative posts (`/ai/...`, `/cs/...`, bilingual entries) to document TOC behaviour, KaTeX, code fences, pagination, related posts, and giscus placement.
+
+3. **Shell & Navigation Parity (local Astro)**  
+   - Visit the local port recorded in step 1; confirm navigation links, hero copy (“Hi, I’m xxchan 👋”), author sidebar, and footer.  
+   - Explicitly check the known gaps: skip-link anchors, analytics scripts in the footer, and RSS link visibility. Log any differences against the Findings section.
+
+4. **Post Template & Footer Checks**  
+   - Compare `/blog/2022-02-07-paxos-hard/`, `/blog/2025-09-28-tool-eval/`, `/blog/2022-02-09-paxos-hard-zh/` between legacy and local.  
+   - Validate TOC labels, KaTeX, code highlighting, bilingual cross-links, giscus embed, related posts grid, and previous/next pagination; update Findings for any departures.
+
 5. **Feeds & Metadata**  
-   - Legacy baseline: `curl -I https://xxchan.me/rss.xml`, `index.xml`, `posts.json` (expected 404 currently).  
-   - Local: `curl -I http://localhost:4321/rss.xml`, `http://localhost:4321/index.xml`, `http://localhost:4321/posts.json`; inspect HTML head for canonical & OG meta.
+   - Legacy reference: `curl -I https://xxchan.me/rss.xml`, `https://xxchan.me/index.xml`, `https://xxchan.me/posts.json` (expect 404).  
+   - Local verification: replace the port in `curl -I http://localhost:PORT/rss.xml`, `http://localhost:PORT/index.xml`, `http://localhost:PORT/posts.json`; scrape the HTML head for canonical + OG/Twitter tags.
+
 6. **Redirects & Legacy URLs**  
-   - From baseline, note existing behaviour (mostly 200s).  
-   - Using local `pnpm test` and manual `curl -I http://localhost:4321/...`, verify redirect targets (`/ai/...` → `/blog/...`, `/categories/` → `/tags/`, etc.).
-7. **Responsive & Accessibility**  
-   - Employ Chrome MCP responsive modes to check mobile/desktop layouts on localhost.  
-   - Run Lighthouse (local) and note scores; compare to baseline when possible.
-8. **Performance & Caching**  
-   - Capture DevTools Performance trace locally; compare TTFB/assets between baseline (via WebPageTest or DevTools) and Astro build.  
-   - Inspect cache headers (`curl -I`) for localhost (Astro dev uses no-cache) vs. baseline (Cloudflare) to plan production expectations.
-9. **Regression Safety Net**  
-   - Run `pnpm test` locally (ensures redirect suite passes).  
-   - Leave environments untouched after tests; stop dev server when finished.
+   - Run `pnpm test` to execute the Vitest redirect suite.  
+   - Manually sample `curl -I http://localhost:PORT/categories/` and dated `/cs/...html` routes to ensure 308 redirects point to `/tags/` and `/blog/.../`.
+
+7. **Build Artifacts & Robots**  
+   - Stop the dev server when verification is done; run `pnpm build`.  
+   - Inspect `dist/sitemap-index.xml`, `dist/sitemap-0.xml`, and `dist/robots.txt` (once added) to confirm domains and policy text match production.
+
+8. **Responsive & Accessibility**  
+   - Use Chrome MCP responsive viewports to confirm layout integrity from mobile to desktop.  
+   - Audit focus order and skip-link behaviour with keyboard-only navigation.
+
+9. **Performance & Caching**  
+   - Capture a DevTools performance trace locally; compare asset waterfall/TTFB with legacy benchmarks.  
+   - Inspect cache headers via `curl -I` to understand differences between Astro dev, build output, and production (Cloudflare).
+
+10. **Regression Safety Net**  
+    - After fixes, rerun `pnpm test` and any focused `curl` checks from the Findings list.  
+    - Document results, then stop background processes (`kill <PID>` from step 1).
 
 ## Production Baseline Feature Inventory
 ### Global Shell
-- **Priority: High** Navigation bar (`https://xxchan.me/`) with greedy-nav collapse, site title link, and `Archive`/`About` items must function and retain skip-link accessibility.
-- **Priority: Medium** Ensure global skip links and keyboard focus states mirror the legacy behaviour for accessibility parity.
-- **Priority: High** Footer needs feed link, copyright text, and analytics scripts (Google Analytics `G-2MN995FKFK`, Tinybird flock) to load on every page.
+- ✅ **Priority: High** Navigation bar keeps the site title link and menu items (`Home`, `Blog`, `Topics`, `About`) working across breakpoints. Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** Ensure global skip links and keyboard focus states mirror the legacy behaviour for accessibility parity. (Pending; see Findings).
+- 🔴 **Priority: High** Footer needs feed link, copyright text, and analytics scripts (Google Analytics `G-2MN995FKFK`, Tinybird flock) to load on every page. (Pending; see Findings).
 
 ### Sidebar & Profile
-- **Priority: High** Author card (avatar, “Build something fun and useful” bio) appears on home/posts with correct social icons (Twitter, GitHub, LinkedIn) and external `rel` attributes.
-- **Priority: Medium** `Follow` button toggles the social icon list without layout regressions on mobile breakpoints, and remains operable via keyboard (`Enter`/`Space`) with icons focusable after expansion.
-- **Priority: Medium** Avatar hot-links to GitHub’s image CDN (`https://avatars.githubusercontent.com/...`); confirm the Astro build preserves a working headshot (or ships a local fallback) so CSP/cache tweaks do not break the portrait.
+- ✅ **Priority: High** Author card (avatar, “Build something fun and useful” bio) appears on home/posts with correct social icons (Twitter, GitHub, LinkedIn) and external `rel` attributes. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** `Follow` button toggles the social icon list without layout regressions on mobile breakpoints, and remains operable via keyboard (`Enter`/`Space`) with icons focusable after expansion. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** Avatar hot-links to GitHub’s image CDN (`https://avatars.githubusercontent.com/...`); confirm the Astro build preserves a working headshot (or ships a local fallback) so CSP/cache tweaks do not break the portrait. Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** Preserve the legacy microformats/IndieWeb affordances (`h-card`, `u-photo`, `p-name`, `rel="me"`) alongside Schema.org metadata so identity parsers and social verification keep functioning. (Pending; see Findings).
 
 ### Homepage & Listing Views
-- **Priority: High** `Recent Posts` list keeps ordering, bilingual titles, and excerpts exactly as the Jekyll baseline (mix of `/ai/`, `/cs/`, `/misc/`, `/this-week-in-risingwave/`).
-- **Priority: Medium** Verify legacy categories index (`/categories/`) still renders taxonomy counts, anchor links, and per-category groupings (e.g., CS=12, AI=5, Life=2, This-Week-in-RisingWave=1, Misc=1) with anchors like `/categories/#cs`.
+- ✅ **Priority: High** `Recent Posts` list keeps ordering, bilingual titles, and excerpts exactly as the Jekyll baseline (mix of `/ai/`, `/cs/`, `/misc/`, `/this-week-in-risingwave/`). Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** Verify legacy categories index (`/categories/`) still renders taxonomy counts, the `taxonomy__index` quick-jump list (anchors like `#this-week-in-risingwave`), and per-category groupings (e.g., CS=12, AI=5, Life=2, This-Week-in-RisingWave=1, Misc=1) including the “Back to Top ↑” shortcuts. (Pending; see Findings).
 
 ### Post Template Essentials
-- **Priority: High** Sticky “On this page” table of contents renders for long-form posts (e.g., `/cs/2023/02/17/optimize-rust-comptime-en.html`) with deep-link anchors intact.
-- **Priority: Medium** TOC heading labels honor front-matter overrides/localization (`Contents` on `/cs/2022/02/07/paxos-hard.html`, `目录` on `/cs/2022/02/09/paxos-hard-zh.html`, `On this page` on `/ai/2025/06/10/ai-coding-en.html`) so the Astro rewrite mirrors each label verbatim.
-- **Priority: High** Bilingual cross-links (e.g., `English version of this post`) remain functional between paired slugs.
-- **Priority: High** Code fences, syntax highlighting, blockquotes, and inline images served from `/assets/img/...` display with expected styling.
-- **Priority: Medium** `You May Also Enjoy` related posts grid and previous/next pagination preserve relationships and copy.
-- **Priority: Medium** Giscus comment widget (`data-repo="xxchan/xxchan.github.io"`) mounts with light theme, reaction toggles, respects per-post titles, and retains the production config (`data-category="Announcements"`, `data-mapping="title"`, `data-lang="en"`).
-- **Priority: Medium** MathJax configuration (footer script enabling `$...$`/`\(...\)` rendering) remains available for math-heavy articles such as the Paxos series.
-- **Priority: Medium** Post footer metadata matches legacy output: category chips linking to `/categories/#<slug>`, “Updated” timestamps (`February 17, 2023` format), share buttons opening popup windows, plus the Previous/Next pager chaining bilingual posts (see `/cs/2023/02/17/optimize-rust-comptime-en.html`).
+- ✅ **Priority: High** Sticky “On this page” table of contents renders for long-form posts (e.g., `/cs/2023/02/17/optimize-rust-comptime-en.html`) with deep-link anchors intact. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** TOC heading labels honor front-matter overrides/localization (`Contents` on `/cs/2022/02/07/paxos-hard.html`, `目录` on `/cs/2022/02/09/paxos-hard-zh.html`, `On this page` on `/ai/2025/06/10/ai-coding-en.html`) so the Astro rewrite mirrors each label verbatim. Parity confirmed 2025-10-09.
+- ✅ **Priority: High** Bilingual cross-links (e.g., `English version of this post`) remain functional between paired slugs. Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** Tag chips targeting `/tags/#<slug>` keep working; ensure the Astro `/tags` page exposes matching fragment IDs (`consensus`, `system`, etc.) so historical permalinks stay valid. (Pending; see Findings).
+- 🔴 **Priority: Medium** HTML `lang` attributes and Open Graph `og:locale` values on bilingual posts mirror the production choices (Chinese articles currently render `lang="en"` unless we intentionally change that) to avoid regressions in screen readers and social previews. (Pending; see Findings).
+- ✅ **Priority: High** Code fences, syntax highlighting, blockquotes, and inline images served from `/assets/img/...` display with expected styling. Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** `You May Also Enjoy` related posts grid and previous/next pagination preserve relationships and copy. (Pending; see Findings).
+- 🔴 **Priority: Medium** Giscus comment widget (`data-repo="xxchan/xxchan.github.io"`) mounts with light theme, reaction toggles, respects per-post titles, and retains the production config (`data-category="Announcements"`, `data-mapping="title"`, `data-lang="en"`). (Pending; see Findings).
+- 🔴 **Priority: Medium** MathJax configuration (footer script enabling `$...$`/`\(...\)` rendering) remains available for math-heavy articles such as the Paxos series. (Pending; see Findings).
+- 🔴 **Priority: Medium** Post footer metadata matches legacy output: category chips linking to `/categories/#<slug>`, “Updated” timestamps (`February 17, 2023` format), share buttons opening popup windows, plus the Previous/Next pager chaining bilingual posts (see `/cs/2023/02/17/optimize-rust-comptime-en.html`). (Pending; see Findings).
 
 ### Syndication & Integrations
-- **Priority: High** Atom feed at `/feed.xml` continues to build and expose recent posts metadata.
-- **Priority: Medium** Social share buttons (Twitter, Facebook, LinkedIn) on posts open share dialogs with accurate permalinks and titles.
-- **Priority: Medium** Sitemap build outputs `sitemap-index.xml`/`sitemap-0.xml` with `https://xxchan.me` URLs (`pnpm build`, then inspect `dist/sitemap-index.xml` and `dist/sitemap-0.xml`).
-- **Priority: Low** Feed endpoint preserves HTTP headers observed today (`Content-Type: application/xml`, `Access-Control-Allow-Origin: *`, `Cache-Control: max-age=600`) so downstream consumers keep working once migrated.
-- **Priority: Low** Google Fonts (`Noto Serif SC`) and Font Awesome assets load without blocking layout; confirm Astro build maintains preload/async hints.
-- **Priority: Medium** `/robots.txt` serves the same allow/block policy text as production (`https://xxchan.me/robots.txt`) instead of the Astro 404 page.
+- ✅ **Priority: High** Atom feed at `/feed.xml` continues to build and expose recent posts metadata. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** Feed entries retain embedded HTML (images, lists, code blocks) inside CDATA so downstream readers render the same rich content as production. Parity confirmed 2025-10-09.
+- 🔴 **Priority: Medium** Social share buttons (Twitter, Facebook, LinkedIn) on posts open share dialogs with accurate permalinks and titles. (Pending; see Findings).
+- ✅ **Priority: High** Canonical, OG, and Twitter metadata reference `https://xxchan.me` across pages. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** Article pages emit `og:type=article`, publish timestamps, and tag metadata matching the legacy site. Parity confirmed 2025-10-09.
+- ✅ **Priority: Medium** Sitemap build outputs `sitemap-index.xml`/`sitemap-0.xml` with `https://xxchan.me` URLs (`pnpm build`, then inspect `dist/sitemap-index.xml` and `dist/sitemap-0.xml`). Parity confirmed 2025-10-09.
+- 🔴 **Priority: Low** Feed endpoint preserves HTTP headers observed today (`Content-Type: application/xml`, `Access-Control-Allow-Origin: *`, `Cache-Control: max-age=600`) so downstream consumers keep working once migrated. (Pending; see Findings).
+- 🔴 **Priority: Low** Google Fonts (`Noto Serif SC`) and Font Awesome assets load without blocking layout; confirm Astro build maintains preload/async hints. (Pending; see Findings).
+- 🔴 **Priority: Medium** `/robots.txt` serves the same allow/block policy text as production (`https://xxchan.me/robots.txt`) instead of the Astro 404 page. (Pending; see Findings).
+- ✅ **Priority: Medium** Legacy routes (`/categories/`, dated `/cs/...` paths) 308 redirect to new slugs. Parity confirmed 2025-10-09.
 
 ### Legacy Edge Cases Observed (2025-10-09)
 - **Priority: Low** Short-form articles (e.g., `/this-week-in-risingwave/2023/04/02/twirw-migration.html`) render an empty “On this page” shell; decide whether to mirror this empty aside or hide it to avoid blank chrome while preserving sticky layout spacing.
@@ -79,91 +99,82 @@
 - **Priority: Low** Theme 404 screen (`/search/` → HTTP 404) shows centered “Page not found :(” messaging; verify Astro returns the same status code and supplies a friendly fallback.
 
 ## Findings Log
-- Use the template below for each issue and append entries in chronological order. Update status as items get triaged or resolved.
-```
-- [DATE] URL/Feature: Observed..., Expected..., Steps..., Status: Open | In Progress | Resolved.
-```
-- **Priority: High · Status: ✅ Resolved**  
-  [2025-10-09] Canonical and social metadata use production domain  
-  Observed: Canonical + OG/Twitter tags now point at `https://xxchan.me` across the site.  
-  Expected: Keep canonical and social URLs aligned with the production domain.  
-  Steps: `curl -s http://localhost:4323/ | rg "canonical"` (replace port if dev picks a different one).  
-  Action: None.
+- Record only actionable items below; move validated checks into the Production Baseline section above.
 
-- **Priority: High · Status: 🚫 Cancelled**  
-  [2025-10-09] Internal cross-links hard-coded to legacy domain  
-  Observed: Markdown content still links to `https://xxchan.github.io/...` (e.g., bilingual post cross-links, historical references).  
-  Expected: Internal links should target the new `https://xxchan.me` structure (prefer relative URLs to survive future domain changes).  
-  Steps: `rg "https://xxchan.github.io" src/content`.  
-  Action: Replace hard-coded legacy domain URLs with correct Astro routes or relative paths, adjusting slugs if necessary.
-  comment: 我觉得用 absolute URL 挺好的，没必要切
-
-- **Priority: High · Status: 🔴 Open**  
-  [2025-10-09] Footer analytics scripts absent  
-  Observed: Footer still renders only copyright text + RSS link; GA `G-2MN995FKFK` and Tinybird flock scripts are missing, though `/feed.xml` now returns 200.  
-  Expected: Mirror legacy footer beacons while keeping the RSS link working.  
+### Open Findings (🔴)
+- **Priority: High** Footer analytics scripts absent (GA `G-2MN995FKFK`, Tinybird).  
+  Observed: Footer renders only copyright text + RSS link; analytics beacons are missing even though `/feed.xml` now returns 200.  
+  Expected: Mirror legacy footer scripts while keeping the RSS link working.  
   Steps: `curl -s http://localhost:4323/ | rg "Tinybird"` (replace port as needed), `curl -I http://localhost:4323/feed.xml`.  
-  Action: Embed analytics scripts in the footer (feed already configured).
+  Next: Embed analytics scripts in `src/components/Footer.astro`.
 
-- **Priority: High · Status: ✅ Resolved**  
-  [2025-10-09] Author card and follow interaction restored  
-  Observed: Home and post layouts now show the author sidebar (avatar, bio, social icons) with the expected Follow interaction.  
-  Expected: Maintain author profile parity with the legacy site.  
-  Steps: Compare the local home page against the legacy page in the browser.  
-  Action: None.
+- **Priority: Medium** Post footer lacks giscus, related posts, and prev/next pagination.  
+  Observed: Astro posts stop after the tag list.  
+  Expected: Match legacy `/cs/2022/02/07/paxos-hard.html` footer features.  
+  Steps: `curl -s http://localhost:4323/blog/2022-02-07-paxos-hard/ | rg "giscus"` (replace port as needed), compare against the legacy HTML.  
+  Next: Restore giscus + related grid + pager in `src/layouts/BlogPost.astro`.
 
-- **Priority: Medium · Status: 🔴 Open**  
-  [2025-10-09] Post footer enhancements and giscus widget not implemented  
-  Observed: Astro posts stop after tag list; giscus comments, related-posts grid, and previous/next pagination are missing.  
-  Expected: Match legacy `/cs/2022/02/07/paxos-hard.html` footer features to preserve engagement patterns.  
-  Steps: `curl -s http://localhost:4323/blog/2022-02-07-paxos-hard/ | rg "giscus"` (replace port as needed), compare against legacy HTML.  
-  Action: Reintroduce giscus embed and related/pager sections in `BlogPost.astro`.
-
-- **Priority: Medium · Status: ✅ Resolved**  
-  [2025-10-09] Social metadata carries article context  
-  Observed: Post pages emit `og:type=article`, publish timestamps, sections/tags, and per-post descriptions.  
-  Expected: Continue exposing article-specific Open Graph fields.  
-  Steps: `curl -s http://localhost:4323/blog/2025-09-28-tool-eval/ | rg "og:type"` (replace port as needed), `curl -s http://localhost:4323/blog/2023-02-08-profiling-101/ | rg "og:description"`.  
-  Action: None.
-
-- **Priority: High · Status: ✅ Resolved**  
-  [2025-10-09] Latest posts ordering matches production  
-  Observed: Home page shows the same six most recent entries as the legacy site with identical ordering and bilingual titles.  
-  Expected: Keep home listing in sync with production.  
-  Steps: `curl -s http://localhost:4323/` (replace port as needed), `curl -s https://xxchan.me/`.  
-  Action: None.
-
-- **Priority: Medium · Status: ✅ Resolved**  
-  [2025-10-09] Legacy redirects working  
-  Observed: `/categories/` and dated `/cs/...` URLs return 308s to `/tags/` and `/blog/.../`; Vitest redirect suite passes.  
-  Expected: Preserve legacy URL coverage.  
-  Steps: `curl -I http://localhost:4323/categories/`, `curl -I http://localhost:4323/cs/2022/02/07/paxos-hard.html` (replace port as needed), `pnpm test`.  
-  Action: None.
-
-- **Priority: Medium · Status: ✅ Resolved**  
-  [2025-10-09] TOC, KaTeX, and syntax highlighting render correctly  
-  Observed: Paxos posts show sticky TOC, math, and Shiki-highlighted code blocks consistent with the baseline.  
-  Expected: Maintain these rendering features across migrated posts.  
-  Steps: `curl -s http://localhost:4323/blog/2022-02-07-paxos-hard/` (replace port as needed; manual inspection).  
-  Action: None.
-
-- **Priority: Medium · Status: 🔴 Open**  
-  [2025-10-09] Skip links missing from global shell  
-  Observed: Local home page lacks “Skip to …” anchors before the navigation bar, while the legacy site renders dedicated skip links for primary nav, content, and footer.  
-  Expected: Provide the same skip-link affordances to preserve keyboard accessibility.  
+- **Priority: Medium** Skip links missing from the global shell.  
+  Observed: Local home page lacks “Skip to …” anchors, while the legacy site renders dedicated skip links for nav, content, and footer.  
+  Expected: Provide equivalent skip-link affordances for keyboard users.  
   Steps: Inspect `http://localhost:4323/` (replace port as needed) and `https://xxchan.me/` with Chrome MCP; search for `a[href="#site-nav"]`.  
-  Action: Reintroduce skip-link markup in the layout header and ensure focus styles match production.
+  Next: Reintroduce skip-link markup + focus styles in `src/layouts/BaseLayout.astro` / `src/components/Header.astro`.
 
-- **Priority: Medium · Status: 🔴 Open**  
-  [2025-10-09] Category index omits post counts  
-  Observed: `/tags` shows a plain list of category names with no article counts, whereas `https://xxchan.me/categories/` displays “CS 12”, “AI 5”, etc. to communicate volume at a glance.  
-  Expected: Surface per-category post counts (and equivalent tag statistics) on the Astro listing.  
+- **Priority: Medium** Microformats/IndieWeb hooks missing from author card.  
+  Observed: Local markup lacks `class="h-card"`/`u-photo`/`rel="me"` attributes (`rg "h-card" /tmp/local_home.html`).  
+  Expected: Mirror production microformats for identity parsers (`rg "h-card" /tmp/prod_home.html`).  
+  Steps: Audit `src/components/AuthorCard.astro` and Schema.org metadata to combine both sets of attributes.  
+  Next: Restore IndieWeb classes and rel attributes around the author card.
+
+- **Priority: Medium** Category index omits post counts.  
+  Observed: `/tags` shows a plain list without article counts.  
+  Expected: Show counts similar to `https://xxchan.me/categories/` (“CS 12”, “AI 5”, etc.).  
   Steps: Compare `http://localhost:4323/tags` (replace port as needed) to `https://xxchan.me/categories/`.  
-  Action: Extend the Topics page data to compute counts and render them alongside each category/tag entry.
+  Next: Extend the Topics data to compute and render counts.
 
-- **Priority: Medium · Status: 🔴 Open**  
-  [2025-10-09] `robots.txt` missing locally  
-  Observed: `http://localhost:4323/robots.txt` returns the Astro 404 page, while the legacy site serves a policy document.  
-  Expected: Serve the same `robots.txt` content as production to preserve crawl directives.  
+- **Priority: Medium** Tag chips break legacy fragment URLs.  
+  Observed: Post tags link to `/tags/consensus/` while the legacy site serves `/tags/#consensus`; `/tags` lacks fragment IDs for old permalinks.  
+  Expected: Preserve historical `#slug` fragments so existing links remain valid.  
+  Steps: Inspect `http://localhost:4323/blog/2022-02-07-paxos-hard/` for tag URLs and `http://localhost:4323/tags/` for fragment anchors; compare with production.  
+  Next: Restore `#slug` anchors (or provide redirects) and align tag chip hrefs accordingly.
+
+- **Priority: Medium** `og:locale` meta missing on bilingual posts.  
+  Observed: Local pages omit `meta property="og:locale"` (`rg "og:locale" /tmp/local_paxos_zh.html`) while production supplies it.  
+  Expected: Emit the same locale meta values to avoid social preview regressions.  
+  Steps: Update the blog layout head to include `og:locale` derived from frontmatter language.  
+  Next: Add locale meta tags for both English and Chinese posts.
+
+- **Priority: Medium** MathJax script absent from post template.  
+  Observed: No MathJax configuration or script tag on Paxos posts (`rg -i "mathjax" /tmp/local_paxos_en.html`).  
+  Expected: Load the legacy MathJax config to render inline/Block math.  
+  Steps: Port the MathJax `<script>` and config from production into `src/layouts/BlogPost.astro`.  
+  Next: Restore MathJax so `$...$` markup renders locally.
+
+- **Priority: Medium** Social share buttons missing from post footer.  
+  Observed: Local posts lack Twitter/Facebook/LinkedIn share links (`rg "intent/tweet" /tmp/local_paxos_en.html`).  
+  Expected: Provide the same share buttons as production for parity.  
+  Steps: Copy share button markup into the Astro footer component and wire up popup handlers.  
+  Next: Reintroduce share buttons after the post metadata block.
+
+- **Priority: Medium** `robots.txt` missing locally.  
+  Observed: `http://localhost:4323/robots.txt` returns the Astro 404 page, while production serves a policy document.  
+  Expected: Serve the same policy text in the rewrite.  
   Steps: `curl -s http://localhost:4323/robots.txt` (replace port as needed), `curl -s https://xxchan.me/robots.txt`.  
-  Action: Add `robots.txt` to `public/` or configure a route that emits the existing policy text.
+  Next: Add `robots.txt` under `public/` or configure an Astro route.
+
+- **Priority: Low** Feed headers diverge from production.  
+  Observed: Local `/feed.xml` omits `Access-Control-Allow-Origin` and uses `Cache-Control: public, max-age=0` (`curl -I http://localhost:4323/feed.xml`).  
+  Expected: Match production’s CORS and 10-minute cache policy (`curl -I https://xxchan.me/feed.xml`).  
+  Steps: Update the feed endpoint to set response headers explicitly.  
+  Next: Align feed headers for downstream consumers.
+
+- **Priority: Low** Google Fonts + Font Awesome assets not enqueued.  
+  Observed: Local pages lack `fonts.googleapis.com`/Font Awesome links (`rg "fonts.googleapis.com" /tmp/local_home.html`) while production preloads them.  
+  Expected: Include the same font assets or documented replacements.  
+  Steps: Reintroduce the font link/preload tags in the base layout head.  
+  Next: Restore Google Fonts & Font Awesome references for typography parity.
+
+### Decisions (🚫)
+- **Priority: High** Keep absolute cross-domain links (`https://xxchan.github.io/...`) in migrated content.  
+  Rationale: Project owner prefers absolute URLs; no change required.  
+  Steps considered: `rg "https://xxchan.github.io" src/content`.
