@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: polymorphism
 ---
 
 *Disclamer：由于本人才疏学浅，并且本文涉及的话题内容过多，肯定有不全面甚至错误。本文既不学术也不实践，仅为个人阶段的学习理解，写的也比较随意。如有错误欢迎指正。*

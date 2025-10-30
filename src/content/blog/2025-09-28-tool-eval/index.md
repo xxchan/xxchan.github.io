@@ -5,6 +5,8 @@ categories:
   - AI
 toc: true
 tocSticky: true
+locale: zh
+translationKey: tool-eval
 ---
 
 Context7 是个少数比较有用的 MCP tool 之一，他能搜索你用的库的文档。

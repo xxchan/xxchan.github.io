@@ -15,6 +15,7 @@ interface Props {
   readonly image?: string;
   readonly ogType?: "website" | "article";
   readonly articleMeta?: ArticleMeta;
+  readonly alternates?: readonly { locale: string; url: string }[];
 }
 
 const props = Astro.props as Props;
@@ -22,6 +23,18 @@ const { title, description, image, articleMeta } = props;
 const ogType = props.ogType ?? "website";
 const metaDescription = description ?? articleMeta?.description;
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const alternates = props.alternates ?? [];
+
+function resolveAbsoluteUrl(path: string): string | null {
+  if (!Astro.site) {
+    return path;
+  }
+  try {
+    return new URL(path, Astro.site).toString();
+  } catch {
+    return path;
+  }
+}
 ---
 
 <meta charset="utf-8" />
@@ -45,10 +58,17 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : unde
 )}
 {ogType === "article" &&
   articleMeta?.tags?.map((tag) => (
-    <meta property="article:tag" content={tag} key={tag} />
+    <meta property="article:tag" content={tag} />
   ))}
 {image && <meta property="og:image" content={image} />}
 <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
 <meta name="twitter:title" content={title} />
 {metaDescription && <meta name="twitter:description" content={metaDescription} />}
 {image && <meta name="twitter:image" content={image} />}
+{alternates.map((link) => {
+  const absolute = resolveAbsoluteUrl(link.url);
+  return absolute ? (
+    <link rel="alternate" hreflang={link.locale} href={absolute} />
+  ) : null;
+})}
+{canonicalURL && <link rel="alternate" hreflang="x-default" href={canonicalURL.toString()} />}

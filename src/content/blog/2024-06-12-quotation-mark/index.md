@@ -5,6 +5,8 @@ categories:
   - Misc
 toc: true
 tocSticky: true
+locale: en
+translationKey: quotation-mark
 ---
 
 As you might have noticed, I write blogs in both Chinese and English. My approach to multilingual blogs is straightforward and somewhat brute-force: I simply put them together without a language switcher or any filtering. Admittedly, I haven't figured out how to implement this in Jekyll due to a lack of motivation.

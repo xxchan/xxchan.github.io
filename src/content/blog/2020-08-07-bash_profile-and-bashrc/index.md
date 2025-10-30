@@ -5,6 +5,8 @@ categories:
   - CS
 tags:
   - Random
+locale: zh
+translationKey: bash-profile-and-bashrc
 ---
 
 ## 虚惊一场

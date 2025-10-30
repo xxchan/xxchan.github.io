@@ -4,11 +4,12 @@ pubDate: 2025-06-10T00:00:00.000Z
 categories:
   - AI
 toc: true
-tocSticky: true
-lang: en
+tocSticky: false
+locale: en
+translationKey: ai-coding
 ---
 
-> (Translated from [my Chinese post](https://xxchan.me/ai/2025/06/08/ai-coding.html) by Gemini)
+> (Translated from [my Chinese post](/zh/blog/2025-06-08-ai-coding/) by Gemini)
 
 Agentic coding is arguably the hottest (and most hyper-competitive) space in tech right now, with a thousand companies jumping into the fray. Every other day, social media is flooded with announcements of a new tool or a new feature, each claiming to be mind-blowing or revolutionary. It's dizzying, and I see a lot of people asking, "Are these AI coding tools really that good?" or "What's the actual difference between X and Y?" Many try them out, feel underwhelmed, and quickly lose interest. At the same time, I'm surprised by how many programmers haven't even used **Cursor**.
 

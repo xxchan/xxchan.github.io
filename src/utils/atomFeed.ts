@@ -1,6 +1,7 @@
 import type { APIContext } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_FEED_TITLE, SITE_SUBTITLE, SITE_TITLE, SITE_URL } from '../consts';
+import { buildPostUrl, DEFAULT_LOCALE } from './i18n';
 
 type BlogEntry = CollectionEntry<'blog'>;
 
@@ -148,9 +149,17 @@ export function getLegacyEntryPath(post: BlogEntry): string | null {
 }
 
 function buildLegacyEntryMetadata(post: BlogEntry, site: URL): { link: string; id: string } {
+  if (post.data.locale !== DEFAULT_LOCALE) {
+    const localizedUrl = toAbsoluteUrl(buildPostUrl(post), site);
+    return {
+      link: localizedUrl,
+      id: localizedUrl.replace(/\/$/, ''),
+    };
+  }
+
   const legacyPath = getLegacyEntryPath(post);
   if (!legacyPath) {
-    const fallbackUrl = toAbsoluteUrl(`/blog/${post.slug}/`, site);
+    const fallbackUrl = toAbsoluteUrl(buildPostUrl(post), site);
     return {
       link: fallbackUrl,
       id: fallbackUrl.replace(/\/$/, ''),
@@ -179,7 +188,7 @@ export async function generateBlogFeed(context: APIContext): Promise<Response> {
 
   const entries = limitedPosts
     .map((post) => {
-      const entryUrl = toAbsoluteUrl(`/blog/${post.slug}/`, siteUrl);
+      const entryUrl = toAbsoluteUrl(buildPostUrl(post), siteUrl);
       const { link: legacyLink, id: legacyId } = buildLegacyEntryMetadata(post, siteUrl);
       const published = formatRfc3339(post.data.pubDate);
       const updated = formatRfc3339(getPostUpdatedDate(post));

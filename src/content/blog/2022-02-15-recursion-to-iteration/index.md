@@ -6,6 +6,8 @@ categories:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: recursion-to-iteration
 ---
 
 > 递归是像呼吸一般自然的事情。

@@ -8,6 +8,8 @@ categories:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: optimize-rust-comptime
 ---
 
 [English version of this post](/blog/2023-02-17-optimize-rust-comptime-en/)

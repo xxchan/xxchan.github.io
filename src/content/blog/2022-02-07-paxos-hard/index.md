@@ -11,9 +11,10 @@ tags:
 toc: true
 tocLabel: Contents
 tocSticky: true
+locale: en
+translationKey: paxos-hard
 ---
-
-[Chinese Version](https://xxchan.github.io/cs/2022/02/09/paxos-hard-zh.html)
+[Chinese Version](/zh/blog/2022-02-09-paxos-hard-zh/)
 
 
 In this blog, I will **omit practical aspects like performance issues**. I will focus on general ideas like basic notions, expressiveness, or "**how to make it possible**" instead of "how to make it super-fast". Also, I will try to convey my ideas to readers without any knowledge of distributed systems or consensus. Still, it may be better if you already know one or more consensus algorithms, like Raft or Paxos.

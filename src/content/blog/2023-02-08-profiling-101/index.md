@@ -8,6 +8,8 @@ categories:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: en
+translationKey: profiling-101
 ---
 
 以前也浅尝辄止地试图 profile 过，但是被一大堆概念和工具搞的头昏脑涨，全是问题：

@@ -11,10 +11,10 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
-lang: zh
+locale: zh
+translationKey: paxos-hard
 ---
-
-[English Version](https://xxchan.github.io/cs/2022/02/07/paxos-hard.html)
+[English Version](/blog/2022-02-07-paxos-hard/)
 
 本文中，我将**忽略性能等实际问题**，主要聊点 general 的东西，如基本概念、表达力，或者说“怎么把它变为可能”，而不是“怎么把它搞得快的飞起”。另外，我会尽量写的让不了解分布式系统或共识的读者也能看懂。不过，如果你已经对 Raft 或 Paxos 之类的共识算法有了概念，那当然还是更好。
 

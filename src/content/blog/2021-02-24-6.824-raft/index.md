@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: 6-824-raft
 ---
 
 最近终于自己动手做了一下大名鼎鼎的 [MIT 6.824 Lab](http://nil.csail.mit.edu/6.824/2020/schedule.html)。因为 6.824 的资料已经有太多了，像介绍 Raft、介绍 Lab 之类的东西就不必再提了，另外 Raft 确实是名副其实的 **understandable**，算法很容易看懂，而且实现细节在 paper 中都体现得很好（Figure 2 is extremely precise），真的非常难得。不过还是有一些自己的收获和踩坑经历想记录一下，把我思考的过程写出来。

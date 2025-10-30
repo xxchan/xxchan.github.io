@@ -13,7 +13,7 @@ const languageMap: Record<string, string> = {
   zh: 'zh-CN',
 };
 
-const lang = languageMap[post.data.lang ?? ''] ?? 'en';
+const lang = languageMap[post.data.locale ?? ''] ?? 'en';
 ---
 
 <section class="post-comments" aria-labelledby="comments-heading" data-giscus-container>

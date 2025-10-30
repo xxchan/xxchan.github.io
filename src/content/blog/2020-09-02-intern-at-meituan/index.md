@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: intern-at-meituan
 ---
 
 *Disclaimer：本文提及的内容有效范围仅限于后端业务开发岗位，甚至仅限于我所在部门，仅为个人体验与看法，请酌情参考。*

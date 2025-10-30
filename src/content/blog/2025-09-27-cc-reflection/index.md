@@ -5,6 +5,8 @@ categories:
   - AI
 toc: false
 tocSticky: true
+locale: zh
+translationKey: cc-reflection
 ---
 
 [上一篇博客锐评 Coding Agent](/ai/2025/06/08/ai-coding.html)时就觉得 CC 性能遥遥领先，并且有种"第一性原理"的美。现在今非昔比，大家的认知都跟上了，甚至 Codex 已成新神。

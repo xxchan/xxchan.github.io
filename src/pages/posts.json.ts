@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { buildPostUrl } from '../utils/i18n';
 
 export async function GET() {
   const posts = await getCollection('blog');
@@ -10,6 +11,8 @@ export async function GET() {
           title: post.data.title,
           tags: post.data.tags,
           categories: post.data.categories,
+          locale: post.data.locale,
+          url: buildPostUrl(post),
         })),
       },
       null,

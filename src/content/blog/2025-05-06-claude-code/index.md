@@ -5,6 +5,8 @@ categories:
   - AI
 toc: true
 tocSticky: true
+locale: zh
+translationKey: claude-code
 ---
 
 [这篇帖子](https://www.superlinear.academy/c/share-your-work/cursor-8514ec) 讲了关于如何偷看 cursor prompt。

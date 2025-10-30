@@ -1,4 +1,3 @@
 - robots.txt
 - llms.txt
-- giscus
 - i18n

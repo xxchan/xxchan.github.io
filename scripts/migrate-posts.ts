@@ -30,8 +30,10 @@ interface BlogFrontmatter {
   readonly toc?: boolean;
   readonly tocLabel?: string;
   readonly tocSticky?: boolean;
-  readonly lang?: string;
-  readonly alternateSlug?: string;
+  readonly locale: 'en' | 'zh';
+  readonly translationKey: string;
+  readonly translationStatus?: 'draft' | 'review' | 'ready';
+  readonly translator?: string;
 }
 
 const __filename = fileURLToPath(import.meta.url);
@@ -92,33 +94,16 @@ function deriveDateFromSlug(slug: string, fileName: string): Date {
   return candidate;
 }
 
-function transformContent(content: string, slug: string): { body: string; possibleAlternateSlug?: string } {
-  let candidateAlternate: string | undefined;
-  const body = content.replace(/\{\%\s*post_url\s+([\w\-]+)\s*\%\}/g, (_, targetSlug: string) => {
+function transformContent(content: string): string {
+  return content.replace(/\{\%\s*post_url\s+([\w\-]+)\s*\%\}/g, (_, targetSlug: string) => {
     const normalizedTarget = targetSlug.trim();
-    if (!candidateAlternate && isLikelyAlternate(slug, normalizedTarget)) {
-      candidateAlternate = normalizedTarget;
-    }
     return `/blog/${normalizedTarget}/`;
-  });
-  return { body: body.trim(), possibleAlternateSlug: candidateAlternate };
+  }).trim();
 }
 
-function isLikelyAlternate(sourceSlug: string, targetSlug: string): boolean {
-  const localeSuffix = /\-(?<locale>en|zh)$/;
-  const sourceMatch = localeSuffix.exec(sourceSlug);
-  const targetMatch = localeSuffix.exec(targetSlug);
-  if (!sourceMatch?.groups || !targetMatch?.groups) {
-    return false;
-  }
-  const sourceStem = sourceSlug.replace(localeSuffix, '');
-  const targetStem = targetSlug.replace(localeSuffix, '');
-  return sourceStem === targetStem && sourceMatch.groups.locale !== targetMatch.groups.locale;
-}
-
-function detectLang(slug: string, fm: JekyllFrontmatter): string | undefined {
+function detectLang(slug: string, fm: JekyllFrontmatter): 'en' | 'zh' {
   if (fm.lang) {
-    return fm.lang;
+    return fm.lang === 'zh' ? 'zh' : 'en';
   }
   if (slug.endsWith('-en')) {
     return 'en';
@@ -126,10 +111,15 @@ function detectLang(slug: string, fm: JekyllFrontmatter): string | undefined {
   if (slug.endsWith('-zh')) {
     return 'zh';
   }
-  return undefined;
+  return 'en';
 }
 
-function toFrontmatter(slug: string, rawFrontmatter: JekyllFrontmatter, alternateSlug?: string): BlogFrontmatter {
+function deriveTranslationKey(slug: string): string {
+  const strippedDate = slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+  return strippedDate.replace(/-(en|zh)$/, '');
+}
+
+function toFrontmatter(slug: string, rawFrontmatter: JekyllFrontmatter): BlogFrontmatter {
   if (!rawFrontmatter.title) {
     throw new Error(`Missing title in ${slug}`);
   }
@@ -141,6 +131,7 @@ function toFrontmatter(slug: string, rawFrontmatter: JekyllFrontmatter, alternat
 
   const description = rawFrontmatter.excerpt ?? rawFrontmatter.description;
 
+  const locale = detectLang(slug, rawFrontmatter);
   const baseFrontmatter: BlogFrontmatter = {
     title: rawFrontmatter.title,
     description: description?.trim() || undefined,
@@ -152,8 +143,9 @@ function toFrontmatter(slug: string, rawFrontmatter: JekyllFrontmatter, alternat
     toc: coerceBoolean(rawFrontmatter.toc),
     tocLabel: rawFrontmatter.toc_label,
     tocSticky: coerceBoolean(rawFrontmatter.toc_sticky),
-    lang: detectLang(slug, rawFrontmatter),
-    alternateSlug,
+    locale,
+    translationKey: deriveTranslationKey(slug),
+    translationStatus: 'ready',
   };
 
   const cleanedFrontmatter = Object.fromEntries(
@@ -203,8 +195,8 @@ async function migrate(): Promise<void> {
     const raw = await fs.readFile(sourcePath, 'utf8');
     const parsed = matter(raw);
     const slug = parse(file.name).name;
-    const { body, possibleAlternateSlug } = transformContent(parsed.content, slug);
-    const frontmatter = toFrontmatter(slug, parsed.data as JekyllFrontmatter, possibleAlternateSlug);
+    const body = transformContent(parsed.content);
+    const frontmatter = toFrontmatter(slug, parsed.data as JekyllFrontmatter);
     await writePost(slug, frontmatter, body);
     migratedCount += 1;
   }

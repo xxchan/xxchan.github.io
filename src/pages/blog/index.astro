@@ -1,14 +1,33 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostList from '../../components/PostList.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostList from "../../components/PostList.astro";
+import { getCollection } from "astro:content";
 
-const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const allPosts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const chinesePosts = allPosts.filter((entry) => entry.data.locale === "zh");
+const englishPosts = allPosts.filter((entry) => entry.data.locale === "en");
 ---
 
-<BaseLayout title="All Posts">
+<BaseLayout title="所有文章" locale="en">
   <section>
-    <h1>All posts</h1>
-    <PostList posts={posts} showExcerpt />
+    <h1>All Posts</h1>
+    {
+      chinesePosts.length > 0 && (
+        <>
+          <h2>中文</h2>
+          <PostList posts={chinesePosts} showExcerpt />
+        </>
+      )
+    }
+    {
+      englishPosts.length > 0 && (
+        <>
+          <h2>English</h2>
+          <PostList posts={englishPosts} showExcerpt />
+        </>
+      )
+    }
   </section>
 </BaseLayout>

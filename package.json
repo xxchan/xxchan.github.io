@@ -4,8 +4,10 @@
   "version": "0.0.1",
   "packageManager": "pnpm@10.15.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "pnpm run llms:generate && astro dev",
+    "prebuild": "pnpm run llms:generate",
     "build": "astro build",
+    "llms:generate": "pnpm exec tsx scripts/generate-llms.ts",
     "preview": "astro preview",
     "astro": "astro",
     "migrate": "tsx scripts/migrate-posts.ts",

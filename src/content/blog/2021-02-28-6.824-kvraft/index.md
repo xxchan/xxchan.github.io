@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: 6-824-kvraft
 ---
 
 本以为[写完 Raft](https://xxchan.github.io/cs/2021/02/24/6.824-raft.html) 以后，在 Raft 上搭一个 app 想必是行云流水。事实证明我错了，又是踩了许多坑。 T_T

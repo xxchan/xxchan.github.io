@@ -7,10 +7,10 @@ categories:
   - CS
 toc: true
 tocSticky: true
-lang: en
+locale: en
+translationKey: optimize-rust-comptime
 ---
-
-[本文的中文版](/blog/2023-02-11-optimize-rust-comptime/)
+[本文的中文版](/zh/blog/2023-02-11-optimize-rust-comptime/)
 
 Although there are often complaints saying Rust's compilation speed is notorious slow, our project [RisingWave](https://github.com/risingwavelabs/risingwave) is not very slow to compile, especially since previously contributors like ([skyzh](https://github.com/skyzh), [BugenZhao](https://github.com/bugenzhao)) have put in a lot of effort. After using an M1 MacBook Pro, compiling is not a problem at all. A full debug compilation only takes 2-3 minutes.
 

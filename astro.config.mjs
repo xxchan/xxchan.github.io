@@ -44,12 +44,19 @@ function buildLegacyRedirects() {
 
     const source = fs.readFileSync(indexPath, 'utf-8');
     const { data } = matter(source);
+    const locale = typeof data?.locale === 'string' ? data.locale : 'en';
     const categories = Array.isArray(data?.categories) ? data.categories : [];
     const primaryCategory = categories.find((value) => typeof value === 'string' && value.trim().length > 0);
     const categorySegment = slugifyCategory(primaryCategory);
     const legacyPath = `/${categorySegment}/${year}/${month}/${day}/${legacySlug}.html`;
-    const destination = `/blog/${sanitizeEntrySlug(entry.name)}/`;
+    const sanitizedSlug = sanitizeEntrySlug(entry.name);
+    const destination = locale === 'en' ? `/blog/${sanitizedSlug}/` : `/zh/blog/${sanitizedSlug}/`;
     redirects[legacyPath] = { destination, status: 308 };
+
+    if (locale !== 'en') {
+      const legacyLocalizedPath = `/blog/${sanitizedSlug}/`;
+      redirects[legacyLocalizedPath] = { destination, status: 308 };
+    }
   }
 
   redirects['/categories/'] = '/tags/';

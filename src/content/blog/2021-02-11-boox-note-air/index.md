@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: boox-note-air
 ---
 
 *Disclaimer: 本文并非客观评测，纯属主观感受。*

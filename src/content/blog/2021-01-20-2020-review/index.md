@@ -8,6 +8,8 @@ tags:
 toc: true
 tocLabel: 目录
 tocSticky: true
+locale: zh
+translationKey: 2020-review
 ---
 
 2020 这一年对我有很大影响，但我在技术、知识上长进不大，主要是在心态观念上有不少改变。有人说年纪大了就会更在乎一些**虚**的东西，更在乎精神上的愉悦（[Teahour Terry](https://pythonhunter.org/episodes/ep21#t=26:15)，[GeekPlux](https://geekplux.com/2021/01/05/2020-summary#%E4%B9%A6)），难道我提前进入这个阶段了？

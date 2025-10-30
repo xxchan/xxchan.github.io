@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# generated llms markdown
+public/blog/
+public/llms.txt
+public/*/blog/

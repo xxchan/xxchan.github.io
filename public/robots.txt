@@ -1,0 +1,5 @@
+# robots.txt for https://xxchan.me
+User-agent: *
+Allow: /
+
+Sitemap: https://xxchan.me/sitemap-index.xml

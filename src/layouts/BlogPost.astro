@@ -1,23 +1,39 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import BaseLayout from './BaseLayout.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import TagList from '../components/TagList.astro';
-import AuthorCard from '../components/AuthorCard.astro';
-import GiscusComments from '../components/GiscusComments.astro';
-import type { ArticleMeta } from '../components/BaseHead.astro';
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import TagList from "../components/TagList.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+import GiscusComments from "../components/GiscusComments.astro";
+import type { ArticleMeta } from "../components/BaseHead.astro";
+import type { AlternateLink, TranslationLink } from "../utils/i18n";
+import { LOCALE_LABEL } from "../utils/i18n";
 
 interface Props {
-  readonly post: CollectionEntry<'blog'>;
-  readonly headings: readonly import('astro').MarkdownHeading[];
+  readonly post: CollectionEntry<"blog">;
+  readonly headings: readonly import("astro").MarkdownHeading[];
+  readonly translations?: readonly TranslationLink[];
+  readonly alternates?: readonly AlternateLink[];
 }
 
-const { post, headings } = Astro.props;
-const { title, description, pubDate, updatedDate, categories, tags, toc, tocLabel, tocSticky, alternateSlug, lang } = post.data;
-const tocTitle = tocLabel ?? 'Table of Contents';
+const { post, headings, translations = [], alternates = [] } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  categories,
+  tags,
+  toc,
+  tocLabel,
+  tocSticky,
+} = post.data;
+const tocTitle = tocLabel ?? "Table of Contents";
 const showToc = Boolean(toc) && headings.length > 0;
 const seoDescription = description ?? post.data.excerpt;
 const primaryCategory = categories[0];
+const locale = post.data.locale;
+const localeLabel = LOCALE_LABEL[locale] ?? locale.toUpperCase();
 const articleMeta = {
   ...(seoDescription ? { description: seoDescription } : {}),
   publishedTime: pubDate.toISOString(),
@@ -32,55 +48,85 @@ const articleMeta = {
   description={seoDescription}
   ogType="article"
   articleMeta={articleMeta}
+  locale={locale}
+  alternates={alternates}
 >
-  <div class:list={{ 'post-layout': true, 'post-layout--with-toc': showToc }}>
+  <div class:list={{ "post-layout": true, "post-layout--with-toc": showToc }}>
     <article class="post-layout__content">
       <header>
         <h1>{title}</h1>
         <p class="article-meta">
           <FormattedDate date={pubDate} />
-          {updatedDate && (
-            <span>
-              {' · Updated '}<FormattedDate date={updatedDate} />
-            </span>
-          )}
-          {categories.length > 0 && <span>{' · '}{categories.join(', ')}</span>}
-          {lang && <span>{' · '}{lang.toUpperCase()}</span>}
+          {
+            updatedDate && (
+              <span>
+                {" · Updated "}
+                <FormattedDate date={updatedDate} />
+              </span>
+            )
+          }
+          {
+            categories.length > 0 && (
+              <span>
+                {" · "}
+                {categories.join(", ")}
+              </span>
+            )
+          }
+          <!-- <span>
+            {" · "}
+            {localeLabel}
+          </span> -->
         </p>
-        {alternateSlug && (
-          <p class="article-meta">
-            Read this post in <a href={`/blog/${alternateSlug}/`}>another language</a>.
-          </p>
-        )}
+        {
+          translations.length > 0 && (
+            <nav class="language-switcher" aria-label="Available translations">
+              <span class="language-switcher__label">Translations:</span>
+              <ul>
+                {translations.map((translation) => (
+                  <li>
+                    <a href={translation.url}>{translation.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
       </header>
 
       <slot />
 
-      {tags.length > 0 && (
-        <section style={{ marginTop: '2rem' }}>
-          <TagList tags={tags} />
-        </section>
-      )}
+      {
+        tags.length > 0 && (
+          <section style={{ marginTop: "2rem" }}>
+            <TagList tags={tags} />
+          </section>
+        )
+      }
       <section class="post-layout__author">
         <AuthorCard />
       </section>
       <GiscusComments post={post} />
     </article>
 
-    {showToc && (
-      <aside class:list={{ 'post-layout__toc': true, 'toc--sticky': tocSticky }}>
-        <nav class="toc" aria-label={tocTitle}>
-          <p class="toc__title">{tocTitle}</p>
-          <ul>
-            {headings.map((heading) => (
-              <li style={`margin-left: ${(heading.depth - 2) * 0.75}rem`}>
-                <a href={`#${heading.slug}`}>{heading.text}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-    )}
+    {
+      showToc && (
+        <aside
+          class:list={{ "post-layout__toc": true, "toc--sticky": tocSticky }}
+        >
+          <nav class="toc" aria-label={tocTitle}>
+            <p class="toc__title">{tocTitle}</p>
+            <ul>
+              {headings.map((heading) => (
+                <li style={`margin-left: ${(heading.depth - 2) * 0.75}rem`}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+      )
+    }
   </div>
 </BaseLayout>
 
@@ -91,6 +137,26 @@ const articleMeta = {
 
   .post-layout__author {
     margin: 3rem 0 0;
+  }
+
+  .language-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: baseline;
+    margin-top: 0.75rem;
+  }
+
+  .language-switcher ul {
+    display: flex;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .language-switcher__label {
+    font-weight: 500;
   }
 
   @media (min-width: 1024px) {

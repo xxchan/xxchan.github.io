@@ -4,7 +4,9 @@ pubDate: 2025-06-08T00:00:00.000Z
 categories:
   - AI
 toc: true
-tocSticky: true
+tocSticky: false
+locale: zh
+translationKey: ai-coding
 ---
 
 Agentic coding 或许是当下最火（最卷）的方向，一万家公司在做。并且隔三差五就在社交媒体上看到又有什么新工具、谁家又出什么新功能了（又 blow 谁的 mind 了，又颠覆谁谁了）。这还挺让人困惑的，我发现很多人会问 “这些 AI coding 工具真有那么牛吗？”，或者 “XX 和 YY 到底有啥区别”。不少人自己试用了一下，感觉不过如此，于是迅速下头。同时，我还发现还有不少程序员连 **Cursor** 都没用过。

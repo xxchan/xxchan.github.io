@@ -1,15 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
-import BlogPostLayout from '../../layouts/BlogPost.astro';
-import { buildAlternateLinks, buildTranslationLinks } from '../../utils/i18n';
+import BlogPostLayout from '../../../layouts/BlogPost.astro';
+import { buildAlternateLinks, buildTranslationLinks } from '../../../utils/i18n';
 
 interface Props {
   readonly post: CollectionEntry<'blog'>;
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', (entry) => entry.data.locale === 'en');
+  const posts = await getCollection('blog', (entry) => entry.data.locale === 'zh');
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -29,3 +29,4 @@ const alternateLinks = buildAlternateLinks(allVariants, post);
 <BlogPostLayout post={post} headings={headings} translations={translationLinks} alternates={alternateLinks}>
   <Content />
 </BlogPostLayout>
+

@@ -1,28 +1,88 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+import { buildPostUrl } from "../utils/i18n";
 
 interface Props {
-  readonly posts: readonly CollectionEntry<'blog'>[];
+  readonly posts: readonly CollectionEntry<"blog">[];
   readonly showExcerpt?: boolean;
 }
 
 const { posts, showExcerpt = false } = Astro.props;
+const CJK_CHARACTER_PATTERN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u;
 ---
 
 <ul class="post-list">
-  {posts.map((post) => (
-    <li class="post-list__item">
-      <h2 class="post-list__title">
-        <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
-      </h2>
-      <p class="post-list__meta">
-        <FormattedDate date={post.data.pubDate} />
-        {post.data.categories.length > 0 && (
-          <span> · {post.data.categories.join(', ')}</span>
-        )}
-      </p>
-      {showExcerpt && post.data.excerpt && <p>{post.data.excerpt}</p>}
-    </li>
-  ))}
+  {
+    posts.map((post) => {
+      const { excerpt } = post.data;
+      const shouldShowExcerpt = showExcerpt && typeof excerpt === "string" && excerpt.length > 0;
+      const isLatinExcerpt = shouldShowExcerpt && !CJK_CHARACTER_PATTERN.test(excerpt);
+
+      return (
+        <li class="post-list__item">
+          <div class="post-list__header">
+            <span class="post-list__date">
+              <FormattedDate date={post.data.pubDate} />
+            </span>
+            <h2 class="post-list__title">
+              <a href={buildPostUrl(post)}>{post.data.title}</a>
+            </h2>
+          </div>
+          {shouldShowExcerpt && (
+            <p
+              class:list={[
+                "post-list__excerpt",
+                isLatinExcerpt && "post-list__excerpt--latin",
+              ]}
+            >
+              {excerpt}
+            </p>
+          )}
+        </li>
+      );
+    })
+  }
 </ul>
+
+<style>
+  .post-list {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .post-list__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+  }
+
+  .post-list__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .post-list__date {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #555);
+  }
+
+  .post-list__title {
+    margin: 0;
+  }
+
+  .post-list__excerpt {
+    margin: 0;
+    color: var(--color-text-secondary, #666);
+  }
+
+  .post-list__excerpt--latin {
+    font-style: italic;
+  }
+</style>

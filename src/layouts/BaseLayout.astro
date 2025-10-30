@@ -5,12 +5,16 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import type { ArticleMeta } from '../components/BaseHead.astro';
 import 'katex/dist/katex.min.css';
+import { DEFAULT_LOCALE } from '../utils/i18n';
+import type { AlternateLink } from '../utils/i18n';
 
 interface Props {
   readonly title?: string;
   readonly description?: string;
   readonly ogType?: 'website' | 'article';
   readonly articleMeta?: ArticleMeta;
+  readonly locale?: string;
+  readonly alternates?: readonly AlternateLink[];
 }
 
 const props = Astro.props as Props;
@@ -18,15 +22,18 @@ const isArticle = props.ogType === 'article';
 const title = props.title ?? SITE_TITLE;
 const description =
   props.description ?? props.articleMeta?.description ?? (isArticle ? undefined : SITE_DESCRIPTION);
+const locale = props.locale ?? DEFAULT_LOCALE;
+const alternates = props.alternates ?? [];
 ---
 
-<html lang="en">
+<html lang={locale}>
   <head>
     <BaseHead
       title={title}
       description={description}
       ogType={props.ogType}
       articleMeta={props.articleMeta}
+      alternates={alternates}
     />
   </head>
   <body>

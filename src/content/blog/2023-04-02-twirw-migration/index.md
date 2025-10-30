@@ -5,6 +5,8 @@ categories:
   - This-Week-in-RisingWave
 toc: true
 tocSticky: true
+locale: en
+translationKey: twirw-migration
 ---
 
 This Week in RisingWave is now migrated to a new dedicated site: [this-week-in-risingwave.vercel.app](https://this-week-in-risingwave.vercel.app).
