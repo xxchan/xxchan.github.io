@@ -4,6 +4,7 @@ import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagList from '../components/TagList.astro';
 import AuthorCard from '../components/AuthorCard.astro';
+import GiscusComments from '../components/GiscusComments.astro';
 import type { ArticleMeta } from '../components/BaseHead.astro';
 
 interface Props {
@@ -63,7 +64,7 @@ const articleMeta = {
       <section class="post-layout__author">
         <AuthorCard />
       </section>
-        <!-- TODO: Reactions widget (Neon + Vercel) to be implemented in a future iteration. -->
+      <GiscusComments post={post} />
     </article>
 
     {showToc && (

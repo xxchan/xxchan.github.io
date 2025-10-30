@@ -1,0 +1,88 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  readonly post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props as Props;
+const legacyDiscussionTitle = `${post.data.title} - XX's Blog`;
+const discussionTerm = legacyDiscussionTitle;
+
+const languageMap: Record<string, string> = {
+  en: 'en',
+  zh: 'zh-CN',
+};
+
+const lang = languageMap[post.data.lang ?? ''] ?? 'en';
+---
+
+<section class="post-comments" aria-labelledby="comments-heading" data-giscus-container>
+  <h2 id="comments-heading" class="post-comments__title">Comments</h2>
+  <div class="post-comments__body">
+    <div class="giscus" data-discussion-term={discussionTerm} data-discussion-lang={lang}></div>
+  </div>
+</section>
+<script is:inline>
+  (() => {
+    const scriptNode = document.currentScript;
+    const section = scriptNode?.previousElementSibling;
+    if (!(section instanceof HTMLElement)) {
+      scriptNode?.remove();
+      return;
+    }
+
+    const container = section.querySelector('.giscus');
+    if (!(container instanceof HTMLElement)) {
+      scriptNode?.remove();
+      return;
+    }
+    if (container.dataset.giscusLoaded === 'true') {
+      scriptNode?.remove();
+      return;
+    }
+
+    const term = container.dataset.discussionTerm ?? '';
+    if (!term) {
+      scriptNode?.remove();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+
+    script.setAttribute('data-repo', 'xxchan/xxchan.github.io');
+    script.setAttribute('data-repo-id', 'MDEwOlJlcG9zaXRvcnkyNzM2NzY1MTE=');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOEE_4384CAfZi');
+    script.setAttribute('data-mapping', 'specific');
+    script.setAttribute('data-term', term);
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-lang', container.dataset.discussionLang ?? 'en');
+    script.setAttribute('data-theme', 'light');
+
+    container.dataset.giscusLoaded = 'true';
+    container.appendChild(script);
+    scriptNode?.remove();
+  })();
+</script>
+
+<style>
+  .post-comments {
+    margin: 3rem 0;
+  }
+
+  .post-comments__title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .post-comments__body {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-top: 1.5rem;
+  }
+</style>

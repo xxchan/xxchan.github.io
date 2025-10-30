@@ -130,7 +130,7 @@ function getRawEntrySlug(post: BlogEntry): string | null {
   return null;
 }
 
-function getLegacyEntryPath(post: BlogEntry): string | null {
+export function getLegacyEntryPath(post: BlogEntry): string | null {
   const rawSlug = getRawEntrySlug(post);
   if (!rawSlug) {
     return null;

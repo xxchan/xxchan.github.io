@@ -30,6 +30,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.14.1",
     "gray-matter": "^4.0.3",
+    "katex": "^0.16.25",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "rehype-katex": "^7.0.1",
