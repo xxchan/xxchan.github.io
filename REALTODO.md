@@ -1,3 +1,0 @@
-- robots.txt
-- llms.txt
-- i18n
