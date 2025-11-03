@@ -8,7 +8,7 @@ categories:
 toc: true
 tocLabel: 目录
 tocSticky: true
-locale: en
+locale: zh
 translationKey: profiling-101
 ---
 
@@ -39,7 +39,7 @@ Flamegraph 只是一种数据可视化方法，属于 profiling 的第二步。�
 
 就算不太懂 profiling 原理或者实践，看到这样的火焰图也会觉得非常直观，基本上能猜个大概是什么意思。
 
-![Example](https://camo.githubusercontent.com/eecfbf00e6cc5baf6ae2b66283573d765f8fe29f1d3df10f4ce3423d942c0af3/687474703a2f2f7777772e6272656e64616e67726567672e636f6d2f466c616d654772617068732f6370752d626173682d666c616d6567726170682e737667)
+![Example](https://camo.githubusercontent.com/fd263ec3e9527631a851491676cfc2397e9ad5b796ead0c2b9c3285653166157/687474703a2f2f7777772e6272656e64616e67726567672e636f6d2f466c616d654772617068732f6578616d706c652d706572662e737667)
 
 这一定程度上导致对门外汉来说提到 profiling 和 flamegraph 就觉得是绑定在一起的两个概念，但实际上不是。
 
