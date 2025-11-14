@@ -42,11 +42,25 @@ code {
 }
 
 blockquote {
-  margin: 1.5rem 0;
-  padding: 0.75rem 1rem;
-  border-left: 4px solid #a0b9ff;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
   background: #f7f9ff;
-  border-radius: 6px;
+  color: #4a556d;
+  font-size: 0.98rem;
+  font-style: normal;
+  line-height: 1.7;
+}
+
+blockquote:where(:lang(en), :lang(en-US), :lang(en-GB), :lang(en-CA), :lang(en-AU)) {
+  font-style: italic;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
 }
 
 hr {
