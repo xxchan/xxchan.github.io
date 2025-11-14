@@ -1,5 +1,5 @@
 ---
-title: Concurrent Local Coding Agents
+title: 使用 Local Coding Agents 疯狂地并发开发
 pubDate: 2025-11-14T00:00:00.000Z
 excerpt: AgentDev, toolset and UI for Git Worktrees and agent sessions - My opinionated, more flexible version of Cursor 2.0
 categories:
@@ -10,10 +10,10 @@ locale: zh
 translationKey: concurrent-local-coding-agents
 ---
 
-> P.S.1 本文假设读者对日常使用 coding agent 进行开发已经比较熟悉
+> 本文假设读者对日常使用 coding agent 进行开发已经比较熟悉
 > 如果不熟悉，可以看看一些一线工程师分享真实一手经验的 blog，如 [Xuanwo](https://xuanwo.io/)、[Armin](https://lucumr.pocoo.org/)。
 
-> P.S.2 本文主要是从已经能完全 end-to-end 用 agent 干活的情况延伸至如何并行干活，更 scalable
+> 本文主要是从已经能完全 end-to-end 用 agent 干活的情况延伸至如何并行干活，更 scalable
 > 并不适合“希望更精准地控制 agent 如何干活”，或者类似“pair programming”等用法
 
 ## Remote Agent
@@ -21,7 +21,7 @@ translationKey: concurrent-local-coding-agents
 一直以来，我对 coding agent 有比较大的两个判断（在[锐评 Coding Agent](https://xxchan.me/zh/blog/2025-06-08-ai-coding/) 一文中也提过一些）：
 1. Cursor 会出更 high-level 的 UI，而不是像现在的以 IDE 为中心。当 agent 能力足够强，应该是它来主导，而不是我。
     就像 YouWare, Lovable 等各种 "Vibe coding platform" 一样，Cursor 也该出一个 Chat + Preview 为中心的 UI 模式。
-> P.S. 最近看了[《Inside Cursor》](https://x.com/dotey/status/1986985829701484563)这篇文章，发现我对 Cursor 野心的理解似乎不对，他们似乎并不急着像 YouWare, Lovable 一样去急着优化小白的体验。
+> 最近看了[《Inside Cursor》](https://x.com/dotey/status/1986985829701484563)这篇文章，发现我对 Cursor 野心的理解似乎不对，他们似乎并不急着像 YouWare, Lovable 一样去急着优化小白的体验。
 > 
 > “别的公司可以去“降低地板”（Lower the floor），让小白也能写代码。而 Cursor 的使命是 “提高天花板” (Raising the ceiling)。”
 2. Remote agent（e.g., Cursor Background Agent, Devin, Codex/Claude Code web, ...）是个好东西。它好在:
