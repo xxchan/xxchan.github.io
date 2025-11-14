@@ -1,3 +1,4 @@
+import type { Dirent } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -135,7 +136,7 @@ function resolveLanguage(frontmatter: PostFrontmatter): string | undefined {
   return undefined;
 }
 
-function buildPostRecords(sourceDir: string, entries: fs.Dirent[]): Promise<PostRecord>[] {
+function buildPostRecords(sourceDir: string, entries: Dirent[]): Promise<(PostRecord | undefined)>[] {
   return entries
     .filter((entry) => entry.isDirectory())
     .map(async (entry) => {

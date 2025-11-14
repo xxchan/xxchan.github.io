@@ -10,6 +10,7 @@ import remarkMath from 'remark-math';
 import remarkToc from 'remark-toc';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
+import remarkCjkSoftBreaks from './scripts/remark/cjkSoftBreaks.js';
 
 export default defineConfig({
   site: 'https://xxchan.me',
@@ -19,7 +20,7 @@ export default defineConfig({
   redirects: buildLegacyRedirects(),
   integrations: [mdx(), react(), sitemap()],
   markdown: {
-    remarkPlugins: [remarkMath, [remarkToc, { tight: true }]],
+    remarkPlugins: [remarkMath, [remarkToc, { tight: true }], remarkCjkSoftBreaks],
     rehypePlugins: [rehypeSlug, rehypeKatex],
     shikiConfig: {
       theme: 'github-light',
