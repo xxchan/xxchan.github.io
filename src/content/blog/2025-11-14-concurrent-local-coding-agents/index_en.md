@@ -126,7 +126,7 @@ Following the development process, the main symptoms are:
 
 The biggest change in the agent era is that **execution becomes extremely cheap**, making it extremely easy to build tools that suit you.
 `xlaude` provides a very good CLI tool for operating worktrees and agents. Addressing these pain points of mine,
-I进行二次开发成了我的 [AgentDev](https://github.com/xxchan/AgentDev).
+I redeveloped it into my [AgentDev](https://github.com/xxchan/AgentDev).
 
 The development of AgentDev was basically pure vibe coding - I only looked at results, not code.
 For small tooling needs, vibe coding feels very competent.
@@ -245,7 +245,7 @@ Cursor 2.0's feature of "sending the same task to different agents" and having t
 
 This sounds like a very reasonable need: there are so many coding agents in the market, and so many models, and new champions change every once in a while, so how should I evaluate agent performance and find the best or most suitable one for me? Frequently switching tools actually affects work efficiency quite a bit.
 
-So I wanted to reduce the cost of "vibe eval" by implementing a tool that can assign tasks at low cost and harvest results quickly, integrating it into daily workflows. But the biggest bottleneck for this is indeed the manual validation环节. To see each agent's work, I made a git diff dashboard on Xlaude's TUI dashboard. But it's still hard to use... so this racing feature was basically gradually abandoned.
+So I wanted to reduce the cost of "vibe eval" by implementing a tool that can assign tasks at low cost and harvest results quickly, integrating it into daily workflows. But the biggest bottleneck for this is indeed the manual validation aspect. To see each agent's work, I made a git diff dashboard on Xlaude's TUI dashboard. But it's still hard to use... so this racing feature was basically gradually abandoned.
 
 As the intensity of daily agent development usage increased, the need to use worktrees to manage tasks became stronger, so I picked up agentdev again and remade it into something completely different. The spirit of "wanting a good UI" was completely inherited though.
 
