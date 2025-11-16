@@ -10,6 +10,15 @@ locale: en
 translationKey: concurrent-local-coding-agents
 ---
 
+import LlmSummary from '@components/LlmSummary.astro';
+
+<LlmSummary generatedAt="2025-11-16T17:15:12.866828+08:00">
+
+The core insight of agent development isn't about chasing the latest models or all-in-one platforms—it's about **attention management**. After exhausting both remote agents (Devin, Cursor Background) and chaotic parallel development, the author discovered that git worktrees offer the sweet spot: local concurrency with first-party CLI agents. The real bottleneck isn't agent capability, but human review speed and context switching costs. 
+
+**AgentDev** emerged from this friction: a minimal tool that turns worktrees into a "GitHub PR-like" UI, surfacing two critical pieces—user messages (what to do) and git diff (what changed). The philosophy is hub-like flexibility over monolithic products, proving that workflow thinking trumps tool accumulation. As agents get 90% of work right, the remaining 10% demands traditional dev wisdom: small PRs, verifiable logic, and the counter-intuitive truth that **slow is fast** when attention is your scarcest resource.
+
+</LlmSummary>
 
 **This post is translated by [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) (kimi-k2-thinking-turbo) from Chinese.**
 
