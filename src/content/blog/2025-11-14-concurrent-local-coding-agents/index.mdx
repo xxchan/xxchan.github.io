@@ -10,6 +10,22 @@ locale: zh
 translationKey: concurrent-local-coding-agents
 ---
 
+import LlmSummary from '@components/LlmSummary.astro';
+
+<LlmSummary generatedAt="2025-11-16T17:11:00.042093+08:00">
+
+本地并发 Agent 开发的核心矛盾：当 AI 编码能力过剩时，人类注意力成了唯一瓶颈。Remote agent 虽有并行优势，但 vendor lock-in 和成本问题使其难成主流。Git worktrees 提供了本地并发的完美载体，但真正的挑战在于"Post-completion integration"——当 N 个 agent 同时完工，如何高效验收？
+
+作者通过四阶段演进揭示关键洞察：从混乱的多 agent 混战中认识到"慢就是快"（小 PR 可 review 性），到使用 xlaude 后发现自己成为验收瓶颈，最终打造出 AgentDev 这一"瑞士军刀"。最精妙的设计在于将 agent session 中的 user messages 直接作为任务描述，既解决了"我刚在干啥"的上下文丢失问题，又天然形成了任务追溯链。
+
+AgentDev 的哲学值得玩味：不做 all-in-one 平台，而是成为兼容任意工具链的中枢。WebUI 而非 TUI 的选择， Terminal.app 启动而非内置 pty 的取巧，都体现了"execution is cheap"时代下，工具应该让工作流适配人，而非让人适应工具。
+
+最终结论颇具禅意：Agent 时代的效率不在于发任务有多快，而在于守护程序员的注意力。Parallel development 的终局不是赛马机制，而是让单个 agent 端到端完成可独立验证的小任务，把 context switch 降到最低。
+
+</LlmSummary>
+
+
+
 > 本文假设读者对日常使用 coding agent 进行开发已经比较熟悉。
 > 如果不熟悉，可以看看一些一线工程师分享真实一手经验的 blog，如 [Xuanwo](https://xuanwo.io/)、[Armin](https://lucumr.pocoo.org/)、[鸭哥](https://yage.ai/).
 

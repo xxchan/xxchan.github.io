@@ -24,3 +24,21 @@ chrome devtools MCP, or other kind of scripts to test the changes.
 ## Testing Guidelines
 Vitest powers the test harness; store new cases beside related features in `tests/` using the `*.test.ts` suffix. Mirror the `redirects.test.ts` pattern: group assertions with `describe`, prefer precise expectations, and mock network boundaries where needed. Run `pnpm test` locally before pushing. While no hard coverage gate exists, extend existing suites whenever routes, collections, or script outputs change.
 
+## LLM Summary Workflow
+
+- Convert the post to `.mdx` before inserting JSX components.
+- After the frontmatter block, make sure there is `import LlmSummary from '@components/LlmSummary.astro';` (only once).
+- Replace any existing `<LlmSummary>` block with a new one, or insert a fresh block right after the import section. Use:
+
+```
+<LlmSummary generatedAt="<ISO datetime>">
+
+summary content
+
+</LlmSummary>
+```
+
+Requirements for generating summary:
+- 模仿原文作者的文风
+- 术语使用遵循原文，不要随意修改
+- 不需要覆盖全部内容，而是提炼出文章中最有意思、最有 insight 的点
