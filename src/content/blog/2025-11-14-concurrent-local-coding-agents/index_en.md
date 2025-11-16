@@ -13,7 +13,7 @@ translationKey: concurrent-local-coding-agents
 
 **This post is translated by [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) (kimi-k2-thinking-turbo) from Chinese.**
 
-> This post assumes readers are already quite familiar with using coding agents for daily development. If you're not, check out some first-hand experience blogs from engineers in the trenches, like [Xuanwo](https://xuanwo.io/) or [Armin](https://lucumr.pocoo.org/).
+> This post assumes readers are already quite familiar with using coding agents for daily development. If you're not, check out some first-hand experience blogs from engineers in the trenches, like [Xuanwo](https://xuanwo.io/), [Armin](https://lucumr.pocoo.org/), [yage](https://yage.ai/).
 
 > This article mainly extends from "being able to work end-to-end with agents" to "how to work in parallel and more scalably." It's not suitable for those who "want more precise control over how agents work" or use cases like "pair programming."
 

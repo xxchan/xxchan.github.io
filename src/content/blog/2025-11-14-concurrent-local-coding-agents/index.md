@@ -11,7 +11,7 @@ translationKey: concurrent-local-coding-agents
 ---
 
 > 本文假设读者对日常使用 coding agent 进行开发已经比较熟悉。
-> 如果不熟悉，可以看看一些一线工程师分享真实一手经验的 blog，如 [Xuanwo](https://xuanwo.io/)、[Armin](https://lucumr.pocoo.org/)。
+> 如果不熟悉，可以看看一些一线工程师分享真实一手经验的 blog，如 [Xuanwo](https://xuanwo.io/)、[Armin](https://lucumr.pocoo.org/)、[鸭哥](https://yage.ai/).
 
 > 本文主要是从已经能完全 end-to-end 用 agent 干活的情况延伸至如何并行干活，更 scalable。
 > 并不适合“希望更精准地控制 agent 如何干活”，或者类似“pair programming”等用法。
