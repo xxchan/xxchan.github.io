@@ -2,7 +2,7 @@
 title: Claude Code 内部工作原理窥探
 pubDate: 2025-05-06T00:00:00.000Z
 categories:
-  - AI
+  - AI Agent
 toc: true
 tocSticky: true
 locale: zh

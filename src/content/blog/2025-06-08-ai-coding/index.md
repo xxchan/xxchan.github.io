@@ -2,7 +2,7 @@
 title: 我对各种 AI Coding Agent 工具的看法
 pubDate: 2025-06-08T00:00:00.000Z
 categories:
-  - AI
+  - AI Agent
 toc: true
 tocSticky: false
 locale: zh

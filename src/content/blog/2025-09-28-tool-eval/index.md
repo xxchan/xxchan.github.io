@@ -2,7 +2,7 @@
 title: 让 agent 自己比较 MCP tools 质量
 pubDate: 2025-09-28T00:00:00.000Z
 categories:
-  - AI
+  - AI Agent
 toc: true
 tocSticky: true
 locale: zh

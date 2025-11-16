@@ -2,7 +2,7 @@
 title: 回顾 Claude Code 的成功：天时地利人和+大道至简
 pubDate: 2025-09-27T00:00:00.000Z
 categories:
-  - AI
+  - AI Agent
 toc: false
 tocSticky: true
 locale: zh
