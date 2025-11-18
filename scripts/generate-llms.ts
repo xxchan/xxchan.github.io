@@ -1,4 +1,3 @@
-import type { Dirent } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,6 +35,7 @@ type CliOptions = {
 
 const DEFAULT_BLOG_OUTPUT = 'public/blog';
 const DEFAULT_LLMS_OUTPUT = 'public/llms.txt';
+const MARKDOWN_EXTENSIONS = new Set(['.md', '.mdx']);
 
 function parseCliOptions(projectRoot: string): CliOptions {
   const args = process.argv.slice(2);
@@ -136,31 +136,60 @@ function resolveLanguage(frontmatter: PostFrontmatter): string | undefined {
   return undefined;
 }
 
-function buildPostRecords(sourceDir: string, entries: Dirent[]): Promise<(PostRecord | undefined)>[] {
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map(async (entry) => {
-      const inputPath = path.join(sourceDir, entry.name, 'index.md');
-      try {
-        const source = await fs.readFile(inputPath, 'utf-8');
-        const { data, content } = matter(source);
-        const frontmatter = data as PostFrontmatter;
-        return {
-          slug: entry.name,
-          title: typeof frontmatter.title === 'string' ? frontmatter.title : entry.name,
-          summary: inferSummary(frontmatter, content),
-          categories: coerceStringArray(frontmatter.categories),
-          tags: coerceStringArray(frontmatter.tags),
-          published: coerceDate(frontmatter.pubDate),
-          updated: coerceDate(frontmatter.updatedDate),
-          language: resolveLanguage(frontmatter),
-          rawSource: source,
-        };
-      } catch (error) {
-        console.warn(`Failed to process ${entry.name}:`, error);
-        return undefined;
+function isMarkdownFile(entryName: string): boolean {
+  return MARKDOWN_EXTENSIONS.has(path.extname(entryName).toLowerCase());
+}
+
+async function collectMarkdownFiles(root: string): Promise<string[]> {
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  const results = await Promise.all(
+    entries.map(async (entry) => {
+      const absolute = path.join(root, entry.name);
+      if (entry.isDirectory()) {
+        return collectMarkdownFiles(absolute);
       }
-    });
+      if (entry.isFile() && isMarkdownFile(entry.name)) {
+        return [absolute];
+      }
+      return [];
+    }),
+  );
+  return results.flat();
+}
+
+function deriveSlug(sourceRoot: string, filePath: string): string {
+  const relativePath = path.relative(sourceRoot, filePath).replace(/\\/g, '/');
+  const withoutExtension = relativePath.replace(/\.(md|mdx)$/i, '');
+  if (withoutExtension.endsWith('/index')) {
+    const trimmed = withoutExtension.slice(0, withoutExtension.length - '/index'.length);
+    return trimmed.length === 0 ? 'index' : trimmed;
+  }
+  return withoutExtension;
+}
+
+function buildPostRecords(sourceDir: string, files: string[]): Promise<(PostRecord | undefined)>[] {
+  return files.map(async (filePath) => {
+    try {
+      const source = await fs.readFile(filePath, 'utf-8');
+      const { data, content } = matter(source);
+      const frontmatter = data as PostFrontmatter;
+      const slug = deriveSlug(sourceDir, filePath);
+      return {
+        slug,
+        title: typeof frontmatter.title === 'string' ? frontmatter.title : slug,
+        summary: inferSummary(frontmatter, content),
+        categories: coerceStringArray(frontmatter.categories),
+        tags: coerceStringArray(frontmatter.tags),
+        published: coerceDate(frontmatter.pubDate),
+        updated: coerceDate(frontmatter.updatedDate),
+        language: resolveLanguage(frontmatter),
+        rawSource: source,
+      };
+    } catch (error) {
+      console.warn(`Failed to process ${path.relative(sourceDir, filePath)}:`, error);
+      return undefined;
+    }
+  });
 }
 
 function resolvePostPath(post: PostRecord): string {
@@ -188,12 +217,15 @@ async function writeBlogMarkdown(posts: PostRecord[], outputRoot: string) {
   await Promise.all(
     posts.map(async (post) => {
       const content = `\uFEFF${post.rawSource}`;
-      await fs.writeFile(path.join(resolvedOutputRoot, `${post.slug}.md`), content, 'utf-8');
+      const postOutputPath = path.join(resolvedOutputRoot, `${post.slug}.md`);
+      await fs.mkdir(path.dirname(postOutputPath), { recursive: true });
+      await fs.writeFile(postOutputPath, content, 'utf-8');
 
       if (post.language && post.language !== 'en') {
         const localizedDir = path.join(publicRoot, post.language, 'blog');
-        await fs.mkdir(localizedDir, { recursive: true });
-        await fs.writeFile(path.join(localizedDir, `${post.slug}.md`), content, 'utf-8');
+        const localizedPath = path.join(localizedDir, `${post.slug}.md`);
+        await fs.mkdir(path.dirname(localizedPath), { recursive: true });
+        await fs.writeFile(localizedPath, content, 'utf-8');
       }
     }),
   );
@@ -276,13 +308,13 @@ function formatLlmsTxt(posts: PostRecord[]): string {
   lines.push(`- [About](${SITE_URL}/about/)`);
   lines.push('');
 
-  lines.push('## Latest Posts');
-  sortedByDate.slice(0, Math.min(sortedByDate.length, 10)).forEach((post) => {
+  lines.push('## Posts');
+  sortedByDate.forEach((post) => {
     lines.push(formatPostLink(post));
   });
   lines.push('');
 
-  lines.push(...formatCategoriesSection(posts));
+  // lines.push(...formatCategoriesSection(posts));
 
   lines.push('## Feeds');
   lines.push(`- [Atom feed](${new URL('/feed.xml', SITE_URL).toString()})`);
@@ -309,8 +341,8 @@ async function main() {
   const blogDir = path.join(projectRoot, 'src', 'content', 'blog');
   const { blogOutputRoot, llmsOutputPath } = parseCliOptions(projectRoot);
 
-  const entries = await fs.readdir(blogDir, { withFileTypes: true });
-  const posts = (await Promise.all(buildPostRecords(blogDir, entries))).filter(
+  const markdownFiles = await collectMarkdownFiles(blogDir);
+  const posts = (await Promise.all(buildPostRecords(blogDir, markdownFiles))).filter(
     (record): record is PostRecord => record !== undefined,
   );
 
