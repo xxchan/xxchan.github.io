@@ -1,0 +1,79 @@
+---
+title: Thoughts on Open Source Software and Kimi Code CLI
+pubDate: 2026-01-30T00:00:00.000Z
+categories:
+  - AI Agent
+toc: true
+tocSticky: true
+locale: en
+translationKey: kimi-cli-oss
+---
+
+[@stdrc](https://x.com/istdrc) and I have been working on open source projects since even before we began our careers. We deeply understand the dynamics of open source—both from the contributor's perspective and the maintainer's. We know the joy, the frustration, and the burden it brings.
+
+In the era of coding agents, one change is becoming increasingly apparent:
+
+> I cannot unsee the death of the pull request in open source upon us.
+> 
+> PRs from external contributors made a lot of sense when it was 
+> hard to write code, and it took lots of time investment (+ lots 
+> of thinking!) to do so.
+> 
+> Now that it takes seconds/minutes: dynamics change
+>
+> -- [@GergelyOrosz](https://x.com/GergelyOrosz/status/2016090541717373135?s=20)
+
+Actually, this is nothing new. Before AI, real open source projects already worked like this. Code contribution was never the most valuable part. Unless you were deeply involved in community discussions, proved your capability, and earned trust, your PR could easily be ignored—especially for large features. The key reason is that code needs maintenance. Unless you could prove you were willing to maintain your code, cared about the whole project and the community, or demonstrated that your PR was easy to maintain and beneficial to everyone (both users and maintainers), your PRs were often more of a burden than a help.
+
+Coding agents now give more people the ability to create PRs, so newcomers may be surprised to find that open source doesn't actually work that way.
+
+Before the era of coding agents, there were cases where the community had an aligned roadmap but lacked the manpower to implement it. In such cases, maintainers were happy to accept newcomers to build together—newcomers who might develop an interest in becoming long-term contributors or even maintainers themselves.
+
+But now, with coding agents, the manpower for coding will never be a problem again. In fact, triaging PRs has become slower than maintainers collaborating with their own coding agents. 
+
+Does that mean open source is dead? Not at all. And why are we still open sourcing [`kimi-cli`](https://github.com/MoonshotAI/kimi-cli)?
+
+## The Freedom to Modify
+
+Consider the MIT License, which I believe captures the core spirit of open source:
+
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, ...
+
+Most importantly, we want to grant everyone the freedom to **modify** the software to fit their own needs.
+
+We actually thought about this [from day one of `kimi-cli`](https://github.com/MoonshotAI/kimi-cli/blob/main/klips/klip-0-klip.md). We want it to be a solid foundation—a kernel for building upwards. We want to make it easy for people to build on top of `kimi-cli`'s kernel, while also crafting elegant and solid abstractions that make the source code easy to hack.
+
+This emphasis on hackability echoes the origins of open source in the early days of the [Free Software Movement](https://en.wikipedia.org/wiki/Free_software_movement)—before GitHub even existed.
+
+We embrace this freedom fully. Even when our visions diverge or our roadmap doesn't align with your needs, you retain complete autonomy to fork and modify. We don't just permit this—we architect for it. Making `kimi-cli` easy to hack is a deliberate design goal, ensuring that divergence is as frictionless as possible.
+
+## Kernel, Not Super App
+
+That said, we are not that strict. Some projects take an even harder line on external contributions. The most famous example is probably SQLite, which is open-source but explicitly not open-contribution:
+
+> **Open-Source, not Open-Contribution**
+> 
+> SQLite is open-source, meaning that you can make as many copies of it as you want and do whatever you want with those copies, without limitation. But SQLite is not open-contribution. In order to keep SQLite in the public domain and ensure that the code does not become contaminated with proprietary or licensed content, the project does not accept patches from people who have not submitted an affidavit dedicating their contribution into the public domain.
+>
+> https://sqlite.org/copyright.html
+
+Our biggest fear is that `kimi-cli` will lose its simplicity and become a bloated beast.
+
+Some people criticize that the TUI experience is shitty compared to Claude Code. That's intentional. I would not say it's shitty—just minimalistic and useful enough.
+
+We deliberately do not want to build a super app in the terminal like Claude Code (which is a great product worthy of respect). Instead, we will focus our efforts on building `kimi web` (**Ki**mi Code CLI **W**eb **I**nterface) and the [Kimi Code VSCode plugin](https://www.kimi.com/code/en).
+
+That's also why we integrated [@willmcgugan](https://x.com/willmcgugan)'s Toad (best known for Rich and Textual) as `kimi term`—we leave TUI excellence to the experts.
+
+We endorse ["The Apache Way"—*Community Over Code*](https://theapacheway.com/community-over-code/). 
+
+## What We Welcome
+
+For us, GitHub will increasingly become a place for "open discussion." Bug reports are very important to us, and bugfix PRs are still welcome.
+
+(That said, some bugfixes are not as obvious as they look and may affect overall system quality—so we might be slow to accept certain fixes.) 
+
+However, the dynamics of new feature PRs will be very different. We welcome "feature requests" and "idea discussions," but we will likely be slow in accepting such PRs. We need to carefully consider each change and push the project forward according to our roadmap, maintaining the stability and consistency of the kernel to ensure long-term sustainability. That said, you can use Pull Requests and [KLIPs (Kimi CLI Improvement Proposals)](https://github.com/MoonshotAI/kimi-cli/blob/main/klips/klip-0-klip.md) as vehicles for idea discussion in the community. Your proposals may inspire us to adjust our roadmap if we see their value or recognize a genuine community need. Of course, for real pain points requiring immediate attention, we will prioritize them. And to make the project fit your specific needs, we encourage you to build on top of it—or fork it—to create your own "personal software." Share with us what you build.
+
+These principles and practices may not fit all projects. "Move fast and fail fast" OSS can succeed in its own way. But that's not the kind of OSS we want `Kimi Code` to be. We aim for something more deliberate, more sustainable—and ultimately, more useful to those who choose to build upon it.
+
