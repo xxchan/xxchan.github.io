@@ -97,22 +97,29 @@ flowchart TD
     J --> K([END])
 ```
 
-D2 is even cleaner:
+Not too different from writing 1. 2. 3. steps.
+D2-style is even cleaner:
 
 ```d2
-flowchart TD
-    A([BEGIN]) --> B[Update kimi-cli in pyproject.toml to latest]
-    B --> C[Align package version: match major.minor, reset patch to 0]
-    C --> D[Run uv sync, use --no-cache if needed]
-    D --> E[Run make format && make check]
-    E --> F{Tests pass?}
-    F -->|No| G[Fix issues]
-    G --> E
-    F -->|Yes| H[Commit: bump kimi-cli to version]
-    H --> I[Git tag version number, no v prefix]
-    I --> J[Push code and tags]
-    J --> K([END])
+A: BEGIN
+B: Update kimi-cli in pyproject.toml to latest
+C: "Align package version: match major.minor, reset patch to 0"
+D: "Run uv sync, use --no-cache if needed"
+E: Run make format && make check
+F: Tests pass? { shape: diamond }
+G: Fix issues
+H: "Commit: bump kimi-cli to version"
+I: "Git tag version number, no v prefix"
+J: Push code and tags
+K: END
+
+A -> B -> C -> D -> E -> F
+F -> G: No
+G -> E
+F -> H: Yes
+H -> I -> J -> K
 ```
+
 Each node = one instruction in natural language. One agent turn.
 The agent executes, chooses branches, loops when needed.
 
