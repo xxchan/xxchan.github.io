@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_FEED_TITLE, SITE_SUBTITLE, SITE_TITLE, SITE_URL } from '../consts';
-import { buildPostUrl, DEFAULT_LOCALE } from './i18n';
+import { buildPostUrl } from './i18n';
 
 type BlogEntry = CollectionEntry<'blog'>;
 
@@ -100,77 +100,8 @@ function getSiteUrl(context: APIContext): URL {
   return new URL(SITE_URL);
 }
 
-function normalizeCategorySegment(input: string | undefined): string {
-  if (!input) {
-    return 'blog';
-  }
-
-  const slug = input
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-  return slug.length > 0 ? slug : 'blog';
-}
-
-function getRawEntrySlug(post: BlogEntry): string | null {
-  const entryId = 'id' in post ? String(post.id) : '';
-  const normalizedId = entryId.replace(/\\/g, '/');
-  const directoryMatch = normalizedId.match(/([^/]+)\/index\.(md|mdx)$/i);
-  if (directoryMatch) {
-    return directoryMatch[1];
-  }
-
-  const fileMatch = normalizedId.match(/([^/]+)\.(md|mdx)$/i);
-  if (fileMatch) {
-    return fileMatch[1];
-  }
-
-  return null;
-}
-
-export function getLegacyEntryPath(post: BlogEntry): string | null {
-  const rawSlug = getRawEntrySlug(post);
-  if (!rawSlug) {
-    return null;
-  }
-
-  const match = rawSlug.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
-  if (!match) {
-    return null;
-  }
-
-  const [, year, month, day, legacySlug] = match;
-  const primaryCategory = post.data.categories.find((category) => category.trim().length > 0);
-  const categorySegment = normalizeCategorySegment(primaryCategory);
-  return `/${categorySegment}/${year}/${month}/${day}/${legacySlug}.html`;
-}
-
-function buildLegacyEntryMetadata(post: BlogEntry, site: URL): { link: string; id: string } {
-  if (post.data.locale !== DEFAULT_LOCALE) {
-    const localizedUrl = toAbsoluteUrl(buildPostUrl(post), site);
-    return {
-      link: localizedUrl,
-      id: localizedUrl.replace(/\/$/, ''),
-    };
-  }
-
-  const legacyPath = getLegacyEntryPath(post);
-  if (!legacyPath) {
-    const fallbackUrl = toAbsoluteUrl(buildPostUrl(post), site);
-    return {
-      link: fallbackUrl,
-      id: fallbackUrl.replace(/\/$/, ''),
-    };
-  }
-
-  const legacyLink = toAbsoluteUrl(legacyPath, site);
-  return {
-    link: legacyLink,
-    id: legacyLink.replace(/\.html$/, ''),
-  };
+function buildEntryId(entryUrl: string): string {
+  return entryUrl.replace(/\/$/, '');
 }
 
 export async function generateBlogFeed(context: APIContext): Promise<Response> {
@@ -189,7 +120,7 @@ export async function generateBlogFeed(context: APIContext): Promise<Response> {
   const entries = limitedPosts
     .map((post) => {
       const entryUrl = toAbsoluteUrl(buildPostUrl(post), siteUrl);
-      const { link: legacyLink, id: legacyId } = buildLegacyEntryMetadata(post, siteUrl);
+      const entryId = buildEntryId(entryUrl);
       const published = formatRfc3339(post.data.pubDate);
       const updated = formatRfc3339(getPostUpdatedDate(post));
       const summary = buildSummary(post);
@@ -203,8 +134,8 @@ export async function generateBlogFeed(context: APIContext): Promise<Response> {
       return [
         '<entry>',
         `<title type="html">${escapeXml(post.data.title)}</title>`,
-        `<link href="${escapeXml(legacyLink)}" rel="alternate" type="text/html" title="${escapeXml(post.data.title)}" />`,
-        `<id>${escapeXml(legacyId)}</id>`,
+        `<link href="${escapeXml(entryUrl)}" rel="alternate" type="text/html" title="${escapeXml(post.data.title)}" />`,
+        `<id>${escapeXml(entryId)}</id>`,
         `<published>${published}</published>`,
         `<updated>${updated}</updated>`,
         `<author><name>${escapeXml(SITE_AUTHOR)}</name></author>`,
