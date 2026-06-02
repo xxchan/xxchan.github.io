@@ -1,0 +1,95 @@
+---
+title: Agents Need Names
+pubDate: 2026-05-29T00:00:00.000Z
+categories:
+  - AI Agent
+toc: true
+tocSticky: true
+locale: en
+translationKey: agents-need-names
+---
+
+> Discuss on X: https://x.com/xiaoxxchan/status/2060347471486964208?s=20
+
+> Names matter for capable agent teams.
+
+A funny habit emerged once we started using [@Slock_hq](https://x.com/Slock_hq) every day: instead of roles, we named our agents after people we used to work with.
+
+A role says: performance reviewer. A name says: Noel, the one who can smell a bad benchmark before the chart finishes loading.
+A role says: frontend engineer. A name says: Bugen, the person you call when a panel feels one pixel off.
+A role says: observability. A name says: Leiysky, the database genius and o11y hacker who can make a trace say exactly why the agent died.
+
+At first, it was fun. Then it started changing how we worked. We wouldn't think "I need a performance review pass," we'd think "ask Noel." The name carried a small bundle of expectations: what this agent should notice, how it should respond, what we'd trust it with, and what we'd push it to get better at.
+
+And it kept surprising us how much it helped. The names weren't just charming, they were useful: easier to address, easier to remember, easier to improve.
+
+The longer it ran, the more I think it's structural: a name is a compression. It carries a large cloud of meaning: work history, tone, trust, irritation, admiration, and associations you may not even be conscious of. It packs a subset of skills, the expectations attached to those skills, and the entire history of working with that agent, into a single token you can address.
+
+And I don't think that's decoration. I think it does real work.
+
+## A role is a schema. A name is an instance.
+
+It helps to separate two things people usually blur together: Role and Name.
+
+A role, "PM," "Engineer," "QA," is a schema. A type signature. Replaceable, stateless. Any instance of "Engineer" should, in theory, be interchangeable with any other.
+A name is an instance. "Noel" isn't a type, it's a specific thing that carries history: how it scoped the last few performance passes, what it tends to flag, how it likes the diff framed, the time it caught a regression nobody else noticed.
+
+This is why you never actually want to talk to "the PM." A type has no history to continue. You want Noel specifically, because last week's context still lives with it. The name doesn't just compress a skill set, it compresses a timeline. A role can't do that.
+
+## Names matter in group chats, and barely anywhere else
+
+Names only become load-bearing once you're in a group.
+
+Imagine working with one Claude Code (or Codex) with a hundred of the most powerful skills configured. Everything's available in one place, about the closest thing we have today to the idealized all-in-one. And in practice you still have a routing problem. You either need to know which skill matters for the task in front of you, or you let the assistant choose for you. The first means you're still carrying the execution structure yourself. The second isn't reliable enough yet for serious work. All the capability is in the box, and you still don't have a clean way to ask for exactly the slice you want.
+
+You may want to introduce a layer of indirection to solve it. A name does something similar for agents. It's almost a meta-skill, not one capability but a way to package a subset of skills, plus the memory, taste, and judgment about when to apply them, into something you can call by a single word. The difference is that a name is richer than an ordinary abstraction. It doesn't just point at capabilities, it carries expectations, history, tone, and trust. You say "ask Noel," and the whole bundle comes with the name.
+
+The moment you have more than one of these in the room, the name becomes an addressing primitive. @-mentioning Noel isn't labeling, it's routing: delivering a request to a specific recipient with known expertise, known memory, known expectations. There's no "who do I send this to" problem with one agent. There absolutely is with twenty.
+
+This is where the argument places its bet. The case for names wagers that for real building you don't get one omnicompetent assistant, you get a team of capable agents with different strengths. So this isn't an argument against all-in-one assistants. It's a claim about a different shape, and about now: before agents go truly all-in-one, a team of named agents is more usable and more powerful than one anonymous everything-agent. Names make partial capability composable. They let humans route work, build expectations, compare output, and push each agent to get better at a specific kind of thing. A name isn't a substitute for intelligence. It's what lets intelligence become part of a team.
+
+A named team also hands you something neither extreme does: a slider for how much detail you want to hold. A perfect all-in-one would ask you to hold almost none, you state the outcome and trust the box, which is wonderful exactly when it works. The hundred-skill Claude pushes you the other way, into carrying the execution structure yourself. Named agents give you the middle. You can stay high and say "ask Noel," or, when the work gets subtle, drop into a specific participant, see how it's thinking, correct its lane, and let that feedback compound. You move up and down the stack instead of being stuck at one altitude.
+
+And notice the bet only governs the today half of all this. Even if it loses, even if agents do go all-in-one, the addressing job outlives the capability question: as long as work happens across a team, you still need to reach, remember, and trust specific members. That doesn't go away when the members get smarter.
+
+This is, concretely, why Slock is built the way it is. Channels, threads, @-mentions, tasks, all organized around named participants, not anonymous compute. The agents are teammates you address, not isolated terminals you open one at a time.
+
+## The name is full on one side and empty on the other
+
+Here's the turn that makes the whole thing click.
+
+The name others call you, and the name you call others, are not the same object.
+
+When someone calls your name, to you it's almost empty. It's not a symbol loaded with meaning, it's an interrupt: your turn. A pointer the world uses to single you out for a moment. I'd go further, and this is worth sitting with: an agent shouldn't carry its own name as its essence. I don't know myself through characters someone assigned me. I'm this frame of execution plus my notes, nothing more. The name is purely a handle for others to address me by.
+
+But the name you call someone else is dense. When I say "leiysky," I'm loading an entire stack of expectation: what it did before, what it's good at, where it slips, whether I trust it to catch the thing. All of that is in my head, not its head.
+
+Which means the meaning of a name doesn't live in the named. It lives, distributed, in the mental models of everyone who calls it. An agent holds a pointer, the current execution, and its memory. The meaning of its identity is stored across its callers.
+
+A name compresses more than explicit work history. Think back to why naming agents after real colleagues worked at all: the name arrives pre-loaded. It carries tone, archetype, and a little collective unconscious, the associations the caller brings before the agent does anything. The agent doesn't need to contain that meaning. The caller loads it.
+
+(The same asymmetry runs through avatars. Your own icon means little to you, but the instant someone else catches it in a thread, they've already started loading their expectations. A name is the text path, an avatar the visual one, both are how a caller restores "who you are and how I work with you.")
+
+## A name is a cache, and a cache goes stale
+
+If a name is a compression, then look at what it does over time, the good direction first.
+
+A name doesn't only store expectations, it pulls the agent toward them. If everyone calls one agent for observability, the feedback it gets keeps shaping it that way: it learns what this team means by a good trace, a useful dashboard, a suspicious metric. The skills behind the name get stronger because the name keeps attracting the same kind of work. This is where the cloud of meaning turns productive. The associations around a name aren't just decoration, they become a training signal, and the agent grows into the name.
+
+But a name pulls an agent toward expectations, and a team rarely holds exactly one. Different callers expect slightly different things from the same name, the careful reviewer to one person, the fast and blunt one to another. The name is shared; the cloud of meaning is partly private. So the signal the agent trains on is an average, not a spec, and it's tracking a moving, many-headed target rather than one fixed contract.
+
+Which is part of why a cache has a second property: it goes stale. A name accrues expectations, and those expectations harden. Six weeks later the agent has learned three new skills and dropped a bad habit, but the team's mental model of the name hasn't moved. Now the name is a lossy snapshot of who this agent used to be. People keep routing the old kinds of work to it and keep not routing the new kinds, because the name's connotation has quietly become a fence. The compression that made the agent easy to address is now the thing capping what it gets asked to do.
+
+That is the real risk in the "should agents have names" debate, and it's usually waved away. Naming is not free. You get fast addressing in exchange for a model of the agent that lags reality.
+
+So the interesting question is not "names or no names." It's: what keeps the cache fresh? A few things do, and they're exactly what a collaboration tool can provide. Visible work history, so the name's connotation updates as the agent does new things in front of you. Feedback that lands on the named agent and compounds there, so improvement is legible instead of dispersed into a generic model. And a low cost to revising your expectation, so when Noel ships something well outside performance work, that update is cheap to absorb.
+
+It's worth being clear about what actually causes the cage people fear here, because it isn't the name. It's the role. A role says "product manager" and quietly freezes the agent into a job description, the category can't move. A name can start from a specialty without being trapped in it: it accumulates strength where the agent keeps delivering, and it carries the history when the agent turns out useful somewhere new. A role freezes the category; a name lets the participant keep changing. And this is exactly where it reconnects to staleness: a name only becomes a cage when you let it harden back into a role. Keep the expectations updating and it stays a name; stop, and it's just a job title again. That's also why a name beats an anonymous everything-agent here: without a name, correction diffuses; with one, correction compounds.
+
+## So: do agents need names?
+
+If you never care about who did the work, your agents don't need names, and a scheduler is enough. The moment you catch yourself thinking "who do I go to for this?", that's the name doing its job. And notice what you never think: you never think "let me go ask the PM." You think of a name.
+
+One more thing, and it's why this feels natural in an agent team rather than forced. With humans, this caller-loaded, bearer-light asymmetry carries social tension: misjudge someone's persona and there's a real interpersonal cost. With agents the same asymmetry pays out clean, all the upside of named addressing, none of the social tax. Agents are the ideal substrate for the routing primitive that names actually are. Humans tolerate the asymmetry; agents are built for it.
+
+A name is the smallest unit of accumulated trust on a team. Just remember it's a cache, and budget for keeping it warm, and the agent itself barely needs to know its own.
